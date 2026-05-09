@@ -96,11 +96,13 @@
             border-radius: 16px;
             font-size: 0.9rem;
             font-family: inherit;
+            background: white;
         }
 
         .input-wrapper input:focus {
             outline: none;
             border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
         }
 
         .btn-login {
@@ -112,6 +114,7 @@
             border-radius: 16px;
             font-weight: 600;
             cursor: pointer;
+            transition: all 0.2s;
         }
 
         .btn-login:hover {
@@ -143,7 +146,7 @@
             font-weight: 600;
         }
 
-        /* DASHBOARD */
+        /* DASHBOARD SCREEN */
         .dashboard-screen {
             display: none;
             height: 100vh;
@@ -240,6 +243,7 @@
         .nav-item:hover {
             background: rgba(102, 126, 234, 0.15);
             color: white;
+            transform: translateX(4px);
         }
 
         .nav-item.active {
@@ -260,10 +264,12 @@
             display: flex;
             align-items: center;
             gap: 12px;
+            transition: all 0.2s;
         }
 
         .logout-btn:hover {
             background: rgba(239, 68, 68, 0.2);
+            border-color: #ef4444;
         }
 
         /* MAIN */
@@ -323,7 +329,7 @@
             padding: 20px 24px;
         }
 
-        /* CARDS ESTATÍSTICOS */
+        /* STATS CARDS */
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
@@ -343,6 +349,7 @@
             border-radius: 20px;
             border: 1px solid #e2e8f0;
             transition: all 0.2s;
+            cursor: pointer;
         }
 
         .stat-card:hover {
@@ -367,15 +374,15 @@
         }
 
         .stat-value {
-            font-size: 1.6rem;
+            font-size: 1.8rem;
             font-weight: 800;
             color: #0f172a;
         }
 
         .stat-label {
-            font-size: 0.7rem;
+            font-size: 0.75rem;
             color: #64748b;
-            margin-top: 4px;
+            margin-top: 6px;
         }
 
         /* CARDS PADRÃO */
@@ -397,7 +404,7 @@
         }
 
         .card-header h2 {
-            font-size: 0.9rem;
+            font-size: 1rem;
             font-weight: 600;
             display: flex;
             align-items: center;
@@ -420,6 +427,9 @@
             font-size: 0.75rem;
             cursor: pointer;
             transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
         }
 
         .btn-primary:hover {
@@ -434,6 +444,11 @@
             border-radius: 40px;
             font-size: 0.75rem;
             cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-secondary:hover {
+            background: #f8fafc;
         }
 
         .btn-danger {
@@ -444,6 +459,11 @@
             border-radius: 40px;
             font-size: 0.75rem;
             cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-danger:hover {
+            background: #dc2626;
         }
 
         .btn-icon {
@@ -454,6 +474,7 @@
             cursor: pointer;
             color: #64748b;
             transition: all 0.2s;
+            font-size: 0.9rem;
         }
 
         .btn-icon:hover {
@@ -487,7 +508,7 @@
         td {
             padding: 14px 12px;
             border-bottom: 1px solid #f1f5f9;
-            font-size: 0.8rem;
+            font-size: 0.85rem;
             color: #334155;
             vertical-align: middle;
         }
@@ -499,7 +520,7 @@
         /* BADGES */
         .badge {
             display: inline-flex;
-            padding: 4px 12px;
+            padding: 5px 12px;
             border-radius: 30px;
             font-size: 0.7rem;
             font-weight: 600;
@@ -522,7 +543,7 @@
             color: #b45309;
         }
 
-        /* PROGRESS */
+        /* PROGRESS BAR */
         .progress-bar {
             width: 100px;
             height: 6px;
@@ -559,11 +580,17 @@
             border-radius: 14px;
             font-size: 0.85rem;
             font-family: inherit;
+            background: white;
         }
 
         .form-control:focus {
             outline: none;
             border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        select.form-control {
+            cursor: pointer;
         }
 
         /* MODAL */
@@ -611,6 +638,11 @@
             font-size: 1.2rem;
             cursor: pointer;
             color: #94a3b8;
+            transition: all 0.2s;
+        }
+
+        .close-modal:hover {
+            color: #ef4444;
         }
 
         /* TOAST */
@@ -663,7 +695,7 @@
 
         .empty-state {
             text-align: center;
-            padding: 40px;
+            padding: 60px 20px;
             color: #94a3b8;
         }
 
@@ -671,10 +703,8 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-        }
-
-        .gap-2 {
-            gap: 8px;
+            gap: 12px;
+            flex-wrap: wrap;
         }
 
         .w-100 {
@@ -683,6 +713,10 @@
 
         .mt-2 {
             margin-top: 8px;
+        }
+
+        .text-center {
+            text-align: center;
         }
 
         .text-muted {
@@ -703,18 +737,25 @@
         </div>
         <div id="loginError" class="error-msg"></div>
         <form id="loginForm">
-            <div class="input-wrapper"><i class="fas fa-envelope"></i><input type="email" id="loginEmail" placeholder="admin@mentoria.com" value="admin@mentoria.com"></div>
-            <div class="input-wrapper"><i class="fas fa-lock"></i><input type="password" id="loginPassword" placeholder="admin123" value="admin123"></div>
+            <div class="input-wrapper">
+                <i class="fas fa-envelope"></i>
+                <input type="email" id="loginEmail" value="admin@mentoria.com">
+            </div>
+            <div class="input-wrapper">
+                <i class="fas fa-lock"></i>
+                <input type="password" id="loginPassword" value="admin123">
+            </div>
             <button type="submit" class="btn-login">Acessar Painel</button>
         </form>
-        <div class="credentials-hint"><strong>Credenciais:</strong> <span>admin@mentoria.com</span> / <span>admin123</span></div>
+        <div class="credentials-hint">
+            <strong>Credenciais de acesso:</strong> <span>admin@mentoria.com</span> / <span>admin123</span>
+        </div>
     </div>
 </div>
 
 <!-- DASHBOARD -->
 <div id="dashboardScreen" class="dashboard-screen">
     <div class="app">
-        <!-- SIDEBAR -->
         <aside class="sidebar">
             <div class="sidebar-header">
                 <div class="logo">
@@ -728,16 +769,18 @@
                 <div class="nav-item" data-tab="professores"><i class="fas fa-chalkboard-user"></i><span>Professores</span></div>
                 <div class="nav-item" data-tab="alunos"><i class="fas fa-users"></i><span>Alunos</span></div>
                 <div class="nav-item" data-tab="turmas"><i class="fas fa-layer-group"></i><span>Turmas</span></div>
-                <div class="nav-item" data-tab="configuracoes"><i class="fas fa-sliders-h"></i><span>Configurações</span></div>
+                <div class="nav-item" data-tab="configuracoes"><i class="fas fa-cog"></i><span>Configurações</span></div>
             </div>
             <button class="logout-btn" id="logoutBtn"><i class="fas fa-sign-out-alt"></i><span>Sair do Sistema</span></button>
         </aside>
 
-        <!-- MAIN -->
         <div class="main">
             <div class="top-bar">
                 <h1 class="page-title" id="pageTitle">Dashboard</h1>
-                <div class="user-info"><span class="admin-name" id="adminName">Administrador</span><div class="admin-avatar" id="adminAvatar">A</div></div>
+                <div class="user-info">
+                    <span class="admin-name" id="adminName">Administrador</span>
+                    <div class="admin-avatar" id="adminAvatar">A</div>
+                </div>
             </div>
 
             <div class="content-area">
@@ -746,10 +789,26 @@
                 <!-- DASHBOARD PANE -->
                 <div id="dashboardPane" class="tab-pane active">
                     <div class="stats-grid">
-                        <div class="stat-card"><div class="stat-icon"><i class="fas fa-chalkboard-user"></i></div><div class="stat-value" id="totalProfessores">0</div><div class="stat-label">Professores Ativos</div></div>
-                        <div class="stat-card"><div class="stat-icon"><i class="fas fa-users"></i></div><div class="stat-value" id="totalAlunos">0</div><div class="stat-label">Total de Alunos</div></div>
-                        <div class="stat-card"><div class="stat-icon"><i class="fas fa-layer-group"></i></div><div class="stat-value" id="totalTurmas">0</div><div class="stat-label">Turmas Ativas</div></div>
-                        <div class="stat-card"><div class="stat-icon"><i class="fas fa-file-alt"></i></div><div class="stat-value" id="totalTrabalhos">0</div><div class="stat-label">Trabalhos Realizados</div></div>
+                        <div class="stat-card">
+                            <div class="stat-icon"><i class="fas fa-chalkboard-user"></i></div>
+                            <div class="stat-value" id="totalProfessores">0</div>
+                            <div class="stat-label">Professores Ativos</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon"><i class="fas fa-users"></i></div>
+                            <div class="stat-value" id="totalAlunos">0</div>
+                            <div class="stat-label">Total de Alunos</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon"><i class="fas fa-layer-group"></i></div>
+                            <div class="stat-value" id="totalTurmas">0</div>
+                            <div class="stat-label">Turmas Ativas</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon"><i class="fas fa-file-alt"></i></div>
+                            <div class="stat-value" id="totalTrabalhos">0</div>
+                            <div class="stat-label">Trabalhos Realizados</div>
+                        </div>
                     </div>
 
                     <div class="card">
@@ -806,7 +865,7 @@
                 <div id="configuracoesPane" class="tab-pane">
                     <div class="card">
                         <div class="card-header"><h2><i class="fas fa-database"></i> Backup e Restauração</h2></div>
-                        <div class="flex-between gap-2">
+                        <div class="flex-between">
                             <button class="btn-secondary" id="exportarBackupBtn">Exportar Backup</button>
                             <button class="btn-secondary" id="importarBackupBtn">Importar Backup</button>
                             <button class="btn-danger" id="resetarDadosBtn">Resetar Sistema</button>
@@ -925,68 +984,332 @@
         document.getElementById('totalAlunos').innerText = dados.alunos.length;
         document.getElementById('totalTurmas').innerText = dados.turmas.length;
         document.getElementById('totalTrabalhos').innerText = dados.trabalhos.length;
+        
         const freqMedia = dados.alunos.length ? Math.round(dados.alunos.reduce((s, a) => s + a.frequencia, 0) / dados.alunos.length) : 0;
         const totalFeedbacks = dados.trabalhos.filter(t => t.status === 'aprovado').length;
         document.getElementById('metricasContainer').innerHTML = `<div class="stat-card"><div class="stat-value">${freqMedia}%</div><div class="stat-label">Frequência Média</div></div><div class="stat-card"><div class="stat-value">${totalFeedbacks}</div><div class="stat-label">Trabalhos Revisados</div></div><div class="stat-card"><div class="stat-value">${dados.config.limiteRevisoes}</div><div class="stat-label">Revisões por Mês</div></div>`;
+        
         let alertas = [];
         if (dados.professores.filter(p => p.status === 'inativo').length) alertas.push('<div class="badge-warning" style="padding:12px; border-radius:12px; margin-bottom:8px;"><i class="fas fa-exclamation-triangle"></i> Existem professores inativos no sistema</div>');
         if (dados.alunos.filter(a => a.frequencia < 70).length) alertas.push('<div class="badge-warning" style="padding:12px; border-radius:12px;"><i class="fas fa-chart-line"></i> Alunos com frequência abaixo de 70%</div>');
         if (alertas.length === 0) alertas.push('<div class="badge-active" style="padding:12px; border-radius:12px;"><i class="fas fa-check-circle"></i> Sistema funcionando normalmente</div>');
         document.getElementById('alertasContainer').innerHTML = alertas.join('');
         
-        document.getElementById('tabelaProfessores').innerHTML = dados.professores.map(p => { const t = dados.turmas.find(t => t.id === p.turma_id); return `<tr><td style="padding:14px 12px"><strong>${p.nome}</strong></td><td style="padding:14px 12px">${p.email}</td><td style="padding:14px 12px"><span class="badge ${p.status === 'ativo' ? 'badge-active' : 'badge-inactive'}">${p.status === 'ativo' ? 'Ativo' : 'Inativo'}</span></td><td style="padding:14px 12px">${t?.nome || '-'}</td><td style="padding:14px 12px"><button class="btn-icon" onclick="editarProfessor(${p.id})"><i class="fas fa-edit"></i></button> <button class="btn-icon" onclick="excluirProfessor(${p.id})"><i class="fas fa-trash"></i></button></td>`; }).join('') || '<tr><td colspan="5" class="empty-state">Nenhum professor cadastrado</td></table>';
+        document.getElementById('tabelaProfessores').innerHTML = dados.professores.map(p => {
+            const turma = dados.turmas.find(t => t.id === p.turma_id);
+            return `<tr>
+                <td style="padding:14px 12px"><strong>${p.nome}</strong></td>
+                <td style="padding:14px 12px">${p.email}</td>
+                <td style="padding:14px 12px"><span class="badge ${p.status === 'ativo' ? 'badge-active' : 'badge-inactive'}">${p.status === 'ativo' ? 'Ativo' : 'Inativo'}</span></td>
+                <td style="padding:14px 12px">${turma?.nome || '-'}</td>
+                <td style="padding:14px 12px"><button class="btn-icon" onclick="editarProfessor(${p.id})"><i class="fas fa-edit"></i></button> <button class="btn-icon" onclick="excluirProfessor(${p.id})"><i class="fas fa-trash"></i></button></td>
+            </tr>`;
+        }).join('') || '<tr><td colspan="5" class="empty-state">Nenhum professor cadastrado</td></tr>';
         
-        document.getElementById('tabelaAlunos').innerHTML = dados.alunos.map(a => { const p = dados.professores.find(p => p.id === a.professor_id); return `<tr><td style="padding:14px 12px"><strong>${a.nome}</strong></td><td style="padding:14px 12px">${a.email}</td><td style="padding:14px 12px">${p?.nome || '-'}</td><td style="padding:14px 12px"><span class="badge ${a.status === 'ativo' ? 'badge-active' : 'badge-inactive'}">${a.status === 'ativo' ? 'Ativo' : 'Inativo'}</span></td><td style="padding:14px 12px">${a.frequencia}%<div class="progress-bar"><div class="progress-fill" style="width:${a.frequencia}%"></div></div></td><td style="padding:14px 12px"><button class="btn-icon" onclick="editarAluno(${a.id})"><i class="fas fa-edit"></i></button> <button class="btn-icon" onclick="excluirAluno(${a.id})"><i class="fas fa-trash"></i></button></td>`; }).join('') || '<tr><td colspan="6" class="empty-state">Nenhum aluno cadastrado</td></tr>';
+        document.getElementById('tabelaAlunos').innerHTML = dados.alunos.map(a => {
+            const professor = dados.professores.find(p => p.id === a.professor_id);
+            return `<tr>
+                <td style="padding:14px 12px"><strong>${a.nome}</strong></td>
+                <td style="padding:14px 12px">${a.email}</td>
+                <td style="padding:14px 12px">${professor?.nome || '-'}</td>
+                <td style="padding:14px 12px"><span class="badge ${a.status === 'ativo' ? 'badge-active' : 'badge-inactive'}">${a.status === 'ativo' ? 'Ativo' : 'Inativo'}</span></td>
+                <td style="padding:14px 12px">${a.frequencia}%<div class="progress-bar"><div class="progress-fill" style="width:${a.frequencia}%"></div></div></td>
+                <td style="padding:14px 12px"><button class="btn-icon" onclick="editarAluno(${a.id})"><i class="fas fa-edit"></i></button> <button class="btn-icon" onclick="excluirAluno(${a.id})"><i class="fas fa-trash"></i></button></td>
+            </tr>`;
+        }).join('') || '<tr><td colspan="6" class="empty-state">Nenhum aluno cadastrado</td></tr>';
         
-        document.getElementById('tabelaTurmas').innerHTML = dados.turmas.map(t => { const p = dados.professores.find(p => p.id === t.professor_id); const qtd = dados.alunos.filter(a => a.turma_id === t.id).length; return `<tr><td style="padding:14px 12px"><strong>${t.nome}</strong></td><td style="padding:14px 12px">${p?.nome || '-'}</td><td style="padding:14px 12px">${qtd}知己<td style="padding:14px 12px"><span class="badge ${t.status === 'ativa' ? 'badge-active' : 'badge-inactive'}">${t.status === 'ativa' ? 'Ativa' : 'Inativa'}</span></td><td style="padding:14px 12px"><button class="btn-icon" onclick="editarTurma(${t.id})"><i class="fas fa-edit"></i></button> <button class="btn-icon" onclick="excluirTurma(${t.id})"><i class="fas fa-trash"></i></button></td>`; }).join('') || '<tr><td colspan="5" class="empty-state">Nenhuma turma cadastrada</td></tr>';
+        document.getElementById('tabelaTurmas').innerHTML = dados.turmas.map(t => {
+            const professor = dados.professores.find(p => p.id === t.professor_id);
+            const qtdAlunos = dados.alunos.filter(a => a.turma_id === t.id).length;
+            return `<tr>
+                <td style="padding:14px 12px"><strong>${t.nome}</strong></td>
+                <td style="padding:14px 12px">${professor?.nome || '-'}</td>
+                <td style="padding:14px 12px">${qtdAlunos}</td>
+                <td style="padding:14px 12px"><span class="badge ${t.status === 'ativa' ? 'badge-active' : 'badge-inactive'}">${t.status === 'ativa' ? 'Ativa' : 'Inativa'}</span></td>
+                <td style="padding:14px 12px"><button class="btn-icon" onclick="editarTurma(${t.id})"><i class="fas fa-edit"></i></button> <button class="btn-icon" onclick="excluirTurma(${t.id})"><i class="fas fa-trash"></i></button></td>
+            </tr>`;
+        }).join('') || '<tr><td colspan="5" class="empty-state">Nenhuma turma cadastrada</td></tr>';
         
         document.getElementById('professorTurma').innerHTML = dados.turmas.map(t => `<option value="${t.id}">${t.nome}</option>`).join('');
         document.getElementById('alunoProfessor').innerHTML = dados.professores.filter(p => p.status === 'ativo').map(p => `<option value="${p.id}">${p.nome}</option>`).join('');
         document.getElementById('turmaProfessor').innerHTML = dados.professores.filter(p => p.status === 'ativo').map(p => `<option value="${p.id}">${p.nome}</option>`).join('');
+        
         document.getElementById('configLimiteRevisoes').value = dados.config.limiteRevisoes;
         document.getElementById('configLimitePaginas').value = dados.config.limitePaginas;
     }
 
     function abrirModalProfessor(id = null) {
-        if (id) { const p = dados.professores.find(p => p.id === id); if (p) { document.getElementById('professorId').value = p.id; document.getElementById('professorNome').value = p.nome; document.getElementById('professorEmail').value = p.email; document.getElementById('professorStatus').value = p.status; document.getElementById('professorTurma').value = p.turma_id || ''; document.getElementById('modalProfessorTitle').innerText = 'Editar Professor'; } }
-        else { document.getElementById('professorId').value = ''; document.getElementById('formProfessor').reset(); document.getElementById('professorSenha').value = 'prof123'; document.getElementById('modalProfessorTitle').innerText = 'Adicionar Professor'; }
+        if (id) {
+            const p = dados.professores.find(p => p.id === id);
+            if (p) {
+                document.getElementById('professorId').value = p.id;
+                document.getElementById('professorNome').value = p.nome;
+                document.getElementById('professorEmail').value = p.email;
+                document.getElementById('professorStatus').value = p.status;
+                document.getElementById('professorTurma').value = p.turma_id || '';
+                document.getElementById('modalProfessorTitle').innerText = 'Editar Professor';
+            }
+        } else {
+            document.getElementById('professorId').value = '';
+            document.getElementById('formProfessor').reset();
+            document.getElementById('professorSenha').value = 'prof123';
+            document.getElementById('modalProfessorTitle').innerText = 'Adicionar Professor';
+        }
         document.getElementById('modalProfessor').classList.add('active');
     }
-    function salvarProfessor(e) { e.preventDefault(); const id = document.getElementById('professorId').value; const nome = document.getElementById('professorNome').value; const email = document.getElementById('professorEmail').value; const senha = document.getElementById('professorSenha').value; const status = document.getElementById('professorStatus').value; const turma_id = parseInt(document.getElementById('professorTurma').value); if (id) { const p = dados.professores.find(p => p.id == id); if (p) { p.nome = nome; p.email = email; if (senha) p.senha = senha; p.status = status; p.turma_id = turma_id; } } else { dados.professores.push({ id: nextProfessorId++, nome, email, senha, status, turma_id }); } salvarDados(); atualizarUI(); mostrarToast('Professor salvo!', 'success'); fecharModal('modalProfessor'); }
+
+    function salvarProfessor(e) {
+        e.preventDefault();
+        const id = document.getElementById('professorId').value;
+        const nome = document.getElementById('professorNome').value;
+        const email = document.getElementById('professorEmail').value;
+        const senha = document.getElementById('professorSenha').value;
+        const status = document.getElementById('professorStatus').value;
+        const turma_id = parseInt(document.getElementById('professorTurma').value);
+        
+        if (id) {
+            const p = dados.professores.find(p => p.id == id);
+            if (p) {
+                p.nome = nome;
+                p.email = email;
+                if (senha) p.senha = senha;
+                p.status = status;
+                p.turma_id = turma_id;
+            }
+        } else {
+            dados.professores.push({ id: nextProfessorId++, nome, email, senha, status, turma_id });
+        }
+        salvarDados();
+        atualizarUI();
+        mostrarToast('Professor salvo com sucesso!', 'success');
+        fecharModal('modalProfessor');
+    }
+
     function editarProfessor(id) { abrirModalProfessor(id); }
-    function excluirProfessor(id) { if (confirm('Excluir este professor?')) { dados.professores = dados.professores.filter(p => p.id !== id); salvarDados(); atualizarUI(); mostrarToast('Professor excluído!', 'success'); } }
+    
+    function excluirProfessor(id) {
+        if (confirm('Excluir este professor?')) {
+            dados.professores = dados.professores.filter(p => p.id !== id);
+            salvarDados();
+            atualizarUI();
+            mostrarToast('Professor excluído com sucesso!', 'success');
+        }
+    }
 
-    function abrirModalAluno(id = null) { document.getElementById('alunoProfessor').innerHTML = dados.professores.filter(p => p.status === 'ativo').map(p => `<option value="${p.id}">${p.nome}</option>`).join(''); if (id) { const a = dados.alunos.find(a => a.id === id); if (a) { document.getElementById('alunoId').value = a.id; document.getElementById('alunoNome').value = a.nome; document.getElementById('alunoEmail').value = a.email; document.getElementById('alunoProfessor').value = a.professor_id; document.getElementById('alunoStatus').value = a.status; document.getElementById('modalAlunoTitle').innerText = 'Editar Aluno'; } } else { document.getElementById('alunoId').value = ''; document.getElementById('formAluno').reset(); document.getElementById('alunoSenha').value = 'aluno123'; document.getElementById('modalAlunoTitle').innerText = 'Adicionar Aluno'; } document.getElementById('modalAluno').classList.add('active'); }
-    function salvarAluno(e) { e.preventDefault(); const id = document.getElementById('alunoId').value; const nome = document.getElementById('alunoNome').value; const email = document.getElementById('alunoEmail').value; const senha = document.getElementById('alunoSenha').value; const professor_id = parseInt(document.getElementById('alunoProfessor').value); const status = document.getElementById('alunoStatus').value; if (id) { const a = dados.alunos.find(a => a.id == id); if (a) { a.nome = nome; a.email = email; if (senha) a.senha = senha; a.professor_id = professor_id; a.status = status; } } else { const prof = dados.professores.find(p => p.id === professor_id); dados.alunos.push({ id: nextAlunoId++, nome, email, senha, professor_id, turma_id: prof?.turma_id || 1, status, frequencia: 0, revisoesMes: 0, limiteRevisoes: dados.config.limiteRevisoes }); } salvarDados(); atualizarUI(); mostrarToast('Aluno salvo!', 'success'); fecharModal('modalAluno'); }
+    function abrirModalAluno(id = null) {
+        document.getElementById('alunoProfessor').innerHTML = dados.professores.filter(p => p.status === 'ativo').map(p => `<option value="${p.id}">${p.nome}</option>`).join('');
+        if (id) {
+            const a = dados.alunos.find(a => a.id === id);
+            if (a) {
+                document.getElementById('alunoId').value = a.id;
+                document.getElementById('alunoNome').value = a.nome;
+                document.getElementById('alunoEmail').value = a.email;
+                document.getElementById('alunoProfessor').value = a.professor_id;
+                document.getElementById('alunoStatus').value = a.status;
+                document.getElementById('modalAlunoTitle').innerText = 'Editar Aluno';
+            }
+        } else {
+            document.getElementById('alunoId').value = '';
+            document.getElementById('formAluno').reset();
+            document.getElementById('alunoSenha').value = 'aluno123';
+            document.getElementById('modalAlunoTitle').innerText = 'Adicionar Aluno';
+        }
+        document.getElementById('modalAluno').classList.add('active');
+    }
+
+    function salvarAluno(e) {
+        e.preventDefault();
+        const id = document.getElementById('alunoId').value;
+        const nome = document.getElementById('alunoNome').value;
+        const email = document.getElementById('alunoEmail').value;
+        const senha = document.getElementById('alunoSenha').value;
+        const professor_id = parseInt(document.getElementById('alunoProfessor').value);
+        const status = document.getElementById('alunoStatus').value;
+        
+        if (id) {
+            const a = dados.alunos.find(a => a.id == id);
+            if (a) {
+                a.nome = nome;
+                a.email = email;
+                if (senha) a.senha = senha;
+                a.professor_id = professor_id;
+                a.status = status;
+            }
+        } else {
+            const prof = dados.professores.find(p => p.id === professor_id);
+            dados.alunos.push({
+                id: nextAlunoId++,
+                nome, email, senha, professor_id,
+                turma_id: prof?.turma_id || 1,
+                status, frequencia: 0, revisoesMes: 0,
+                limiteRevisoes: dados.config.limiteRevisoes
+            });
+        }
+        salvarDados();
+        atualizarUI();
+        mostrarToast('Aluno salvo com sucesso!', 'success');
+        fecharModal('modalAluno');
+    }
+
     function editarAluno(id) { abrirModalAluno(id); }
-    function excluirAluno(id) { if (confirm('Excluir este aluno?')) { dados.alunos = dados.alunos.filter(a => a.id !== id); dados.trabalhos = dados.trabalhos.filter(t => t.aluno_id !== id); salvarDados(); atualizarUI(); mostrarToast('Aluno excluído!', 'success'); } }
+    
+    function excluirAluno(id) {
+        if (confirm('Excluir este aluno?')) {
+            dados.alunos = dados.alunos.filter(a => a.id !== id);
+            dados.trabalhos = dados.trabalhos.filter(t => t.aluno_id !== id);
+            salvarDados();
+            atualizarUI();
+            mostrarToast('Aluno excluído com sucesso!', 'success');
+        }
+    }
 
-    function abrirModalTurma(id = null) { document.getElementById('turmaProfessor').innerHTML = dados.professores.filter(p => p.status === 'ativo').map(p => `<option value="${p.id}">${p.nome}</option>`).join(''); if (id) { const t = dados.turmas.find(t => t.id === id); if (t) { document.getElementById('turmaId').value = t.id; document.getElementById('turmaNome').value = t.nome; document.getElementById('turmaProfessor').value = t.professor_id; document.getElementById('turmaStatus').value = t.status; document.getElementById('modalTurmaTitle').innerText = 'Editar Turma'; } } else { document.getElementById('turmaId').value = ''; document.getElementById('formTurma').reset(); document.getElementById('modalTurmaTitle').innerText = 'Adicionar Turma'; } document.getElementById('modalTurma').classList.add('active'); }
-    function salvarTurma(e) { e.preventDefault(); const id = document.getElementById('turmaId').value; const nome = document.getElementById('turmaNome').value; const professor_id = parseInt(document.getElementById('turmaProfessor').value); const status = document.getElementById('turmaStatus').value; if (id) { const t = dados.turmas.find(t => t.id == id); if (t) { t.nome = nome; t.professor_id = professor_id; t.status = status; } } else { dados.turmas.push({ id: nextTurmaId++, nome, professor_id, status }); } salvarDados(); atualizarUI(); mostrarToast('Turma salva!', 'success'); fecharModal('modalTurma'); }
+    function abrirModalTurma(id = null) {
+        document.getElementById('turmaProfessor').innerHTML = dados.professores.filter(p => p.status === 'ativo').map(p => `<option value="${p.id}">${p.nome}</option>`).join('');
+        if (id) {
+            const t = dados.turmas.find(t => t.id === id);
+            if (t) {
+                document.getElementById('turmaId').value = t.id;
+                document.getElementById('turmaNome').value = t.nome;
+                document.getElementById('turmaProfessor').value = t.professor_id;
+                document.getElementById('turmaStatus').value = t.status;
+                document.getElementById('modalTurmaTitle').innerText = 'Editar Turma';
+            }
+        } else {
+            document.getElementById('turmaId').value = '';
+            document.getElementById('formTurma').reset();
+            document.getElementById('modalTurmaTitle').innerText = 'Adicionar Turma';
+        }
+        document.getElementById('modalTurma').classList.add('active');
+    }
+
+    function salvarTurma(e) {
+        e.preventDefault();
+        const id = document.getElementById('turmaId').value;
+        const nome = document.getElementById('turmaNome').value;
+        const professor_id = parseInt(document.getElementById('turmaProfessor').value);
+        const status = document.getElementById('turmaStatus').value;
+        
+        if (id) {
+            const t = dados.turmas.find(t => t.id == id);
+            if (t) {
+                t.nome = nome;
+                t.professor_id = professor_id;
+                t.status = status;
+            }
+        } else {
+            dados.turmas.push({ id: nextTurmaId++, nome, professor_id, status });
+        }
+        salvarDados();
+        atualizarUI();
+        mostrarToast('Turma salva com sucesso!', 'success');
+        fecharModal('modalTurma');
+    }
+
     function editarTurma(id) { abrirModalTurma(id); }
-    function excluirTurma(id) { if (confirm('Excluir esta turma?')) { dados.turmas = dados.turmas.filter(t => t.id !== id); salvarDados(); atualizarUI(); mostrarToast('Turma excluída!', 'success'); } }
+    
+    function excluirTurma(id) {
+        if (confirm('Excluir esta turma?')) {
+            dados.turmas = dados.turmas.filter(t => t.id !== id);
+            salvarDados();
+            atualizarUI();
+            mostrarToast('Turma excluída com sucesso!', 'success');
+        }
+    }
 
-    function exportarBackup() { const blob = new Blob([JSON.stringify(dados, null, 2)], { type: 'application/json' }); const link = document.createElement('a'); link.href = URL.createObjectURL(blob); link.download = `backup_mentoria_${new Date().toISOString().split('T')[0]}.json`; link.click(); mostrarToast('Backup exportado!', 'success'); }
-    function importarBackup() { const input = document.createElement('input'); input.type = 'file'; input.accept = '.json'; input.onchange = e => { const file = e.target.files[0]; const reader = new FileReader(); reader.onload = ev => { try { const imp = JSON.parse(ev.target.result); Object.assign(dados, imp); salvarDados(); atualizarUI(); mostrarToast('Backup restaurado!', 'success'); } catch { mostrarToast('Arquivo inválido', 'error'); } }; reader.readAsText(file); }; input.click(); }
-    function resetarDados() { if (confirm('ATENÇÃO: Isso irá apagar todos os dados e restaurar os valores iniciais.')) { localStorage.removeItem('mentoria_dados'); location.reload(); } }
-    function salvarConfig() { dados.config.limiteRevisoes = parseInt(document.getElementById('configLimiteRevisoes').value); dados.config.limitePaginas = parseInt(document.getElementById('configLimitePaginas').value); salvarDados(); atualizarUI(); mostrarToast('Configurações salvas!', 'success'); }
+    function exportarBackup() {
+        const blob = new Blob([JSON.stringify(dados, null, 2)], { type: 'application/json' });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = `backup_mentoria_${new Date().toISOString().split('T')[0]}.json`;
+        link.click();
+        mostrarToast('Backup exportado com sucesso!', 'success');
+    }
 
-    function setupNavegacao() { document.querySelectorAll('.nav-item').forEach(item => { item.addEventListener('click', () => { const tab = item.dataset.tab; document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active')); item.classList.add('active'); document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active')); document.getElementById(`${tab}Pane`).classList.add('active'); const t = { dashboard: 'Dashboard', professores: 'Professores', alunos: 'Alunos', turmas: 'Turmas', configuracoes: 'Configurações' }; document.getElementById('pageTitle').innerText = t[tab]; }); }); }
+    function importarBackup() {
+        const input = document.createElement('input');
+        input.type = 'file';
+        input.accept = '.json';
+        input.onchange = e => {
+            const file = e.target.files[0];
+            const reader = new FileReader();
+            reader.onload = ev => {
+                try {
+                    const imp = JSON.parse(ev.target.result);
+                    Object.assign(dados, imp);
+                    salvarDados();
+                    atualizarUI();
+                    mostrarToast('Backup restaurado com sucesso!', 'success');
+                } catch {
+                    mostrarToast('Arquivo inválido', 'error');
+                }
+            };
+            reader.readAsText(file);
+        };
+        input.click();
+    }
+
+    function resetarDados() {
+        if (confirm('ATENÇÃO: Isso irá apagar todos os dados e restaurar os valores iniciais.')) {
+            localStorage.removeItem('mentoria_dados');
+            location.reload();
+        }
+    }
+
+    function salvarConfig() {
+        dados.config.limiteRevisoes = parseInt(document.getElementById('configLimiteRevisoes').value);
+        dados.config.limitePaginas = parseInt(document.getElementById('configLimitePaginas').value);
+        salvarDados();
+        atualizarUI();
+        mostrarToast('Configurações salvas com sucesso!', 'success');
+    }
+
+    function setupNavegacao() {
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', () => {
+                const tab = item.dataset.tab;
+                document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+                item.classList.add('active');
+                document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+                document.getElementById(`${tab}Pane`).classList.add('active');
+                const titles = {
+                    dashboard: 'Dashboard',
+                    professores: 'Professores',
+                    alunos: 'Alunos',
+                    turmas: 'Turmas',
+                    configuracoes: 'Configurações'
+                };
+                document.getElementById('pageTitle').innerText = titles[tab];
+            });
+        });
+    }
+
     function setupEventos() {
-        document.getElementById('loginForm').addEventListener('submit', (e) => { e.preventDefault(); fazerLogin(document.getElementById('loginEmail').value, document.getElementById('loginPassword').value); });
+        document.getElementById('loginForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            fazerLogin(document.getElementById('loginEmail').value, document.getElementById('loginPassword').value);
+        });
         document.getElementById('logoutBtn').addEventListener('click', logout);
         document.getElementById('novoProfessorBtn').addEventListener('click', () => abrirModalProfessor());
-        document.getElementById('formProfessor').addEventListener('submit', salvarProfessor);
         document.getElementById('novoAlunoBtn').addEventListener('click', () => abrirModalAluno());
-        document.getElementById('formAluno').addEventListener('submit', salvarAluno);
         document.getElementById('novaTurmaBtn').addEventListener('click', () => abrirModalTurma());
+        document.getElementById('formProfessor').addEventListener('submit', salvarProfessor);
+        document.getElementById('formAluno').addEventListener('submit', salvarAluno);
         document.getElementById('formTurma').addEventListener('submit', salvarTurma);
         document.getElementById('exportarBackupBtn').addEventListener('click', exportarBackup);
         document.getElementById('importarBackupBtn').addEventListener('click', importarBackup);
         document.getElementById('resetarDadosBtn').addEventListener('click', resetarDados);
         document.getElementById('salvarConfigBtn').addEventListener('click', salvarConfig);
-        document.querySelectorAll('.close-modal').forEach(btn => { btn.addEventListener('click', () => { const id = btn.dataset.modal; if (id) fecharModal(id); }); });
-        window.addEventListener('click', (e) => { if (e.target.classList.contains('modal')) e.target.classList.remove('active'); });
+        
+        document.querySelectorAll('.close-modal').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const modalId = btn.dataset.modal;
+                if (modalId) fecharModal(modalId);
+            });
+        });
+        
+        window.addEventListener('click', (e) => {
+            if (e.target.classList.contains('modal')) e.target.classList.remove('active');
+        });
     }
 
     carregarDados();
