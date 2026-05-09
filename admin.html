@@ -7,95 +7,693 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
-        *{margin:0;padding:0;box-sizing:border-box}
-        body{font-family:'Inter',sans-serif;background:linear-gradient(135deg,#0f0c29 0%,#1a1a3e 100%);height:100vh;overflow:hidden}
-        .login-screen{position:fixed;top:0;left:0;width:100%;height:100%;background:linear-gradient(135deg,#0f0c29 0%,#1a1a3e 50%,#1e1b4b 100%);display:flex;align-items:center;justify-content:center;z-index:1000}
-        .login-card{background:white;border-radius:32px;padding:40px;width:400px;max-width:90%;box-shadow:0 25px 50px -12px rgba(0,0,0,0.25)}
-        .login-header{text-align:center;margin-bottom:32px}
-        .login-icon{width:64px;height:64px;background:linear-gradient(135deg,#667eea,#764ba2);border-radius:20px;display:flex;align-items:center;justify-content:center;margin:0 auto 20px}
-        .login-icon i{font-size:28px;color:white}
-        .login-header h1{font-size:1.5rem;font-weight:700;margin-bottom:8px;color:#1e293b}
-        .login-header p{color:#64748b;font-size:.85rem}
-        .input-wrapper{position:relative;margin-bottom:20px}
-        .input-wrapper i{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:#94a3b8}
-        .input-wrapper input{width:100%;padding:12px 16px 12px 44px;border:1.5px solid #e2e8f0;border-radius:16px;font-size:.9rem;font-family:inherit}
-        .input-wrapper input:focus{outline:none;border-color:#667eea;box-shadow:0 0 0 3px rgba(102,126,234,0.1)}
-        .btn-login{width:100%;background:linear-gradient(135deg,#667eea,#764ba2);color:white;border:none;padding:14px;border-radius:16px;font-weight:600;cursor:pointer}
-        .error-msg{background:#fee2e2;color:#b91c1c;padding:10px;border-radius:12px;font-size:.8rem;margin-bottom:20px;display:none}
-        .dashboard-screen{display:none;height:100vh;overflow:hidden}
-        .app{display:flex;height:100vh}
-        .sidebar{width:260px;background:linear-gradient(180deg,#0f0c29 0%,#1a1a3e 100%);display:flex;flex-direction:column;height:100vh;flex-shrink:0}
-        .sidebar-header{padding:24px 20px;border-bottom:1px solid rgba(255,255,255,0.08)}
-        .logo{display:flex;align-items:center;gap:12px}
-        .logo-icon{width:40px;height:40px;background:linear-gradient(135deg,#667eea,#764ba2);border-radius:12px;display:flex;align-items:center;justify-content:center}
-        .logo-icon i{color:white;font-size:1rem}
-        .logo-text h2{color:white;font-size:1rem;font-weight:600}
-        .logo-text p{color:#a78bfa;font-size:.65rem;margin-top:2px}
-        .role-badge{background:rgba(102,126,234,0.2);padding:4px 10px;border-radius:20px;font-size:.65rem;margin-top:12px;display:inline-block;color:#a78bfa}
-        .nav-menu{flex:1;padding:16px 12px}
-        .nav-item{display:flex;align-items:center;gap:12px;padding:10px 16px;margin-bottom:4px;border-radius:12px;cursor:pointer;color:#94a3b8;font-weight:500;font-size:.85rem;transition:all .2s}
-        .nav-item i{width:20px}
-        .nav-item:hover{background:rgba(102,126,234,0.15);color:white}
-        .nav-item.active{background:rgba(102,126,234,0.2);color:#a78bfa;border-left:3px solid #667eea}
-        .logout-btn{margin:16px;padding:10px 16px;background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.25);color:#f87171;border-radius:12px;cursor:pointer;font-weight:600;display:flex;align-items:center;gap:12px}
-        .main{flex:1;display:flex;flex-direction:column;height:100vh;overflow:hidden}
-        .top-bar{background:white;padding:12px 24px;border-bottom:1px solid #e2e8f0;display:flex;justify-content:space-between;align-items:center;flex-shrink:0}
-        .page-title{font-size:1.2rem;font-weight:700;color:#1e293b}
-        .user-info{display:flex;align-items:center;gap:12px;background:#f1f5f9;padding:6px 16px;border-radius:40px}
-        .admin-name{font-size:.85rem;font-weight:500}
-        .admin-avatar{width:34px;height:34px;background:linear-gradient(135deg,#667eea,#764ba2);border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:600;color:white}
-        .content-area{flex:1;overflow-y:auto;padding:20px 24px}
-        .stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:20px}
-        @media (max-width:900px){.stats-grid{grid-template-columns:repeat(2,1fr)}}
-        .stat-card{background:white;padding:16px;border-radius:16px;border:1px solid #e2e8f0;transition:all .2s}
-        .stat-card:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,0.08)}
-        .stat-icon{width:40px;height:40px;background:rgba(102,126,234,0.1);border-radius:12px;display:flex;align-items:center;justify-content:center;margin-bottom:12px}
-        .stat-icon i{font-size:1rem;color:#667eea}
-        .stat-value{font-size:1.5rem;font-weight:700;color:#0f172a}
-        .stat-label{font-size:.7rem;color:#64748b;margin-top:4px}
-        .card{background:white;border-radius:16px;padding:16px 20px;margin-bottom:16px;border:1px solid #e2e8f0}
-        .card-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:10px}
-        .card-header h2{font-size:.9rem;font-weight:600;display:flex;align-items:center;gap:8px;color:#1e293b}
-        .card-header h2 i{color:#667eea}
-        .btn-primary{background:linear-gradient(135deg,#667eea,#764ba2);color:white;border:none;padding:8px 16px;border-radius:40px;font-weight:600;font-size:.75rem;cursor:pointer}
-        .btn-secondary{background:white;border:1px solid #e2e8f0;padding:8px 16px;border-radius:40px;font-size:.75rem;cursor:pointer}
-        .btn-danger{background:#ef4444;color:white;border:none;padding:8px 16px;border-radius:40px;font-size:.75rem;cursor:pointer}
-        .btn-icon{background:transparent;border:none;padding:6px 8px;border-radius:6px;cursor:pointer;color:#64748b}
-        .btn-icon:hover{background:#f1f5f9;color:#667eea}
-        .table-wrapper{overflow-x:auto}
-        table{width:100%;border-collapse:collapse}
-        th{text-align:left;padding:10px 8px;background:#f8fafc;font-size:.65rem;font-weight:600;color:#475569}
-        td{padding:10px 8px;border-bottom:1px solid #f1f5f9;font-size:.75rem}
-        .badge{display:inline-flex;padding:4px 12px;border-radius:30px;font-size:.7rem;font-weight:600}
-        .badge-active{background:#dcfce7;color:#15803d}
-        .badge-inactive{background:#fee2e2;color:#b91c1c}
-        .form-group{margin-bottom:16px}
-        .form-group label{display:block;margin-bottom:6px;font-weight:600;font-size:.75rem;color:#334155}
-        .form-control{width:100%;padding:10px 12px;border:1.5px solid #e2e8f0;border-radius:12px;font-size:.8rem;font-family:inherit}
-        .form-control:focus{outline:none;border-color:#667eea}
-        .modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);backdrop-filter:blur(4px);justify-content:center;align-items:center;z-index:1001}
-        .modal.active{display:flex}
-        .modal-content{background:white;border-radius:24px;padding:24px;width:90%;max-width:480px}
-        .modal-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}
-        .modal-header h3{font-size:1rem;font-weight:700}
-        .close-modal{background:none;border:none;font-size:1.2rem;cursor:pointer;color:#94a3b8}
-        .toast-container{position:fixed;top:20px;right:20px;z-index:1100}
-        .toast{background:white;border-radius:12px;padding:10px 16px;margin-bottom:8px;display:flex;align-items:center;gap:10px;box-shadow:0 4px 12px rgba(0,0,0,0.1);border-left:3px solid;animation:slideIn .2s ease}
-        .toast.success{border-left-color:#10b981}
-        .toast.error{border-left-color:#ef4444}
-        @keyframes slideIn{from{opacity:0;transform:translateX(100px)}to{opacity:1;transform:translateX(0)}}
-        .tab-pane{display:none}
-        .tab-pane.active{display:block}
-        .empty-state{text-align:center;padding:40px;color:#94a3b8}
-        .flex-between{display:flex;justify-content:space-between;align-items:center}
-        .gap-2{gap:8px}
-        .w-100{width:100%}
-        .mt-2{margin-top:8px}
-        .text-muted{color:#64748b;font-size:.7rem}
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #f1f5f9;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* TELA DE LOGIN */
+        .login-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #0f0c29 0%, #1a1a3e 50%, #1e1b4b 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .login-card {
+            background: white;
+            border-radius: 32px;
+            padding: 40px;
+            width: 400px;
+            max-width: 90%;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        .login-icon {
+            width: 64px;
+            height: 64px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+        }
+
+        .login-icon i {
+            font-size: 28px;
+            color: white;
+        }
+
+        .login-header h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: #1e293b;
+        }
+
+        .login-header p {
+            color: #64748b;
+            font-size: 0.85rem;
+        }
+
+        .input-wrapper {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .input-wrapper i {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #94a3b8;
+        }
+
+        .input-wrapper input {
+            width: 100%;
+            padding: 12px 16px 12px 44px;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 16px;
+            font-size: 0.9rem;
+            font-family: inherit;
+        }
+
+        .input-wrapper input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .btn-login {
+            width: 100%;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 14px;
+            border-radius: 16px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .btn-login:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .error-msg {
+            background: #fee2e2;
+            color: #b91c1c;
+            padding: 10px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .credentials-hint {
+            margin-top: 24px;
+            padding-top: 20px;
+            border-top: 1px solid #e2e8f0;
+            text-align: center;
+            font-size: 0.75rem;
+            color: #64748b;
+        }
+
+        .credentials-hint span {
+            color: #667eea;
+            font-weight: 600;
+        }
+
+        /* DASHBOARD */
+        .dashboard-screen {
+            display: none;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .app {
+            display: flex;
+            height: 100vh;
+        }
+
+        /* SIDEBAR */
+        .sidebar {
+            width: 260px;
+            background: linear-gradient(180deg, #0f0c29 0%, #1a1a3e 100%);
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            flex-shrink: 0;
+            box-shadow: 4px 0 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .sidebar-header {
+            padding: 24px 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logo-icon i {
+            color: white;
+            font-size: 1rem;
+        }
+
+        .logo-text h2 {
+            color: white;
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        .logo-text p {
+            color: #a78bfa;
+            font-size: 0.65rem;
+            margin-top: 2px;
+        }
+
+        .role-badge {
+            background: rgba(102, 126, 234, 0.2);
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.65rem;
+            margin-top: 12px;
+            display: inline-block;
+            color: #a78bfa;
+        }
+
+        .nav-menu {
+            flex: 1;
+            padding: 16px 12px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 16px;
+            margin-bottom: 4px;
+            border-radius: 12px;
+            cursor: pointer;
+            color: #94a3b8;
+            font-weight: 500;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+
+        .nav-item i {
+            width: 20px;
+        }
+
+        .nav-item:hover {
+            background: rgba(102, 126, 234, 0.15);
+            color: white;
+        }
+
+        .nav-item.active {
+            background: rgba(102, 126, 234, 0.2);
+            color: #a78bfa;
+            border-left: 3px solid #667eea;
+        }
+
+        .logout-btn {
+            margin: 16px;
+            padding: 10px 16px;
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.25);
+            color: #f87171;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logout-btn:hover {
+            background: rgba(239, 68, 68, 0.2);
+        }
+
+        /* MAIN */
+        .main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .top-bar {
+            background: white;
+            padding: 12px 24px;
+            border-bottom: 1px solid #e2e8f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-shrink: 0;
+        }
+
+        .page-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #1e293b;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: #f1f5f9;
+            padding: 6px 16px;
+            border-radius: 40px;
+        }
+
+        .admin-name {
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .admin-avatar {
+            width: 34px;
+            height: 34px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            color: white;
+        }
+
+        .content-area {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px 24px;
+        }
+
+        /* CARDS ESTATÍSTICOS */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-bottom: 24px;
+        }
+
+        @media (max-width: 1000px) {
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 20px;
+            border: 1px solid #e2e8f0;
+            transition: all 0.2s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+        }
+
+        .stat-icon {
+            width: 48px;
+            height: 48px;
+            background: rgba(102, 126, 234, 0.1);
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 12px;
+        }
+
+        .stat-icon i {
+            font-size: 1.3rem;
+            color: #667eea;
+        }
+
+        .stat-value {
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: #0f172a;
+        }
+
+        .stat-label {
+            font-size: 0.7rem;
+            color: #64748b;
+            margin-top: 4px;
+        }
+
+        /* CARDS PADRÃO */
+        .card {
+            background: white;
+            border-radius: 20px;
+            padding: 20px 24px;
+            margin-bottom: 20px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .card-header h2 {
+            font-size: 0.9rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #1e293b;
+        }
+
+        .card-header h2 i {
+            color: #667eea;
+        }
+
+        /* BOTÕES */
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 8px 18px;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-secondary {
+            background: white;
+            border: 1px solid #e2e8f0;
+            padding: 8px 18px;
+            border-radius: 40px;
+            font-size: 0.75rem;
+            cursor: pointer;
+        }
+
+        .btn-danger {
+            background: #ef4444;
+            color: white;
+            border: none;
+            padding: 8px 18px;
+            border-radius: 40px;
+            font-size: 0.75rem;
+            cursor: pointer;
+        }
+
+        .btn-icon {
+            background: transparent;
+            border: none;
+            padding: 8px;
+            border-radius: 8px;
+            cursor: pointer;
+            color: #64748b;
+            transition: all 0.2s;
+        }
+
+        .btn-icon:hover {
+            background: #f1f5f9;
+            color: #667eea;
+        }
+
+        /* TABELAS */
+        .table-wrapper {
+            overflow-x: auto;
+            border-radius: 12px;
+            margin-top: 8px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            text-align: left;
+            padding: 14px 12px;
+            background: #f8fafc;
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: #475569;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        td {
+            padding: 14px 12px;
+            border-bottom: 1px solid #f1f5f9;
+            font-size: 0.8rem;
+            color: #334155;
+            vertical-align: middle;
+        }
+
+        tr:hover td {
+            background: #fafaff;
+        }
+
+        /* BADGES */
+        .badge {
+            display: inline-flex;
+            padding: 4px 12px;
+            border-radius: 30px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .badge-active {
+            background: #dcfce7;
+            color: #15803d;
+        }
+
+        .badge-inactive {
+            background: #fee2e2;
+            color: #b91c1c;
+        }
+
+        .badge-warning {
+            background: #fef3c7;
+            color: #b45309;
+        }
+
+        /* PROGRESS */
+        .progress-bar {
+            width: 100px;
+            height: 6px;
+            background: #e2e8f0;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-top: 6px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: #10b981;
+            border-radius: 10px;
+            transition: width 0.3s;
+        }
+
+        /* FORMULÁRIOS */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            font-size: 0.8rem;
+            color: #334155;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 14px;
+            font-size: 0.85rem;
+            font-family: inherit;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        /* MODAL */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(4px);
+            justify-content: center;
+            align-items: center;
+            z-index: 1001;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 24px;
+            padding: 24px;
+            width: 90%;
+            max-width: 500px;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-header h3 {
+            font-size: 1.1rem;
+            font-weight: 700;
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 1.2rem;
+            cursor: pointer;
+            color: #94a3b8;
+        }
+
+        /* TOAST */
+        .toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1100;
+        }
+
+        .toast {
+            background: white;
+            border-radius: 12px;
+            padding: 10px 16px;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            border-left: 3px solid;
+            animation: slideIn 0.2s ease;
+        }
+
+        .toast.success {
+            border-left-color: #10b981;
+        }
+
+        .toast.error {
+            border-left-color: #ef4444;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(100px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .tab-pane {
+            display: none;
+        }
+
+        .tab-pane.active {
+            display: block;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: #94a3b8;
+        }
+
+        .flex-between {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .gap-2 {
+            gap: 8px;
+        }
+
+        .w-100 {
+            width: 100%;
+        }
+
+        .mt-2 {
+            margin-top: 8px;
+        }
+
+        .text-muted {
+            color: #64748b;
+            font-size: 0.7rem;
+        }
     </style>
 </head>
 <body>
 
+<!-- TELA DE LOGIN -->
 <div id="loginScreen" class="login-screen">
     <div class="login-card">
         <div class="login-header">
@@ -105,18 +703,24 @@
         </div>
         <div id="loginError" class="error-msg"></div>
         <form id="loginForm">
-            <div class="input-wrapper"><i class="fas fa-envelope"></i><input type="email" id="loginEmail" value="admin@mentoria.com"></div>
-            <div class="input-wrapper"><i class="fas fa-lock"></i><input type="password" id="loginPassword" value="admin123"></div>
+            <div class="input-wrapper"><i class="fas fa-envelope"></i><input type="email" id="loginEmail" placeholder="admin@mentoria.com" value="admin@mentoria.com"></div>
+            <div class="input-wrapper"><i class="fas fa-lock"></i><input type="password" id="loginPassword" placeholder="admin123" value="admin123"></div>
             <button type="submit" class="btn-login">Acessar Painel</button>
         </form>
+        <div class="credentials-hint"><strong>Credenciais:</strong> <span>admin@mentoria.com</span> / <span>admin123</span></div>
     </div>
 </div>
 
+<!-- DASHBOARD -->
 <div id="dashboardScreen" class="dashboard-screen">
     <div class="app">
+        <!-- SIDEBAR -->
         <aside class="sidebar">
             <div class="sidebar-header">
-                <div class="logo"><div class="logo-icon"><i class="fas fa-shield-alt"></i></div><div class="logo-text"><h2>Mentoria Admin</h2><p>Administrador</p></div></div>
+                <div class="logo">
+                    <div class="logo-icon"><i class="fas fa-shield-alt"></i></div>
+                    <div class="logo-text"><h2>Mentoria Admin</h2><p>Administrador</p></div>
+                </div>
                 <div class="role-badge">Acesso Total</div>
             </div>
             <div class="nav-menu">
@@ -126,49 +730,95 @@
                 <div class="nav-item" data-tab="turmas"><i class="fas fa-layer-group"></i><span>Turmas</span></div>
                 <div class="nav-item" data-tab="configuracoes"><i class="fas fa-sliders-h"></i><span>Configurações</span></div>
             </div>
-            <button class="logout-btn" id="logoutBtn"><i class="fas fa-sign-out-alt"></i><span>Sair</span></button>
+            <button class="logout-btn" id="logoutBtn"><i class="fas fa-sign-out-alt"></i><span>Sair do Sistema</span></button>
         </aside>
 
+        <!-- MAIN -->
         <div class="main">
-            <div class="top-bar"><h1 class="page-title" id="pageTitle">Dashboard</h1><div class="user-info"><span class="admin-name" id="adminName">Administrador</span><div class="admin-avatar" id="adminAvatar">A</div></div></div>
+            <div class="top-bar">
+                <h1 class="page-title" id="pageTitle">Dashboard</h1>
+                <div class="user-info"><span class="admin-name" id="adminName">Administrador</span><div class="admin-avatar" id="adminAvatar">A</div></div>
+            </div>
+
             <div class="content-area">
                 <div class="toast-container" id="toastContainer"></div>
 
+                <!-- DASHBOARD PANE -->
                 <div id="dashboardPane" class="tab-pane active">
                     <div class="stats-grid">
-                        <div class="stat-card"><div class="stat-icon"><i class="fas fa-chalkboard-user"></i></div><div class="stat-value" id="totalProfessores">0</div><div class="stat-label">Professores</div></div>
-                        <div class="stat-card"><div class="stat-icon"><i class="fas fa-users"></i></div><div class="stat-value" id="totalAlunos">0</div><div class="stat-label">Alunos</div></div>
-                        <div class="stat-card"><div class="stat-icon"><i class="fas fa-layer-group"></i></div><div class="stat-value" id="totalTurmas">0</div><div class="stat-label">Turmas</div></div>
-                        <div class="stat-card"><div class="stat-icon"><i class="fas fa-file-alt"></i></div><div class="stat-value" id="totalTrabalhos">0</div><div class="stat-label">Trabalhos</div></div>
+                        <div class="stat-card"><div class="stat-icon"><i class="fas fa-chalkboard-user"></i></div><div class="stat-value" id="totalProfessores">0</div><div class="stat-label">Professores Ativos</div></div>
+                        <div class="stat-card"><div class="stat-icon"><i class="fas fa-users"></i></div><div class="stat-value" id="totalAlunos">0</div><div class="stat-label">Total de Alunos</div></div>
+                        <div class="stat-card"><div class="stat-icon"><i class="fas fa-layer-group"></i></div><div class="stat-value" id="totalTurmas">0</div><div class="stat-label">Turmas Ativas</div></div>
+                        <div class="stat-card"><div class="stat-icon"><i class="fas fa-file-alt"></i></div><div class="stat-value" id="totalTrabalhos">0</div><div class="stat-label">Trabalhos Realizados</div></div>
                     </div>
-                    <div class="card"><div class="card-header"><h2><i class="fas fa-chart-line"></i> Métricas</h2></div><div id="metricasContainer" class="stats-grid" style="grid-template-columns:repeat(3,1fr)"></div></div>
-                    <div class="card"><div class="card-header"><h2><i class="fas fa-bell"></i> Alertas</h2></div><div id="alertasContainer"></div></div>
+
+                    <div class="card">
+                        <div class="card-header"><h2><i class="fas fa-chart-line"></i> Métricas do Sistema</h2></div>
+                        <div id="metricasContainer" class="stats-grid" style="grid-template-columns: repeat(3, 1fr);"></div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header"><h2><i class="fas fa-bell"></i> Alertas do Sistema</h2></div>
+                        <div id="alertasContainer"></div>
+                    </div>
                 </div>
 
+                <!-- PROFESSORES PANE -->
                 <div id="professoresPane" class="tab-pane">
-                    <div class="card"><div class="card-header"><h2><i class="fas fa-chalkboard-user"></i> Professores</h2><button class="btn-primary" id="novoProfessorBtn">Novo Professor</button></div>
-                        <div class="table-wrapper"></table><thead><tr><th>Nome</th><th>E-mail</th><th>Status</th><th>Turma</th><th>Ações</th></tr></thead><tbody id="tabelaProfessores"></tbody></table></div>
-                </div>
-
-                <div id="alunosPane" class="tab-pane">
-                    <div class="card"><div class="card-header"><h2><i class="fas fa-users"></i> Alunos</h2><button class="btn-primary" id="novoAlunoBtn">Novo Aluno</button></div>
-                        <div class="table-wrapper"><table><thead><tr><th>Nome</th><th>E-mail</th><th>Professor</th><th>Status</th><th>Frequência</th><th>Ações</th></tr></thead><tbody id="tabelaAlunos"></tbody></table></div>
-                </div>
-
-                <div id="turmasPane" class="tab-pane">
-                    <div class="card"><div class="card-header"><h2><i class="fas fa-layer-group"></i> Turmas</h2><button class="btn-primary" id="novaTurmaBtn">Nova Turma</button></div>
-                        <div class="table-wrapper"><tr><thead><tr><th>Turma</th><th>Professor</th><th>Alunos</th><th>Status</th><th>Ações</th></tr></thead><tbody id="tabelaTurmas"></tbody></table></div>
-                </div>
-
-                <div id="configuracoesPane" class="tab-pane">
-                    <div class="card"><div class="card-header"><h2><i class="fas fa-database"></i> Backup</h2></div>
-                        <div class="flex-between gap-2"><button class="btn-secondary" id="exportarBackupBtn">Exportar</button><button class="btn-secondary" id="importarBackupBtn">Importar</button><button class="btn-danger" id="resetarDadosBtn">Resetar</button></div>
-                        <div class="mt-2"><small class="text-muted">Último backup: <span id="ultimoBackup">Nunca</span></small></div>
+                    <div class="card">
+                        <div class="card-header"><h2><i class="fas fa-chalkboard-user"></i> Gestão de Professores</h2><button class="btn-primary" id="novoProfessorBtn">+ Novo Professor</button></div>
+                        <div class="table-wrapper">
+                            <table>
+                                <thead><tr><th>Nome</th><th>E-mail</th><th>Status</th><th>Turma</th><th>Ações</th></tr></thead>
+                                <tbody id="tabelaProfessores"></tbody>
+                            </table>
+                        </div>
                     </div>
-                    <div class="card"><div class="card-header"><h2><i class="fas fa-sliders-h"></i> Configurações</h2></div>
-                        <div class="form-group"><label>Revisões por mês</label><input type="number" id="configLimiteRevisoes" class="form-control" value="2"></div>
-                        <div class="form-group"><label>Páginas por trabalho</label><input type="number" id="configLimitePaginas" class="form-control" value="6"></div>
-                        <button class="btn-primary" id="salvarConfigBtn">Salvar</button>
+                </div>
+
+                <!-- ALUNOS PANE -->
+                <div id="alunosPane" class="tab-pane">
+                    <div class="card">
+                        <div class="card-header"><h2><i class="fas fa-users"></i> Gestão de Alunos</h2><button class="btn-primary" id="novoAlunoBtn">+ Novo Aluno</button></div>
+                        <div class="table-wrapper">
+                            <table>
+                                <thead><tr><th>Nome</th><th>E-mail</th><th>Professor</th><th>Status</th><th>Frequência</th><th>Ações</th></tr></thead>
+                                <tbody id="tabelaAlunos"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TURMAS PANE -->
+                <div id="turmasPane" class="tab-pane">
+                    <div class="card">
+                        <div class="card-header"><h2><i class="fas fa-layer-group"></i> Gestão de Turmas</h2><button class="btn-primary" id="novaTurmaBtn">+ Nova Turma</button></div>
+                        <div class="table-wrapper">
+                            <table>
+                                <thead><tr><th>Nome da Turma</th><th>Professor</th><th>Alunos</th><th>Status</th><th>Ações</th></tr></thead>
+                                <tbody id="tabelaTurmas"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CONFIGURAÇÕES PANE -->
+                <div id="configuracoesPane" class="tab-pane">
+                    <div class="card">
+                        <div class="card-header"><h2><i class="fas fa-database"></i> Backup e Restauração</h2></div>
+                        <div class="flex-between gap-2">
+                            <button class="btn-secondary" id="exportarBackupBtn">Exportar Backup</button>
+                            <button class="btn-secondary" id="importarBackupBtn">Importar Backup</button>
+                            <button class="btn-danger" id="resetarDadosBtn">Resetar Sistema</button>
+                        </div>
+                        <div class="mt-2"><small class="text-muted">Último backup: <span id="ultimoBackup">Nunca realizado</span></small></div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header"><h2><i class="fas fa-sliders-h"></i> Configurações do Sistema</h2></div>
+                        <div class="form-group"><label>Limite de revisões por mês</label><input type="number" id="configLimiteRevisoes" class="form-control" value="2" min="1" max="10"></div>
+                        <div class="form-group"><label>Limite de páginas por trabalho</label><input type="number" id="configLimitePaginas" class="form-control" value="6" min="1" max="20"></div>
+                        <button class="btn-primary" id="salvarConfigBtn">Salvar Configurações</button>
                     </div>
                 </div>
             </div>
@@ -176,90 +826,172 @@
     </div>
 </div>
 
-<div id="modalProfessor" class="modal"><div class="modal-content"><div class="modal-header"><h3 id="modalProfessorTitle">Professor</h3><button class="close-modal" data-modal="modalProfessor">&times;</button></div>
-<form id="formProfessor"><input type="hidden" id="professorId"><div class="form-group"><label>Nome</label><input type="text" id="professorNome" class="form-control" required></div>
-<div class="form-group"><label>E-mail</label><input type="email" id="professorEmail" class="form-control" required></div>
-<div class="form-group"><label>Senha</label><input type="password" id="professorSenha" class="form-control" value="prof123"></div>
-<div class="form-group"><label>Status</label><select id="professorStatus" class="form-control"><option value="ativo">Ativo</option><option value="inativo">Inativo</option></select></div>
-<div class="form-group"><label>Turma</label><select id="professorTurma" class="form-control"></select></div>
-<button type="submit" class="btn-primary w-100">Salvar</button></form></div></div>
+<!-- MODAL PROFESSOR -->
+<div id="modalProfessor" class="modal">
+    <div class="modal-content">
+        <div class="modal-header"><h3 id="modalProfessorTitle">Adicionar Professor</h3><button class="close-modal" data-modal="modalProfessor">&times;</button></div>
+        <form id="formProfessor">
+            <input type="hidden" id="professorId">
+            <div class="form-group"><label>Nome Completo</label><input type="text" id="professorNome" class="form-control" required></div>
+            <div class="form-group"><label>E-mail</label><input type="email" id="professorEmail" class="form-control" required></div>
+            <div class="form-group"><label>Senha</label><input type="password" id="professorSenha" class="form-control" value="prof123"></div>
+            <div class="form-group"><label>Status</label><select id="professorStatus" class="form-control"><option value="ativo">Ativo</option><option value="inativo">Inativo</option></select></div>
+            <div class="form-group"><label>Turma</label><select id="professorTurma" class="form-control"></select></div>
+            <button type="submit" class="btn-primary w-100">Salvar Professor</button>
+        </form>
+    </div>
+</div>
 
-<div id="modalAluno" class="modal"><div class="modal-content"><div class="modal-header"><h3 id="modalAlunoTitle">Aluno</h3><button class="close-modal" data-modal="modalAluno">&times;</button></div>
-<form id="formAluno"><input type="hidden" id="alunoId"><div class="form-group"><label>Nome</label><input type="text" id="alunoNome" class="form-control" required></div>
-<div class="form-group"><label>E-mail</label><input type="email" id="alunoEmail" class="form-control" required></div>
-<div class="form-group"><label>Senha</label><input type="password" id="alunoSenha" class="form-control" value="aluno123"></div>
-<div class="form-group"><label>Professor</label><select id="alunoProfessor" class="form-control"></select></div>
-<div class="form-group"><label>Status</label><select id="alunoStatus" class="form-control"><option value="ativo">Ativo</option><option value="inativo">Inativo</option></select></div>
-<button type="submit" class="btn-primary w-100">Salvar</button></form></div></div>
+<!-- MODAL ALUNO -->
+<div id="modalAluno" class="modal">
+    <div class="modal-content">
+        <div class="modal-header"><h3 id="modalAlunoTitle">Adicionar Aluno</h3><button class="close-modal" data-modal="modalAluno">&times;</button></div>
+        <form id="formAluno">
+            <input type="hidden" id="alunoId">
+            <div class="form-group"><label>Nome Completo</label><input type="text" id="alunoNome" class="form-control" required></div>
+            <div class="form-group"><label>E-mail</label><input type="email" id="alunoEmail" class="form-control" required></div>
+            <div class="form-group"><label>Senha</label><input type="password" id="alunoSenha" class="form-control" value="aluno123"></div>
+            <div class="form-group"><label>Professor Responsável</label><select id="alunoProfessor" class="form-control"></select></div>
+            <div class="form-group"><label>Status</label><select id="alunoStatus" class="form-control"><option value="ativo">Ativo</option><option value="inativo">Inativo</option></select></div>
+            <button type="submit" class="btn-primary w-100">Salvar Aluno</button>
+        </form>
+    </div>
+</div>
 
-<div id="modalTurma" class="modal"><div class="modal-content"><div class="modal-header"><h3 id="modalTurmaTitle">Turma</h3><button class="close-modal" data-modal="modalTurma">&times;</button></div>
-<form id="formTurma"><input type="hidden" id="turmaId"><div class="form-group"><label>Nome</label><input type="text" id="turmaNome" class="form-control" required></div>
-<div class="form-group"><label>Professor</label><select id="turmaProfessor" class="form-control"></select></div>
-<div class="form-group"><label>Status</label><select id="turmaStatus" class="form-control"><option value="ativa">Ativa</option><option value="inativa">Inativa</option></select></div>
-<button type="submit" class="btn-primary w-100">Salvar</button></form></div></div>
+<!-- MODAL TURMA -->
+<div id="modalTurma" class="modal">
+    <div class="modal-content">
+        <div class="modal-header"><h3 id="modalTurmaTitle">Adicionar Turma</h3><button class="close-modal" data-modal="modalTurma">&times;</button></div>
+        <form id="formTurma">
+            <input type="hidden" id="turmaId">
+            <div class="form-group"><label>Nome da Turma</label><input type="text" id="turmaNome" class="form-control" required></div>
+            <div class="form-group"><label>Professor Responsável</label><select id="turmaProfessor" class="form-control"></select></div>
+            <div class="form-group"><label>Status</label><select id="turmaStatus" class="form-control"><option value="ativa">Ativa</option><option value="inativa">Inativa</option></select></div>
+            <button type="submit" class="btn-primary w-100">Salvar Turma</button>
+        </form>
+    </div>
+</div>
 
 <script>
-    let dados={professores:[{id:1,nome:'Carlos Alberto Silva',email:'carlos.silva@mentoria.com',senha:'prof123',status:'ativo',turma_id:1},{id:2,nome:'Mariana Santos',email:'mariana.santos@mentoria.com',senha:'prof123',status:'ativo',turma_id:2}],alunos:[{id:1,nome:'Lucas Fernandes de Souza',email:'lucas.fernandes@estudante.com',senha:'aluno123',professor_id:1,turma_id:1,status:'ativo',frequencia:88,revisoesMes:0,limiteRevisoes:2},{id:2,nome:'Ana Beatriz Costa Mendes',email:'ana.mendes@estudante.com',senha:'aluno123',professor_id:1,turma_id:1,status:'ativo',frequencia:72,revisoesMes:1,limiteRevisoes:2},{id:3,nome:'Rafael Augusto Lima',email:'rafael.lima@estudante.com',senha:'aluno123',professor_id:1,turma_id:1,status:'ativo',frequencia:94,revisoesMes:2,limiteRevisoes:2},{id:4,nome:'Camila Rodrigues Alves',email:'camila.alves@estudante.com',senha:'aluno123',professor_id:2,turma_id:2,status:'ativo',frequencia:67,revisoesMes:0,limiteRevisoes:2},{id:5,nome:'Thiago Nascimento Silva',email:'thiago.nascimento@estudante.com',senha:'aluno123',professor_id:2,turma_id:2,status:'ativo',frequencia:81,revisoesMes:1,limiteRevisoes:2}],turmas:[{id:1,nome:'Introdução à Ciências da Religião',professor_id:1,status:'ativa'},{id:2,nome:'Fenomenologia da Religião',professor_id:2,status:'ativa'}],trabalhos:[{id:1,aluno_id:1,titulo:'Análise do Sagrado em Durkheim',data:'10/05/2025',status:'pendente',paginas:4},{id:2,aluno_id:2,titulo:'Weber e a Ética Protestante',data:'12/05/2025',status:'pendente',paginas:5},{id:3,aluno_id:3,titulo:'Eliade e o Conceito de Hierofania',data:'08/05/2025',status:'aprovado',desempenho:'Excelente',paginas:6}],config:{limiteRevisoes:2,limitePaginas:6}};
-    let nextProfessorId=3,nextAlunoId=6,nextTurmaId=3;
-    function salvarDados(){localStorage.setItem('mentoria_dados',JSON.stringify(dados))}
-    function carregarDados(){const s=localStorage.getItem('mentoria_dados');if(s){try{const p=JSON.parse(s);dados={...dados,...p}}catch(e){}}salvarDados()}
-    function mostrarToast(msg,tipo){const t=document.createElement('div');t.className=`toast ${tipo}`;t.innerHTML=`<i class="fas ${tipo==='success'?'fa-check-circle':'fa-exclamation-circle'}"></i> ${msg}`;document.getElementById('toastContainer').appendChild(t);setTimeout(()=>t.remove(),3000)}
-    function fecharModal(id){document.getElementById(id).classList.remove('active')}
-    function fazerLogin(email,senha){if(email==='admin@mentoria.com'&&senha==='admin123'){document.getElementById('loginScreen').style.display='none';document.getElementById('dashboardScreen').style.display='block';document.getElementById('adminName').innerText='Administrador';document.getElementById('adminAvatar').innerText='A';atualizarUI();return true}document.getElementById('loginError').innerText='E-mail ou senha inválidos';document.getElementById('loginError').classList.add('show');return false}
-    function logout(){document.getElementById('loginScreen').style.display='flex';document.getElementById('dashboardScreen').style.display='none'}
-    function atualizarUI(){
-        document.getElementById('totalProfessores').innerText=dados.professores.length;
-        document.getElementById('totalAlunos').innerText=dados.alunos.length;
-        document.getElementById('totalTurmas').innerText=dados.turmas.length;
-        document.getElementById('totalTrabalhos').innerText=dados.trabalhos.length;
-        const freqMedia=dados.alunos.length?Math.round(dados.alunos.reduce((s,a)=>s+a.frequencia,0)/dados.alunos.length):0;
-        const totalFeedbacks=dados.trabalhos.filter(t=>t.status==='aprovado').length;
-        document.getElementById('metricasContainer').innerHTML=`<div class="stat-card"><div class="stat-value">${freqMedia}%</div><div class="stat-label">Frequência Média</div></div><div class="stat-card"><div class="stat-value">${totalFeedbacks}</div><div class="stat-label">Trabalhos Revisados</div></div><div class="stat-card"><div class="stat-value">${dados.config.limiteRevisoes}</div><div class="stat-label">Revisões/Mês</div></div>`;
-        let alertas=[];if(dados.professores.filter(p=>p.status==='inativo').length)alertas.push('<div class="badge-warning" style="padding:12px;border-radius:12px;margin-bottom:8px;">Professores inativos</div>');if(dados.alunos.filter(a=>a.frequencia<70).length)alertas.push('<div class="badge-warning" style="padding:12px;border-radius:12px;">Alunos com baixa frequência</div>');if(!alertas.length)alertas.push('<div class="badge-active" style="padding:12px;border-radius:12px;">Sistema normal</div>');
-        document.getElementById('alertasContainer').innerHTML=alertas.join('');
-        document.getElementById('tabelaProfessores').innerHTML=dados.professores.map(p=>{const t=dados.turmas.find(t=>t.id===p.turma_id);return `<td style="padding:12px"><strong>${p.nome}</strong></td><td style="padding:12px">${p.email}</td><td style="padding:12px"><span class="badge ${p.status==='ativo'?'badge-active':'badge-inactive'}">${p.status}</span></td><td style="padding:12px">${t?.nome||'-'}</td><td style="padding:12px"><button class="btn-icon" onclick="editarProfessor(${p.id})"><i class="fas fa-edit"></i></button> <button class="btn-icon" onclick="excluirProfessor(${p.id})"><i class="fas fa-trash"></i></button></td>`}).join('')||'<td colspan="5" class="empty-state">Nenhum professor</td>';
-        document.getElementById('tabelaAlunos').innerHTML=dados.alunos.map(a=>{const p=dados.professores.find(p=>p.id===a.professor_id);return `<td style="padding:12px"><strong>${a.nome}</strong></td><td style="padding:12px">${a.email}</td><td style="padding:12px">${p?.nome||'-'}</td><td style="padding:12px"><span class="badge ${a.status==='ativo'?'badge-active':'badge-inactive'}">${a.status}</span></td><td style="padding:12px">${a.frequencia}%<div class="progress-bar" style="width:80px;height:4px;background:#e2e8f0;border-radius:10px;margin-top:4px"><div style="width:${a.frequencia}%;height:100%;background:#10b981;border-radius:10px"></div></div></td><td style="padding:12px"><button class="btn-icon" onclick="editarAluno(${a.id})"><i class="fas fa-edit"></i></button> <button class="btn-icon" onclick="excluirAluno(${a.id})"><i class="fas fa-trash"></i></button></td>`}).join('')||'<td colspan="6" class="empty-state">Nenhum aluno</td>';
-        document.getElementById('tabelaTurmas').innerHTML=dados.turmas.map(t=>{const p=dados.professores.find(p=>p.id===t.professor_id);const qtd=dados.alunos.filter(a=>a.turma_id===t.id).length;return `<td style="padding:12px"><strong>${t.nome}</strong></td><td style="padding:12px">${p?.nome||'-'}</td><td style="padding:12px">${qtd}</td><td style="padding:12px"><span class="badge ${t.status==='ativa'?'badge-active':'badge-inactive'}">${t.status}</span></td><td style="padding:12px"><button class="btn-icon" onclick="editarTurma(${t.id})"><i class="fas fa-edit"></i></button> <button class="btn-icon" onclick="excluirTurma(${t.id})"><i class="fas fa-trash"></i></button></td>`}).join('')||'<td colspan="5" class="empty-state">Nenhuma turma</td>';
-        document.getElementById('professorTurma').innerHTML=dados.turmas.map(t=>`<option value="${t.id}">${t.nome}</option>`).join('');
-        document.getElementById('alunoProfessor').innerHTML=dados.professores.filter(p=>p.status==='ativo').map(p=>`<option value="${p.id}">${p.nome}</option>`).join('');
-        document.getElementById('turmaProfessor').innerHTML=dados.professores.filter(p=>p.status==='ativo').map(p=>`<option value="${p.id}">${p.nome}</option>`).join('');
-        document.getElementById('configLimiteRevisoes').value=dados.config.limiteRevisoes;
-        document.getElementById('configLimitePaginas').value=dados.config.limitePaginas;
+    let dados = {
+        professores: [
+            { id: 1, nome: 'Carlos Alberto Silva', email: 'carlos.silva@mentoria.com', senha: 'prof123', status: 'ativo', turma_id: 1 },
+            { id: 2, nome: 'Mariana Santos', email: 'mariana.santos@mentoria.com', senha: 'prof123', status: 'ativo', turma_id: 2 }
+        ],
+        alunos: [
+            { id: 1, nome: 'Lucas Fernandes de Souza', email: 'lucas.fernandes@estudante.com', senha: 'aluno123', professor_id: 1, turma_id: 1, status: 'ativo', frequencia: 88, revisoesMes: 0, limiteRevisoes: 2 },
+            { id: 2, nome: 'Ana Beatriz Costa Mendes', email: 'ana.mendes@estudante.com', senha: 'aluno123', professor_id: 1, turma_id: 1, status: 'ativo', frequencia: 72, revisoesMes: 1, limiteRevisoes: 2 },
+            { id: 3, nome: 'Rafael Augusto Lima', email: 'rafael.lima@estudante.com', senha: 'aluno123', professor_id: 1, turma_id: 1, status: 'ativo', frequencia: 94, revisoesMes: 2, limiteRevisoes: 2 },
+            { id: 4, nome: 'Camila Rodrigues Alves', email: 'camila.alves@estudante.com', senha: 'aluno123', professor_id: 2, turma_id: 2, status: 'ativo', frequencia: 67, revisoesMes: 0, limiteRevisoes: 2 },
+            { id: 5, nome: 'Thiago Nascimento Silva', email: 'thiago.nascimento@estudante.com', senha: 'aluno123', professor_id: 2, turma_id: 2, status: 'ativo', frequencia: 81, revisoesMes: 1, limiteRevisoes: 2 }
+        ],
+        turmas: [
+            { id: 1, nome: 'Introdução à Ciências da Religião', professor_id: 1, status: 'ativa' },
+            { id: 2, nome: 'Fenomenologia da Religião', professor_id: 2, status: 'ativa' }
+        ],
+        trabalhos: [
+            { id: 1, aluno_id: 1, titulo: 'Análise do Sagrado em Durkheim', data: '10/05/2025', status: 'pendente', paginas: 4 },
+            { id: 2, aluno_id: 2, titulo: 'Weber e a Ética Protestante', data: '12/05/2025', status: 'pendente', paginas: 5 },
+            { id: 3, aluno_id: 3, titulo: 'Eliade e o Conceito de Hierofania', data: '08/05/2025', status: 'aprovado', desempenho: 'Excelente', paginas: 6 }
+        ],
+        config: { limiteRevisoes: 2, limitePaginas: 6 }
+    };
+
+    let nextProfessorId = 3, nextAlunoId = 6, nextTurmaId = 3;
+
+    function salvarDados() { localStorage.setItem('mentoria_dados', JSON.stringify(dados)); }
+    function carregarDados() { const s = localStorage.getItem('mentoria_dados'); if (s) { try { const p = JSON.parse(s); dados = { ...dados, ...p }; } catch(e) {} } salvarDados(); }
+    function mostrarToast(msg, tipo) { const t = document.createElement('div'); t.className = `toast ${tipo}`; t.innerHTML = `<i class="fas ${tipo === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'}"></i> ${msg}`; document.getElementById('toastContainer').appendChild(t); setTimeout(() => t.remove(), 3000); }
+    function fecharModal(id) { document.getElementById(id).classList.remove('active'); }
+
+    function fazerLogin(email, senha) {
+        if (email === 'admin@mentoria.com' && senha === 'admin123') {
+            document.getElementById('loginScreen').style.display = 'none';
+            document.getElementById('dashboardScreen').style.display = 'block';
+            document.getElementById('adminName').innerText = 'Administrador';
+            document.getElementById('adminAvatar').innerText = 'A';
+            atualizarUI();
+            return true;
+        }
+        document.getElementById('loginError').innerText = 'E-mail ou senha inválidos. Use: admin@mentoria.com / admin123';
+        document.getElementById('loginError').classList.add('show');
+        return false;
     }
-    function abrirModalProfessor(id=null){if(id){const p=dados.professores.find(p=>p.id===id);if(p){document.getElementById('professorId').value=p.id;document.getElementById('professorNome').value=p.nome;document.getElementById('professorEmail').value=p.email;document.getElementById('professorStatus').value=p.status;document.getElementById('professorTurma').value=p.turma_id||'';document.getElementById('modalProfessorTitle').innerText='Editar Professor'}}else{document.getElementById('professorId').value='';document.getElementById('formProfessor').reset();document.getElementById('professorSenha').value='prof123';document.getElementById('modalProfessorTitle').innerText='Adicionar Professor'}document.getElementById('modalProfessor').classList.add('active')}
-    function salvarProfessor(e){e.preventDefault();const id=document.getElementById('professorId').value;const nome=document.getElementById('professorNome').value;const email=document.getElementById('professorEmail').value;const senha=document.getElementById('professorSenha').value;const status=document.getElementById('professorStatus').value;const turma_id=parseInt(document.getElementById('professorTurma').value);if(id){const p=dados.professores.find(p=>p.id==id);if(p){p.nome=nome;p.email=email;if(senha)p.senha=senha;p.status=status;p.turma_id=turma_id}}else{dados.professores.push({id:nextProfessorId++,nome,email,senha,status,turma_id})}salvarDados();atualizarUI();mostrarToast('Professor salvo!','success');fecharModal('modalProfessor')}
-    function editarProfessor(id){abrirModalProfessor(id)}
-    function excluirProfessor(id){if(confirm('Excluir professor?')){dados.professores=dados.professores.filter(p=>p.id!==id);salvarDados();atualizarUI();mostrarToast('Professor excluído!','success')}}
-    function abrirModalAluno(id=null){document.getElementById('alunoProfessor').innerHTML=dados.professores.filter(p=>p.status==='ativo').map(p=>`<option value="${p.id}">${p.nome}</option>`).join('');if(id){const a=dados.alunos.find(a=>a.id===id);if(a){document.getElementById('alunoId').value=a.id;document.getElementById('alunoNome').value=a.nome;document.getElementById('alunoEmail').value=a.email;document.getElementById('alunoProfessor').value=a.professor_id;document.getElementById('alunoStatus').value=a.status;document.getElementById('modalAlunoTitle').innerText='Editar Aluno'}}else{document.getElementById('alunoId').value='';document.getElementById('formAluno').reset();document.getElementById('alunoSenha').value='aluno123';document.getElementById('modalAlunoTitle').innerText='Adicionar Aluno'}document.getElementById('modalAluno').classList.add('active')}
-    function salvarAluno(e){e.preventDefault();const id=document.getElementById('alunoId').value;const nome=document.getElementById('alunoNome').value;const email=document.getElementById('alunoEmail').value;const senha=document.getElementById('alunoSenha').value;const professor_id=parseInt(document.getElementById('alunoProfessor').value);const status=document.getElementById('alunoStatus').value;if(id){const a=dados.alunos.find(a=>a.id==id);if(a){a.nome=nome;a.email=email;if(senha)a.senha=senha;a.professor_id=professor_id;a.status=status}}else{const prof=dados.professores.find(p=>p.id===professor_id);dados.alunos.push({id:nextAlunoId++,nome,email,senha,professor_id,turma_id:prof?.turma_id||1,status,frequencia:0,revisoesMes:0,limiteRevisoes:dados.config.limiteRevisoes})}salvarDados();atualizarUI();mostrarToast('Aluno salvo!','success');fecharModal('modalAluno')}
-    function editarAluno(id){abrirModalAluno(id)}
-    function excluirAluno(id){if(confirm('Excluir aluno?')){dados.alunos=dados.alunos.filter(a=>a.id!==id);dados.trabalhos=dados.trabalhos.filter(t=>t.aluno_id!==id);salvarDados();atualizarUI();mostrarToast('Aluno excluído!','success')}}
-    function abrirModalTurma(id=null){document.getElementById('turmaProfessor').innerHTML=dados.professores.filter(p=>p.status==='ativo').map(p=>`<option value="${p.id}">${p.nome}</option>`).join('');if(id){const t=dados.turmas.find(t=>t.id===id);if(t){document.getElementById('turmaId').value=t.id;document.getElementById('turmaNome').value=t.nome;document.getElementById('turmaProfessor').value=t.professor_id;document.getElementById('turmaStatus').value=t.status;document.getElementById('modalTurmaTitle').innerText='Editar Turma'}}else{document.getElementById('turmaId').value='';document.getElementById('formTurma').reset();document.getElementById('modalTurmaTitle').innerText='Adicionar Turma'}document.getElementById('modalTurma').classList.add('active')}
-    function salvarTurma(e){e.preventDefault();const id=document.getElementById('turmaId').value;const nome=document.getElementById('turmaNome').value;const professor_id=parseInt(document.getElementById('turmaProfessor').value);const status=document.getElementById('turmaStatus').value;if(id){const t=dados.turmas.find(t=>t.id==id);if(t){t.nome=nome;t.professor_id=professor_id;t.status=status}}else{dados.turmas.push({id:nextTurmaId++,nome,professor_id,status})}salvarDados();atualizarUI();mostrarToast('Turma salva!','success');fecharModal('modalTurma')}
-    function editarTurma(id){abrirModalTurma(id)}
-    function excluirTurma(id){if(confirm('Excluir turma?')){dados.turmas=dados.turmas.filter(t=>t.id!==id);salvarDados();atualizarUI();mostrarToast('Turma excluída!','success')}}
-    function exportarBackup(){const blob=new Blob([JSON.stringify(dados,null,2)],{type:'application/json'});const link=document.createElement('a');link.href=URL.createObjectURL(blob);link.download=`backup_mentoria_${new Date().toISOString().split('T')[0]}.json`;link.click();mostrarToast('Backup exportado!','success')}
-    function importarBackup(){const input=document.createElement('input');input.type='file';input.accept='.json';input.onchange=e=>{const file=e.target.files[0];const reader=new FileReader();reader.onload=ev=>{try{const imp=JSON.parse(ev.target.result);Object.assign(dados,imp);salvarDados();atualizarUI();mostrarToast('Backup restaurado!','success')}catch{mostrarToast('Erro','error')}};reader.readAsText(file)};input.click()}
-    function resetarDados(){if(confirm('Resetar dados?')){localStorage.removeItem('mentoria_dados');location.reload()}}
-    function salvarConfig(){dados.config.limiteRevisoes=parseInt(document.getElementById('configLimiteRevisoes').value);dados.config.limitePaginas=parseInt(document.getElementById('configLimitePaginas').value);salvarDados();atualizarUI();mostrarToast('Configurações salvas!','success')}
-    function setupNavegacao(){document.querySelectorAll('.nav-item').forEach(item=>{item.addEventListener('click',()=>{const tab=item.dataset.tab;document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));item.classList.add('active');document.querySelectorAll('.tab-pane').forEach(p=>p.classList.remove('active'));document.getElementById(`${tab}Pane`).classList.add('active');const t={dashboard:'Dashboard',professores:'Professores',alunos:'Alunos',turmas:'Turmas',configuracoes:'Configurações'};document.getElementById('pageTitle').innerText=t[tab]})})}
-    function setupEventos(){
-        document.getElementById('loginForm').addEventListener('submit',(e)=>{e.preventDefault();fazerLogin(document.getElementById('loginEmail').value,document.getElementById('loginPassword').value)});
-        document.getElementById('logoutBtn').addEventListener('click',logout);
-        document.getElementById('novoProfessorBtn').addEventListener('click',()=>abrirModalProfessor());
-        document.getElementById('formProfessor').addEventListener('submit',salvarProfessor);
-        document.getElementById('novoAlunoBtn').addEventListener('click',()=>abrirModalAluno());
-        document.getElementById('formAluno').addEventListener('submit',salvarAluno);
-        document.getElementById('novaTurmaBtn').addEventListener('click',()=>abrirModalTurma());
-        document.getElementById('formTurma').addEventListener('submit',salvarTurma);
-        document.getElementById('exportarBackupBtn').addEventListener('click',exportarBackup);
-        document.getElementById('importarBackupBtn').addEventListener('click',importarBackup);
-        document.getElementById('resetarDadosBtn').addEventListener('click',resetarDados);
-        document.getElementById('salvarConfigBtn').addEventListener('click',salvarConfig);
-        document.querySelectorAll('.close-modal').forEach(btn=>{btn.addEventListener('click',()=>{const id=btn.dataset.modal;if(id)fecharModal(id)})});
-        window.addEventListener('click',(e)=>{if(e.target.classList.contains('modal'))e.target.classList.remove('active')})
+
+    function logout() { document.getElementById('loginScreen').style.display = 'flex'; document.getElementById('dashboardScreen').style.display = 'none'; }
+
+    function atualizarUI() {
+        document.getElementById('totalProfessores').innerText = dados.professores.length;
+        document.getElementById('totalAlunos').innerText = dados.alunos.length;
+        document.getElementById('totalTurmas').innerText = dados.turmas.length;
+        document.getElementById('totalTrabalhos').innerText = dados.trabalhos.length;
+        const freqMedia = dados.alunos.length ? Math.round(dados.alunos.reduce((s, a) => s + a.frequencia, 0) / dados.alunos.length) : 0;
+        const totalFeedbacks = dados.trabalhos.filter(t => t.status === 'aprovado').length;
+        document.getElementById('metricasContainer').innerHTML = `<div class="stat-card"><div class="stat-value">${freqMedia}%</div><div class="stat-label">Frequência Média</div></div><div class="stat-card"><div class="stat-value">${totalFeedbacks}</div><div class="stat-label">Trabalhos Revisados</div></div><div class="stat-card"><div class="stat-value">${dados.config.limiteRevisoes}</div><div class="stat-label">Revisões por Mês</div></div>`;
+        let alertas = [];
+        if (dados.professores.filter(p => p.status === 'inativo').length) alertas.push('<div class="badge-warning" style="padding:12px; border-radius:12px; margin-bottom:8px;"><i class="fas fa-exclamation-triangle"></i> Existem professores inativos no sistema</div>');
+        if (dados.alunos.filter(a => a.frequencia < 70).length) alertas.push('<div class="badge-warning" style="padding:12px; border-radius:12px;"><i class="fas fa-chart-line"></i> Alunos com frequência abaixo de 70%</div>');
+        if (alertas.length === 0) alertas.push('<div class="badge-active" style="padding:12px; border-radius:12px;"><i class="fas fa-check-circle"></i> Sistema funcionando normalmente</div>');
+        document.getElementById('alertasContainer').innerHTML = alertas.join('');
+        
+        document.getElementById('tabelaProfessores').innerHTML = dados.professores.map(p => { const t = dados.turmas.find(t => t.id === p.turma_id); return `<tr><td style="padding:14px 12px"><strong>${p.nome}</strong></td><td style="padding:14px 12px">${p.email}</td><td style="padding:14px 12px"><span class="badge ${p.status === 'ativo' ? 'badge-active' : 'badge-inactive'}">${p.status === 'ativo' ? 'Ativo' : 'Inativo'}</span></td><td style="padding:14px 12px">${t?.nome || '-'}</td><td style="padding:14px 12px"><button class="btn-icon" onclick="editarProfessor(${p.id})"><i class="fas fa-edit"></i></button> <button class="btn-icon" onclick="excluirProfessor(${p.id})"><i class="fas fa-trash"></i></button></td>`; }).join('') || '<tr><td colspan="5" class="empty-state">Nenhum professor cadastrado</td></table>';
+        
+        document.getElementById('tabelaAlunos').innerHTML = dados.alunos.map(a => { const p = dados.professores.find(p => p.id === a.professor_id); return `<tr><td style="padding:14px 12px"><strong>${a.nome}</strong></td><td style="padding:14px 12px">${a.email}</td><td style="padding:14px 12px">${p?.nome || '-'}</td><td style="padding:14px 12px"><span class="badge ${a.status === 'ativo' ? 'badge-active' : 'badge-inactive'}">${a.status === 'ativo' ? 'Ativo' : 'Inativo'}</span></td><td style="padding:14px 12px">${a.frequencia}%<div class="progress-bar"><div class="progress-fill" style="width:${a.frequencia}%"></div></div></td><td style="padding:14px 12px"><button class="btn-icon" onclick="editarAluno(${a.id})"><i class="fas fa-edit"></i></button> <button class="btn-icon" onclick="excluirAluno(${a.id})"><i class="fas fa-trash"></i></button></td>`; }).join('') || '<tr><td colspan="6" class="empty-state">Nenhum aluno cadastrado</td></tr>';
+        
+        document.getElementById('tabelaTurmas').innerHTML = dados.turmas.map(t => { const p = dados.professores.find(p => p.id === t.professor_id); const qtd = dados.alunos.filter(a => a.turma_id === t.id).length; return `<tr><td style="padding:14px 12px"><strong>${t.nome}</strong></td><td style="padding:14px 12px">${p?.nome || '-'}</td><td style="padding:14px 12px">${qtd}知己<td style="padding:14px 12px"><span class="badge ${t.status === 'ativa' ? 'badge-active' : 'badge-inactive'}">${t.status === 'ativa' ? 'Ativa' : 'Inativa'}</span></td><td style="padding:14px 12px"><button class="btn-icon" onclick="editarTurma(${t.id})"><i class="fas fa-edit"></i></button> <button class="btn-icon" onclick="excluirTurma(${t.id})"><i class="fas fa-trash"></i></button></td>`; }).join('') || '<tr><td colspan="5" class="empty-state">Nenhuma turma cadastrada</td></tr>';
+        
+        document.getElementById('professorTurma').innerHTML = dados.turmas.map(t => `<option value="${t.id}">${t.nome}</option>`).join('');
+        document.getElementById('alunoProfessor').innerHTML = dados.professores.filter(p => p.status === 'ativo').map(p => `<option value="${p.id}">${p.nome}</option>`).join('');
+        document.getElementById('turmaProfessor').innerHTML = dados.professores.filter(p => p.status === 'ativo').map(p => `<option value="${p.id}">${p.nome}</option>`).join('');
+        document.getElementById('configLimiteRevisoes').value = dados.config.limiteRevisoes;
+        document.getElementById('configLimitePaginas').value = dados.config.limitePaginas;
     }
-    carregarDados();setupNavegacao();setupEventos();
+
+    function abrirModalProfessor(id = null) {
+        if (id) { const p = dados.professores.find(p => p.id === id); if (p) { document.getElementById('professorId').value = p.id; document.getElementById('professorNome').value = p.nome; document.getElementById('professorEmail').value = p.email; document.getElementById('professorStatus').value = p.status; document.getElementById('professorTurma').value = p.turma_id || ''; document.getElementById('modalProfessorTitle').innerText = 'Editar Professor'; } }
+        else { document.getElementById('professorId').value = ''; document.getElementById('formProfessor').reset(); document.getElementById('professorSenha').value = 'prof123'; document.getElementById('modalProfessorTitle').innerText = 'Adicionar Professor'; }
+        document.getElementById('modalProfessor').classList.add('active');
+    }
+    function salvarProfessor(e) { e.preventDefault(); const id = document.getElementById('professorId').value; const nome = document.getElementById('professorNome').value; const email = document.getElementById('professorEmail').value; const senha = document.getElementById('professorSenha').value; const status = document.getElementById('professorStatus').value; const turma_id = parseInt(document.getElementById('professorTurma').value); if (id) { const p = dados.professores.find(p => p.id == id); if (p) { p.nome = nome; p.email = email; if (senha) p.senha = senha; p.status = status; p.turma_id = turma_id; } } else { dados.professores.push({ id: nextProfessorId++, nome, email, senha, status, turma_id }); } salvarDados(); atualizarUI(); mostrarToast('Professor salvo!', 'success'); fecharModal('modalProfessor'); }
+    function editarProfessor(id) { abrirModalProfessor(id); }
+    function excluirProfessor(id) { if (confirm('Excluir este professor?')) { dados.professores = dados.professores.filter(p => p.id !== id); salvarDados(); atualizarUI(); mostrarToast('Professor excluído!', 'success'); } }
+
+    function abrirModalAluno(id = null) { document.getElementById('alunoProfessor').innerHTML = dados.professores.filter(p => p.status === 'ativo').map(p => `<option value="${p.id}">${p.nome}</option>`).join(''); if (id) { const a = dados.alunos.find(a => a.id === id); if (a) { document.getElementById('alunoId').value = a.id; document.getElementById('alunoNome').value = a.nome; document.getElementById('alunoEmail').value = a.email; document.getElementById('alunoProfessor').value = a.professor_id; document.getElementById('alunoStatus').value = a.status; document.getElementById('modalAlunoTitle').innerText = 'Editar Aluno'; } } else { document.getElementById('alunoId').value = ''; document.getElementById('formAluno').reset(); document.getElementById('alunoSenha').value = 'aluno123'; document.getElementById('modalAlunoTitle').innerText = 'Adicionar Aluno'; } document.getElementById('modalAluno').classList.add('active'); }
+    function salvarAluno(e) { e.preventDefault(); const id = document.getElementById('alunoId').value; const nome = document.getElementById('alunoNome').value; const email = document.getElementById('alunoEmail').value; const senha = document.getElementById('alunoSenha').value; const professor_id = parseInt(document.getElementById('alunoProfessor').value); const status = document.getElementById('alunoStatus').value; if (id) { const a = dados.alunos.find(a => a.id == id); if (a) { a.nome = nome; a.email = email; if (senha) a.senha = senha; a.professor_id = professor_id; a.status = status; } } else { const prof = dados.professores.find(p => p.id === professor_id); dados.alunos.push({ id: nextAlunoId++, nome, email, senha, professor_id, turma_id: prof?.turma_id || 1, status, frequencia: 0, revisoesMes: 0, limiteRevisoes: dados.config.limiteRevisoes }); } salvarDados(); atualizarUI(); mostrarToast('Aluno salvo!', 'success'); fecharModal('modalAluno'); }
+    function editarAluno(id) { abrirModalAluno(id); }
+    function excluirAluno(id) { if (confirm('Excluir este aluno?')) { dados.alunos = dados.alunos.filter(a => a.id !== id); dados.trabalhos = dados.trabalhos.filter(t => t.aluno_id !== id); salvarDados(); atualizarUI(); mostrarToast('Aluno excluído!', 'success'); } }
+
+    function abrirModalTurma(id = null) { document.getElementById('turmaProfessor').innerHTML = dados.professores.filter(p => p.status === 'ativo').map(p => `<option value="${p.id}">${p.nome}</option>`).join(''); if (id) { const t = dados.turmas.find(t => t.id === id); if (t) { document.getElementById('turmaId').value = t.id; document.getElementById('turmaNome').value = t.nome; document.getElementById('turmaProfessor').value = t.professor_id; document.getElementById('turmaStatus').value = t.status; document.getElementById('modalTurmaTitle').innerText = 'Editar Turma'; } } else { document.getElementById('turmaId').value = ''; document.getElementById('formTurma').reset(); document.getElementById('modalTurmaTitle').innerText = 'Adicionar Turma'; } document.getElementById('modalTurma').classList.add('active'); }
+    function salvarTurma(e) { e.preventDefault(); const id = document.getElementById('turmaId').value; const nome = document.getElementById('turmaNome').value; const professor_id = parseInt(document.getElementById('turmaProfessor').value); const status = document.getElementById('turmaStatus').value; if (id) { const t = dados.turmas.find(t => t.id == id); if (t) { t.nome = nome; t.professor_id = professor_id; t.status = status; } } else { dados.turmas.push({ id: nextTurmaId++, nome, professor_id, status }); } salvarDados(); atualizarUI(); mostrarToast('Turma salva!', 'success'); fecharModal('modalTurma'); }
+    function editarTurma(id) { abrirModalTurma(id); }
+    function excluirTurma(id) { if (confirm('Excluir esta turma?')) { dados.turmas = dados.turmas.filter(t => t.id !== id); salvarDados(); atualizarUI(); mostrarToast('Turma excluída!', 'success'); } }
+
+    function exportarBackup() { const blob = new Blob([JSON.stringify(dados, null, 2)], { type: 'application/json' }); const link = document.createElement('a'); link.href = URL.createObjectURL(blob); link.download = `backup_mentoria_${new Date().toISOString().split('T')[0]}.json`; link.click(); mostrarToast('Backup exportado!', 'success'); }
+    function importarBackup() { const input = document.createElement('input'); input.type = 'file'; input.accept = '.json'; input.onchange = e => { const file = e.target.files[0]; const reader = new FileReader(); reader.onload = ev => { try { const imp = JSON.parse(ev.target.result); Object.assign(dados, imp); salvarDados(); atualizarUI(); mostrarToast('Backup restaurado!', 'success'); } catch { mostrarToast('Arquivo inválido', 'error'); } }; reader.readAsText(file); }; input.click(); }
+    function resetarDados() { if (confirm('ATENÇÃO: Isso irá apagar todos os dados e restaurar os valores iniciais.')) { localStorage.removeItem('mentoria_dados'); location.reload(); } }
+    function salvarConfig() { dados.config.limiteRevisoes = parseInt(document.getElementById('configLimiteRevisoes').value); dados.config.limitePaginas = parseInt(document.getElementById('configLimitePaginas').value); salvarDados(); atualizarUI(); mostrarToast('Configurações salvas!', 'success'); }
+
+    function setupNavegacao() { document.querySelectorAll('.nav-item').forEach(item => { item.addEventListener('click', () => { const tab = item.dataset.tab; document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active')); item.classList.add('active'); document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active')); document.getElementById(`${tab}Pane`).classList.add('active'); const t = { dashboard: 'Dashboard', professores: 'Professores', alunos: 'Alunos', turmas: 'Turmas', configuracoes: 'Configurações' }; document.getElementById('pageTitle').innerText = t[tab]; }); }); }
+    function setupEventos() {
+        document.getElementById('loginForm').addEventListener('submit', (e) => { e.preventDefault(); fazerLogin(document.getElementById('loginEmail').value, document.getElementById('loginPassword').value); });
+        document.getElementById('logoutBtn').addEventListener('click', logout);
+        document.getElementById('novoProfessorBtn').addEventListener('click', () => abrirModalProfessor());
+        document.getElementById('formProfessor').addEventListener('submit', salvarProfessor);
+        document.getElementById('novoAlunoBtn').addEventListener('click', () => abrirModalAluno());
+        document.getElementById('formAluno').addEventListener('submit', salvarAluno);
+        document.getElementById('novaTurmaBtn').addEventListener('click', () => abrirModalTurma());
+        document.getElementById('formTurma').addEventListener('submit', salvarTurma);
+        document.getElementById('exportarBackupBtn').addEventListener('click', exportarBackup);
+        document.getElementById('importarBackupBtn').addEventListener('click', importarBackup);
+        document.getElementById('resetarDadosBtn').addEventListener('click', resetarDados);
+        document.getElementById('salvarConfigBtn').addEventListener('click', salvarConfig);
+        document.querySelectorAll('.close-modal').forEach(btn => { btn.addEventListener('click', () => { const id = btn.dataset.modal; if (id) fecharModal(id); }); });
+        window.addEventListener('click', (e) => { if (e.target.classList.contains('modal')) e.target.classList.remove('active'); });
+    }
+
+    carregarDados();
+    setupNavegacao();
+    setupEventos();
 </script>
 </body>
 </html>
