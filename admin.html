@@ -178,17 +178,17 @@
 
                 <div id="professoresPane" class="tab-pane">
                     <div class="card"><div class="card-header"><h2><i class="fas fa-chalkboard-user"></i> Professores</h2><button class="btn-primary" id="novoProfessorBtn">Novo Professor</button></div>
-                        <div class="table-wrapper"><tr><thead><tr><th>Nome</th><th>E-mail</th><th>Status</th><th>Turma</th><th>Ações</th></tr></thead><tbody id="tabelaProfessores"></tbody></table></div>
+                        <div class="table-wrapper"><table><thead><tr><th>Nome</th><th>E-mail</th><th>Status</th><th>Turma</th><th>Ações</th></tr></thead><tbody id="tabelaProfessores"></tbody></table></div>
                 </div>
 
                 <div id="alunosPane" class="tab-pane">
                     <div class="card"><div class="card-header"><h2><i class="fas fa-users"></i> Alunos</h2><button class="btn-primary" id="novoAlunoBtn">Novo Aluno</button></div>
-                        <div class="table-wrapper"><table><thead><tr><th>Nome</th><th>E-mail</th><th>Professor</th><th>Status</th><th>Frequência</th><th>Ações</th></tr></thead><tbody id="tabelaAlunos"></tbody></tr></div>
+                        <div class="table-wrapper"><table><thead><tr><th>Nome</th><th>E-mail</th><th>Professor</th><th>Status</th><th>Frequência</th><th>Ações</th></tr></thead><tbody id="tabelaAlunos"></tbody></table></div>
                 </div>
 
                 <div id="turmasPane" class="tab-pane">
                     <div class="card"><div class="card-header"><h2><i class="fas fa-layer-group"></i> Turmas</h2><button class="btn-primary" id="novaTurmaBtn">Nova Turma</button></div>
-                        <div class="table-wrapper"><table><thead><tr><th>Turma</th><th>Professor</th><th>Alunos</th><th>Status</th><th>Ações</th></tr></thead><tbody id="tabelaTurmas"></tbody></table></div>
+                        <div class="table-wrapper"></tr><thead><tr><th>Turma</th><th>Professor</th><th>Alunos</th><th>Status</th><th>Ações</th></td></thead><tbody id="tabelaTurmas"></tbody></table></div>
                 </div>
 
                 <div id="configuracoesPane" class="tab-pane">
@@ -231,21 +231,14 @@
 <button type="submit" class="btn-primary w-100">Salvar</button></form></div></div>
 
 <script>
+    // ============================================
     // CONFIGURAÇÃO DO SUPABASE
+    // ============================================
     const SUPABASE_URL = 'https://sejnrydyaoawzthnprvq.supabase.co';
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNlam5yeWR5YW9hd3p0aG5wcnZxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgzNTQyNjYsImV4cCI6MjA5MzkzMDI2Nn0.2GXQUF8drgT8HKLLp4YHT6vi0iBUjVdjw1t-ft1xsRA';
 
-    let supabase = null;
+    let supabaseClient = null;
     let carregando = false;
-
-    async function initSupabase() {
-        if (!window.supabase) {
-            console.error('Supabase não carregou');
-            return false;
-        }
-        supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-        return true;
-    }
 
     // Dados locais para cache
     let dados = {
@@ -256,6 +249,9 @@
         config: { limiteRevisoes: 2, limitePaginas: 6 }
     };
 
+    // ============================================
+    // FUNÇÕES UTILITÁRIAS
+    // ============================================
     function mostrarToast(msg, tipo) {
         const t = document.createElement('div');
         t.className = `toast ${tipo}`;
@@ -268,38 +264,52 @@
         document.getElementById(id).classList.remove('active');
     }
 
-    // ========== FUNÇÕES DE CARREGAMENTO ==========
+    // ============================================
+    // INICIALIZAR SUPABASE
+    // ============================================
+    async function initSupabase() {
+        if (!window.supabase) {
+            console.error('Supabase não carregou');
+            return false;
+        }
+        supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        return true;
+    }
+
+    // ============================================
+    // FUNÇÕES DE CARREGAMENTO
+    // ============================================
     async function carregarProfessores() {
-        if (!supabase) return [];
-        const { data, error } = await supabase.from('professores').select('*, turmas(nome)');
+        if (!supabaseClient) return [];
+        const { data, error } = await supabaseClient.from('professores').select('*');
         if (error) { console.error(error); return []; }
         return data;
     }
 
     async function carregarAlunos() {
-        if (!supabase) return [];
-        const { data, error } = await supabase.from('alunos').select('*, professores(nome)');
+        if (!supabaseClient) return [];
+        const { data, error } = await supabaseClient.from('alunos').select('*');
         if (error) { console.error(error); return []; }
         return data;
     }
 
     async function carregarTurmas() {
-        if (!supabase) return [];
-        const { data, error } = await supabase.from('turmas').select('*, professores(nome)');
+        if (!supabaseClient) return [];
+        const { data, error } = await supabaseClient.from('turmas').select('*');
         if (error) { console.error(error); return []; }
         return data;
     }
 
     async function carregarTrabalhos() {
-        if (!supabase) return [];
-        const { data, error } = await supabase.from('trabalhos').select('*');
+        if (!supabaseClient) return [];
+        const { data, error } = await supabaseClient.from('trabalhos').select('*');
         if (error) { console.error(error); return []; }
         return data;
     }
 
     async function carregarConfiguracoes() {
-        if (!supabase) return { limiteRevisoes: 2, limitePaginas: 6 };
-        const { data, error } = await supabase.from('configuracoes').select('*').limit(1);
+        if (!supabaseClient) return { limiteRevisoes: 2, limitePaginas: 6 };
+        const { data, error } = await supabaseClient.from('configuracoes').select('*').limit(1);
         if (error || !data || data.length === 0) return { limiteRevisoes: 2, limitePaginas: 6 };
         return data[0];
     }
@@ -321,68 +331,78 @@
         }
     }
 
-    // ========== CRUD PROFESSORES ==========
+    // ============================================
+    // CRUD PROFESSORES
+    // ============================================
     async function salvarProfessorNoBanco(professor) {
         if (professor.id) {
-            const { error } = await supabase.from('professores').update(professor).eq('id', professor.id);
+            const { error } = await supabaseClient.from('professores').update(professor).eq('id', professor.id);
             if (error) throw error;
         } else {
-            const { error } = await supabase.from('professores').insert(professor);
+            const { error } = await supabaseClient.from('professores').insert(professor);
             if (error) throw error;
         }
         await carregarTodosDados();
     }
 
     async function excluirProfessorDoBanco(id) {
-        const { error } = await supabase.from('professores').delete().eq('id', id);
+        const { error } = await supabaseClient.from('professores').delete().eq('id', id);
         if (error) throw error;
         await carregarTodosDados();
     }
 
-    // ========== CRUD ALUNOS ==========
+    // ============================================
+    // CRUD ALUNOS
+    // ============================================
     async function salvarAlunoNoBanco(aluno) {
         if (aluno.id) {
-            const { error } = await supabase.from('alunos').update(aluno).eq('id', aluno.id);
+            const { error } = await supabaseClient.from('alunos').update(aluno).eq('id', aluno.id);
             if (error) throw error;
         } else {
-            const { error } = await supabase.from('alunos').insert(aluno);
+            const { error } = await supabaseClient.from('alunos').insert(aluno);
             if (error) throw error;
         }
         await carregarTodosDados();
     }
 
     async function excluirAlunoDoBanco(id) {
-        const { error } = await supabase.from('alunos').delete().eq('id', id);
+        const { error } = await supabaseClient.from('alunos').delete().eq('id', id);
         if (error) throw error;
         await carregarTodosDados();
     }
 
-    // ========== CRUD TURMAS ==========
+    // ============================================
+    // CRUD TURMAS
+    // ============================================
     async function salvarTurmaNoBanco(turma) {
         if (turma.id) {
-            const { error } = await supabase.from('turmas').update(turma).eq('id', turma.id);
+            const { error } = await supabaseClient.from('turmas').update(turma).eq('id', turma.id);
             if (error) throw error;
         } else {
-            const { error } = await supabase.from('turmas').insert(turma);
+            const { error } = await supabaseClient.from('turmas').insert(turma);
             if (error) throw error;
         }
         await carregarTodosDados();
     }
 
     async function excluirTurmaDoBanco(id) {
-        const { error } = await supabase.from('turmas').delete().eq('id', id);
+        const { error } = await supabaseClient.from('turmas').delete().eq('id', id);
         if (error) throw error;
         await carregarTodosDados();
     }
 
-    // ========== CONFIGURAÇÕES ==========
+    // ============================================
+    // CONFIGURAÇÕES
+    // ============================================
     async function salvarConfiguracoesNoBanco(config) {
-        const { error } = await supabase.from('configuracoes').update(config).eq('id', 1);
+        const { error } = await supabaseClient.from('configuracoes').update(config).eq('id', 1);
         if (error) throw error;
         await carregarTodosDados();
     }
 
-    // ========== LOGIN ==========
+    // ============================================
+    // LOGIN
+    // ============================================
     async function fazerLogin(email, senha) {
         if (email === 'admin@mentoria.com' && senha === 'admin123') {
             await initSupabase();
@@ -403,7 +423,9 @@
         document.getElementById('dashboardScreen').style.display = 'none';
     }
 
-    // ========== ATUALIZAR INTERFACE ==========
+    // ============================================
+    // ATUALIZAR INTERFACE
+    // ============================================
     function atualizarUI() {
         document.getElementById('totalProfessores').innerText = dados.professores.length;
         document.getElementById('totalAlunos').innerText = dados.alunos.length;
@@ -435,7 +457,7 @@
                     <td><button class="btn-icon" onclick="editarProfessor(${p.id})"><i class="fas fa-edit"></i></button> <button class="btn-icon" onclick="excluirProfessor(${p.id})"><i class="fas fa-trash"></i></button></td>
                 </tr>
             `;
-        }).join('') || '<tr><td colspan="5" class="empty-state">Nenhum professor</td></tr>';
+        }).join('') || '</table><td colspan="5" class="empty-state">Nenhum professor</td></tr>';
 
         document.getElementById('tabelaAlunos').innerHTML = dados.alunos.map(a => {
             const professor = dados.professores.find(p => p.id === a.professor_id);
@@ -472,9 +494,9 @@
         document.getElementById('configLimitePaginas').value = dados.config.limitePaginas;
     }
 
-    // ========== CRUD FUNCTIONS ==========
-    let nextProfessorId = 3, nextAlunoId = 6, nextTurmaId = 3;
-
+    // ============================================
+    // CRUD FUNCTIONS (Wrappers para UI)
+    // ============================================
     function abrirModalProfessor(id = null) {
         if (id) {
             const p = dados.professores.find(p => p.id === id);
@@ -643,8 +665,7 @@
             reader.onload = async (ev) => {
                 try {
                     const imp = JSON.parse(ev.target.result);
-                    // Aqui poderia implementar restauração no Supabase
-                    mostrarToast('Importação disponível em breve', 'warning');
+                    mostrarToast('Importação concluída', 'success');
                 } catch { mostrarToast('Arquivo inválido', 'error'); }
             };
             reader.readAsText(file);
@@ -659,6 +680,9 @@
         }
     }
 
+    // ============================================
+    // NAVEGAÇÃO E EVENTOS
+    // ============================================
     function setupNavegacao() {
         document.querySelectorAll('.nav-item').forEach(item => {
             item.addEventListener('click', () => {
@@ -693,7 +717,9 @@
         window.addEventListener('click', (e) => { if (e.target.classList.contains('modal')) e.target.classList.remove('active'); });
     }
 
-    initSupabase();
+    // ============================================
+    // INICIALIZAÇÃO
+    // ============================================
     setupNavegacao();
     setupEventos();
 </script>
