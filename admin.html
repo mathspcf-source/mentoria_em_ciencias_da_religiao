@@ -7,7 +7,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <style>
         * {
             margin: 0;
@@ -105,7 +104,6 @@
             border-radius: 16px;
             font-size: 0.9rem;
             font-family: inherit;
-            transition: all 0.2s;
             background: white;
         }
 
@@ -586,24 +584,6 @@
         }
 
         /* ============================================ */
-        /* PROGRESS */
-        /* ============================================ */
-        .progress-bar {
-            width: 100px;
-            height: 6px;
-            background: #e2e8f0;
-            border-radius: 10px;
-            overflow: hidden;
-            margin-top: 4px;
-        }
-
-        .progress-fill {
-            height: 100%;
-            background: #10b981;
-            border-radius: 10px;
-        }
-
-        /* ============================================ */
         /* FORMULÁRIOS */
         /* ============================================ */
         .form-group {
@@ -826,7 +806,7 @@
                 <div class="nav-item" data-tab="turmas"><i class="fas fa-layer-group"></i><span>Turmas</span></div>
                 <div class="nav-item" data-tab="alunos"><i class="fas fa-users"></i><span>Alunos</span></div>
                 <div class="nav-item" data-tab="financeiro"><i class="fas fa-dollar-sign"></i><span>Financeiro</span></div>
-                <div class="nav-item" data-tab="configuracoes"><i class="fas fa-sliders-h"></i><span>Configurações</span></div>
+                <div class="nav-item" data-tab="configuracoes"><i class="fas fa-cog"></i><span>Configurações</span></div>
             </div>
             <button class="logout-btn" id="logoutBtn"><i class="fas fa-sign-out-alt"></i><span>Sair</span></button>
         </aside>
@@ -872,7 +852,7 @@
                 <div id="turmasPane" class="tab-pane">
                     <div class="card">
                         <div class="card-header"><h2><i class="fas fa-layer-group"></i> Turmas</h2><button class="btn-primary" id="novaTurmaBtn">Nova Turma</button></div>
-                        <div class="table-wrapper"></table><thead><tr><th>Nome</th><th>Professor</th><th>Alunos</th><th>Status</th><th>Ações</th></tr></thead><tbody id="tabelaTurmas"></tbody></table></div>
+                        <div class="table-wrapper"><table><thead><tr><th>Nome</th><th>Professor</th><th>Alunos</th><th>Status</th><th>Ações</th></tr></thead><tbody id="tabelaTurmas"></tbody></table></div>
                     </div>
                 </div>
 
@@ -880,7 +860,7 @@
                 <div id="alunosPane" class="tab-pane">
                     <div class="card">
                         <div class="card-header"><h2><i class="fas fa-users"></i> Alunos</h2><button class="btn-primary" id="novoAlunoBtn">Novo Aluno</button></div>
-                        <div class="table-wrapper"><table><thead><tr><th>Nome</th><th>E-mail</th><th>Professor</th><th>Turma</th><th>Status</th><th>Pagamento</th><th>Ações</th></tr></thead><tbody id="tabelaAlunos"></tbody></table></div>
+                        <div class="table-wrapper"><tr><thead><tr><th>Nome</th><th>E-mail</th><th>Professor</th><th>Turma</th><th>Status</th><th>Pagamento</th><th>Ações</th></tr></thead><tbody id="tabelaAlunos"></tbody></tr></div>
                     </div>
                 </div>
 
@@ -893,7 +873,7 @@
                     </div>
                     <div class="card">
                         <div class="card-header"><h2><i class="fas fa-dollar-sign"></i> Controle de Pagamentos</h2><button class="btn-primary" id="marcarTodosPagosBtn">Marcar Todos Pagos</button></div>
-                        <div class="table-wrapper"></td><thead><tr><th>Aluno</th><th>Professor</th><th>Valor</th><th>Vencimento</th><th>Status</th><th>Ações</th></tr></thead><tbody id="tabelaPagamentos"></tbody></table></div>
+                        <div class="table-wrapper"><table><thead><tr><th>Aluno</th><th>Professor</th><th>Valor</th><th>Vencimento</th><th>Status</th><th>Ações</th></tr></thead><tbody id="tabelaPagamentos"></tbody></table></div>
                     </div>
                 </div>
 
@@ -981,7 +961,7 @@
     const SUPABASE_URL = 'https://sejnrydyaoawzthnprvq.supabase.co';
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNlam5yeWR5YW9hd3p0aG5wcnZxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgzNTQyNjYsImV4cCI6MjA5MzkzMDI2Nn0.2GXQUF8drgT8HKLLp4YHT6vi0iBUjVdjw1t-ft1xsRA';
 
-    let supabase = null;
+    let supabaseClient = null;
     let carregando = false;
 
     let dados = {
@@ -1019,52 +999,52 @@
     }
 
     // ============================================
-    // SUPABASE
+    // SUPABASE - INICIALIZAÇÃO
     // ============================================
     async function initSupabase() {
         if (!window.supabase) return false;
-        supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
         return true;
     }
 
     async function carregarProfessores() {
-        if (!supabase) return [];
-        const { data, error } = await supabase.from('admin_professores').select('*');
+        if (!supabaseClient) return [];
+        const { data, error } = await supabaseClient.from('admin_professores').select('*');
         if (error) return [];
         return data;
     }
 
     async function carregarTurmas() {
-        if (!supabase) return [];
-        const { data, error } = await supabase.from('admin_turmas').select('*, admin_professores(nome)');
+        if (!supabaseClient) return [];
+        const { data, error } = await supabaseClient.from('admin_turmas').select('*, admin_professores(nome)');
         if (error) return [];
         return data;
     }
 
     async function carregarAlunos() {
-        if (!supabase) return [];
-        const { data, error } = await supabase.from('admin_alunos').select('*, admin_professores(nome), admin_turmas(nome)');
+        if (!supabaseClient) return [];
+        const { data, error } = await supabaseClient.from('admin_alunos').select('*, admin_professores(nome), admin_turmas(nome)');
         if (error) return [];
         return data;
     }
 
     async function carregarPagamentos() {
-        if (!supabase) return [];
-        const { data, error } = await supabase.from('admin_pagamentos').select('*');
+        if (!supabaseClient) return [];
+        const { data, error } = await supabaseClient.from('admin_pagamentos').select('*');
         if (error) return [];
         return data;
     }
 
     async function carregarTrabalhos() {
-        if (!supabase) return [];
-        const { data, error } = await supabase.from('admin_trabalhos').select('*');
+        if (!supabaseClient) return [];
+        const { data, error } = await supabaseClient.from('admin_trabalhos').select('*');
         if (error) return [];
         return data;
     }
 
     async function carregarConfiguracoes() {
-        if (!supabase) return { mensalidade: 60, limiteRevisoes: 2, limitePaginas: 6 };
-        const { data, error } = await supabase.from('admin_configuracoes').select('*').limit(1);
+        if (!supabaseClient) return { mensalidade: 60, limiteRevisoes: 2, limitePaginas: 6 };
+        const { data, error } = await supabaseClient.from('admin_configuracoes').select('*').limit(1);
         if (error || !data || data.length === 0) return { mensalidade: 60, limiteRevisoes: 2, limitePaginas: 6 };
         return data[0];
     }
@@ -1092,58 +1072,58 @@
     // ============================================
     async function salvarProfessorNoBanco(professor) {
         if (professor.id) {
-            await supabase.from('admin_professores').update(professor).eq('id', professor.id);
+            await supabaseClient.from('admin_professores').update(professor).eq('id', professor.id);
         } else {
-            await supabase.from('admin_professores').insert(professor);
+            await supabaseClient.from('admin_professores').insert(professor);
         }
         await carregarTodosDados();
     }
 
     async function excluirProfessorDoBanco(id) {
-        await supabase.from('admin_professores').delete().eq('id', id);
+        await supabaseClient.from('admin_professores').delete().eq('id', id);
         await carregarTodosDados();
     }
 
     async function salvarTurmaNoBanco(turma) {
         if (turma.id) {
-            await supabase.from('admin_turmas').update(turma).eq('id', turma.id);
+            await supabaseClient.from('admin_turmas').update(turma).eq('id', turma.id);
         } else {
-            await supabase.from('admin_turmas').insert(turma);
+            await supabaseClient.from('admin_turmas').insert(turma);
         }
         await carregarTodosDados();
     }
 
     async function excluirTurmaDoBanco(id) {
-        await supabase.from('admin_turmas').delete().eq('id', id);
+        await supabaseClient.from('admin_turmas').delete().eq('id', id);
         await carregarTodosDados();
     }
 
     async function salvarAlunoNoBanco(aluno) {
         if (aluno.id) {
-            await supabase.from('admin_alunos').update(aluno).eq('id', aluno.id);
+            await supabaseClient.from('admin_alunos').update(aluno).eq('id', aluno.id);
         } else {
-            await supabase.from('admin_alunos').insert(aluno);
+            await supabaseClient.from('admin_alunos').insert(aluno);
         }
         await carregarTodosDados();
     }
 
     async function excluirAlunoDoBanco(id) {
-        await supabase.from('admin_alunos').delete().eq('id', id);
+        await supabaseClient.from('admin_alunos').delete().eq('id', id);
         await carregarTodosDados();
     }
 
     async function salvarPagamentoNoBanco(pagamento) {
         const existing = dados.pagamentos.find(p => p.aluno_id === pagamento.aluno_id);
         if (existing) {
-            await supabase.from('admin_pagamentos').update(pagamento).eq('id', existing.id);
+            await supabaseClient.from('admin_pagamentos').update(pagamento).eq('id', existing.id);
         } else {
-            await supabase.from('admin_pagamentos').insert(pagamento);
+            await supabaseClient.from('admin_pagamentos').insert(pagamento);
         }
         await carregarTodosDados();
     }
 
     async function salvarConfiguracoesNoBanco(config) {
-        await supabase.from('admin_configuracoes').update(config).eq('id', 1);
+        await supabaseClient.from('admin_configuracoes').update(config).eq('id', 1);
         await carregarTodosDados();
     }
 
@@ -1199,27 +1179,31 @@
             const turma = dados.turmas.find(t => t.id === p.turma_id);
             const qtdAlunos = dados.alunos.filter(a => a.professor_id === p.id).length;
             return `
-                <td style="padding:14px 12px"><strong>${p.nome}</strong></td>
-                <td style="padding:14px 12px">${p.email}</td>
-                <td style="padding:14px 12px"><span class="badge ${p.status === 'ativo' ? 'badge-active' : 'badge-inactive'}">${p.status}</span></td>
-                <td style="padding:14px 12px">${turma?.nome || '-'}</td>
-                <td style="padding:14px 12px">${qtdAlunos}</td>
-                <td style="padding:14px 12px"><button class="btn-icon" onclick="editarProfessor(${p.id})"><i class="fas fa-edit"></i></button> <button class="btn-icon" onclick="excluirProfessor(${p.id})"><i class="fas fa-trash"></i></button></td>
+                <tr>
+                    <td style="padding:14px 12px"><strong>${p.nome}</strong></td>
+                    <td style="padding:14px 12px">${p.email}</td>
+                    <td style="padding:14px 12px"><span class="badge ${p.status === 'ativo' ? 'badge-active' : 'badge-inactive'}">${p.status}</span></td>
+                    <td style="padding:14px 12px">${turma?.nome || '-'}</td>
+                    <td style="padding:14px 12px">${qtdAlunos}</td>
+                    <td style="padding:14px 12px"><button class="btn-icon" onclick="editarProfessor(${p.id})"><i class="fas fa-edit"></i></button> <button class="btn-icon" onclick="excluirProfessor(${p.id})"><i class="fas fa-trash"></i></button></td>
+                </tr>
             `;
-        }).join('') || '<td colspan="6" class="empty-state">Nenhum professor</div>';
+        }).join('') || '<tr><td colspan="6" class="empty-state">Nenhum professor</div>';
 
         // Tabela Turmas
         document.getElementById('tabelaTurmas').innerHTML = dados.turmas.map(t => {
             const professor = dados.professores.find(p => p.id === t.professor_id);
             const qtdAlunos = dados.alunos.filter(a => a.turma_id === t.id).length;
             return `
-                <td style="padding:14px 12px"><strong>${t.nome}</strong></td>
-                <td style="padding:14px 12px">${professor?.nome || '-'}</td>
-                <td style="padding:14px 12px">${qtdAlunos}</td>
-                <td style="padding:14px 12px"><span class="badge ${t.status === 'ativa' ? 'badge-active' : 'badge-inactive'}">${t.status}</span></td>
-                <td style="padding:14px 12px"><button class="btn-icon" onclick="editarTurma(${t.id})"><i class="fas fa-edit"></i></button> <button class="btn-icon" onclick="excluirTurma(${t.id})"><i class="fas fa-trash"></i></button></td>
+                <table>
+                    <td style="padding:14px 12px"><strong>${t.nome}</strong></td>
+                    <td style="padding:14px 12px">${professor?.nome || '-'}</td>
+                    <td style="padding:14px 12px">${qtdAlunos}</td>
+                    <td style="padding:14px 12px"><span class="badge ${t.status === 'ativa' ? 'badge-active' : 'badge-inactive'}">${t.status}</span></td>
+                    <td style="padding:14px 12px"><button class="btn-icon" onclick="editarTurma(${t.id})"><i class="fas fa-edit"></i></button> <button class="btn-icon" onclick="excluirTurma(${t.id})"><i class="fas fa-trash"></i></button></td>
+                </tr>
             `;
-        }).join('') || '<td colspan="5" class="empty-state">Nenhuma turma</div>';
+        }).join('') || '<tr><td colspan="5" class="empty-state">Nenhuma turma</div>';
 
         // Tabela Alunos
         document.getElementById('tabelaAlunos').innerHTML = dados.alunos.map(a => {
@@ -1228,15 +1212,17 @@
             const pagamento = dados.pagamentos.find(p => p.aluno_id === a.id);
             const statusPagamento = pagamento ? pagamento.status : 'pendente';
             return `
-                <td style="padding:14px 12px"><strong>${a.nome}</strong></td>
-                <td style="padding:14px 12px">${a.email}</td>
-                <td style="padding:14px 12px">${professor?.nome || '-'}</td>
-                <td style="padding:14px 12px">${turma?.nome || '-'}</td>
-                <td style="padding:14px 12px"><span class="badge ${a.status === 'ativo' ? 'badge-active' : 'badge-inactive'}">${a.status}</span></td>
-                <td style="padding:14px 12px"><span class="badge ${statusPagamento === 'pago' ? 'badge-paid' : 'badge-pending'}">${statusPagamento === 'pago' ? 'Pago' : 'Pendente'}</span></td>
-                <td style="padding:14px 12px"><button class="btn-icon" onclick="editarAluno(${a.id})"><i class="fas fa-edit"></i></button> <button class="btn-icon" onclick="excluirAluno(${a.id})"><i class="fas fa-trash"></i></button> <button class="btn-icon" onclick="abrirModalPagamento(${a.id}, '${a.nome}')"><i class="fas fa-dollar-sign"></i></button></td>
+                <tr>
+                    <td style="padding:14px 12px"><strong>${a.nome}</strong></td>
+                    <td style="padding:14px 12px">${a.email}</td>
+                    <td style="padding:14px 12px">${professor?.nome || '-'}</td>
+                    <td style="padding:14px 12px">${turma?.nome || '-'}</td>
+                    <td style="padding:14px 12px"><span class="badge ${a.status === 'ativo' ? 'badge-active' : 'badge-inactive'}">${a.status}</span></td>
+                    <td style="padding:14px 12px"><span class="badge ${statusPagamento === 'pago' ? 'badge-paid' : 'badge-pending'}">${statusPagamento === 'pago' ? 'Pago' : 'Pendente'}</span></td>
+                    <td style="padding:14px 12px"><button class="btn-icon" onclick="editarAluno(${a.id})"><i class="fas fa-edit"></i></button> <button class="btn-icon" onclick="excluirAluno(${a.id})"><i class="fas fa-trash"></i></button> <button class="btn-icon" onclick="abrirModalPagamento(${a.id}, '${a.nome}')"><i class="fas fa-dollar-sign"></i></button></td>
+                </tr>
             `;
-        }).join('') || '<td colspan="7" class="empty-state">Nenhum aluno</div>';
+        }).join('') || '<tr><td colspan="7" class="empty-state">Nenhum aluno</div>';
 
         // Financeiro
         const receitaTotal = dados.pagamentos.filter(p => p.status === 'pago').reduce((s, p) => s + (p.valor || dados.config.mensalidade), 0);
@@ -1251,14 +1237,16 @@
             const professor = dados.professores.find(p => p.id === a.professor_id);
             const status = pagamento ? pagamento.status : 'pendente';
             return `
-                <td style="padding:14px 12px"><strong>${a.nome}</strong></td>
-                <td style="padding:14px 12px">${professor?.nome || '-'}</td>
-                <td style="padding:14px 12px">R$ ${dados.config.mensalidade}</td>
-                <td style="padding:14px 12px">${pagamento?.vencimento ? formatarData(pagamento.vencimento) : formatarData(new Date().toISOString().split('T')[0])}</td>
-                <td style="padding:14px 12px"><span class="badge ${status === 'pago' ? 'badge-paid' : 'badge-pending'}">${status === 'pago' ? 'Pago' : 'Pendente'}</span></td>
-                <td style="padding:14px 12px"><button class="btn-icon" onclick="abrirModalPagamento(${a.id}, '${a.nome}')"><i class="fas fa-dollar-sign"></i></button></td>
+                <tr>
+                    <td style="padding:14px 12px"><strong>${a.nome}</strong></td>
+                    <td style="padding:14px 12px">${professor?.nome || '-'}</td>
+                    <td style="padding:14px 12px">R$ ${dados.config.mensalidade}</td>
+                    <td style="padding:14px 12px">${pagamento?.vencimento ? formatarData(pagamento.vencimento) : formatarData(new Date().toISOString().split('T')[0])}</td>
+                    <td style="padding:14px 12px"><span class="badge ${status === 'pago' ? 'badge-paid' : 'badge-pending'}">${status === 'pago' ? 'Pago' : 'Pendente'}</span></td>
+                    <td style="padding:14px 12px"><button class="btn-icon" onclick="abrirModalPagamento(${a.id}, '${a.nome}')"><i class="fas fa-dollar-sign"></i></button></td>
+                </tr>
             `;
-        }).join('') || '<td colspan="6" class="empty-state">Nenhum pagamento</div>';
+        }).join('') || '<tr><td colspan="6" class="empty-state">Nenhum pagamento</div>';
 
         // Selects
         document.getElementById('professorTurma').innerHTML = dados.turmas.filter(t => t.status === 'ativa').map(t => `<option value="${t.id}">${t.nome}</option>`).join('');
@@ -1472,10 +1460,10 @@
             reader.onload = async (ev) => {
                 try {
                     const imp = JSON.parse(ev.target.result);
-                    if (imp.professores) await supabase.from('admin_professores').upsert(imp.professores);
-                    if (imp.turmas) await supabase.from('admin_turmas').upsert(imp.turmas);
-                    if (imp.alunos) await supabase.from('admin_alunos').upsert(imp.alunos);
-                    if (imp.pagamentos) await supabase.from('admin_pagamentos').upsert(imp.pagamentos);
+                    if (imp.professores) await supabaseClient.from('admin_professores').upsert(imp.professores);
+                    if (imp.turmas) await supabaseClient.from('admin_turmas').upsert(imp.turmas);
+                    if (imp.alunos) await supabaseClient.from('admin_alunos').upsert(imp.alunos);
+                    if (imp.pagamentos) await supabaseClient.from('admin_pagamentos').upsert(imp.pagamentos);
                     await carregarTodosDados();
                     mostrarToast('Backup importado!', 'success');
                 } catch { mostrarToast('Arquivo inválido', 'error'); }
@@ -1537,9 +1525,9 @@
     (function keepAlive() {
         let pings = 0;
         async function ping() {
-            if (!supabase) return;
+            if (!supabaseClient) return;
             try {
-                await supabase.from('admin_configuracoes').select('id').limit(1);
+                await supabaseClient.from('admin_configuracoes').select('id').limit(1);
                 pings++;
                 console.log(`🔵 Keep-alive #${pings} - ${new Date().toLocaleTimeString()}`);
             } catch (e) { }
