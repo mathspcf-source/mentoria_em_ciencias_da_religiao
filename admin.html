@@ -269,7 +269,7 @@
             background: rgba(239,68,68,0.2);
         }
 
-        /* MAIN - SEM SCROLL NAS TABS */
+        /* MAIN */
         .main {
             flex: 1;
             display: flex;
@@ -320,19 +320,19 @@
             color: white;
         }
 
-        /* SCROLL APENAS NO CONTEÚDO */
+        /* CONTEÚDO - SCROLL APENAS AQUI */
         .content-area {
             flex: 1;
             overflow-y: auto;
-            padding: 20px 24px;
+            padding: 24px 28px;
         }
 
-        /* CARDS */
+        /* STATS CARDS */
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
             gap: 20px;
-            margin-bottom: 24px;
+            margin-bottom: 28px;
         }
 
         @media (max-width: 1000px) {
@@ -382,6 +382,7 @@
             margin-top: 6px;
         }
 
+        /* CARD PADRÃO */
         .card {
             background: white;
             border-radius: 20px;
@@ -395,6 +396,8 @@
             justify-content: space-between;
             align-items: center;
             margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #e2e8f0;
             flex-wrap: wrap;
             gap: 12px;
         }
@@ -410,6 +413,14 @@
 
         .card-header h2 i {
             color: #667eea;
+        }
+
+        .card-subtitle {
+            font-size: 0.75rem;
+            color: #64748b;
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #e2e8f0;
         }
 
         /* BOTÕES */
@@ -435,11 +446,16 @@
 
         .btn-secondary {
             background: white;
+            color: #475569;
             border: 1px solid #e2e8f0;
             padding: 8px 18px;
             border-radius: 40px;
             font-size: 0.75rem;
             cursor: pointer;
+        }
+
+        .btn-secondary:hover {
+            background: #f8fafc;
         }
 
         .btn-danger {
@@ -450,6 +466,13 @@
             border-radius: 40px;
             font-size: 0.75rem;
             cursor: pointer;
+        }
+
+        /* GRUPO DE BOTÕES */
+        .btn-group {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
         }
 
         .btn-icon {
@@ -519,7 +542,7 @@
         .badge-inactive { background: #fee2e2; color: #b91c1c; }
         .badge-paid { background: #dcfce7; color: #15803d; }
         .badge-pending { background: #fef3c7; color: #b45309; }
-        .badge-warning { background: #fef3c7; color: #b45309; }
+        .badge-info { background: #e0f2fe; color: #0369a1; }
 
         /* FORMULÁRIOS */
         .form-group {
@@ -554,7 +577,7 @@
             cursor: pointer;
         }
 
-        /* INFO CARD */
+        /* INFOCARD */
         .info-card {
             background: #f0fdf4;
             border-radius: 16px;
@@ -566,6 +589,11 @@
         .info-card p {
             font-size: 0.8rem;
             color: #166534;
+        }
+
+        .info-card i {
+            margin-right: 8px;
+            color: #22c55e;
         }
 
         /* MODAL */
@@ -602,6 +630,8 @@
             justify-content: space-between;
             align-items: center;
             margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #e2e8f0;
         }
 
         .modal-header h3 {
@@ -646,6 +676,7 @@
             to { opacity: 1; transform: translateX(0); }
         }
 
+        /* TABS */
         .tab-pane {
             display: none;
         }
@@ -664,8 +695,6 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            gap: 12px;
-            flex-wrap: wrap;
         }
 
         .w-100 {
@@ -731,66 +760,114 @@
                 <!-- DASHBOARD -->
                 <div id="dashboardPane" class="tab-pane active">
                     <div class="stats-grid">
-                        <div class="stat-card"><div class="stat-icon"><i class="fas fa-chalkboard-user"></i></div><div class="stat-value" id="totalProfessores">0</div><div class="stat-label">Professores</div></div>
-                        <div class="stat-card"><div class="stat-icon"><i class="fas fa-layer-group"></i></div><div class="stat-value" id="totalTurmas">0</div><div class="stat-label">Turmas</div></div>
-                        <div class="stat-card"><div class="stat-icon"><i class="fas fa-users"></i></div><div class="stat-value" id="totalAlunos">0</div><div class="stat-label">Alunos</div></div>
-                        <div class="stat-card"><div class="stat-icon"><i class="fas fa-file-alt"></i></div><div class="stat-value" id="totalTrabalhos">0</div><div class="stat-label">Trabalhos</div></div>
+                        <div class="stat-card"><div class="stat-icon"><i class="fas fa-chalkboard-user"></i></div><div class="stat-value" id="totalProfessores">0</div><div class="stat-label">Professores Ativos</div></div>
+                        <div class="stat-card"><div class="stat-icon"><i class="fas fa-layer-group"></i></div><div class="stat-value" id="totalTurmas">0</div><div class="stat-label">Turmas Cadastradas</div></div>
+                        <div class="stat-card"><div class="stat-icon"><i class="fas fa-users"></i></div><div class="stat-value" id="totalAlunos">0</div><div class="stat-label">Alunos Matriculados</div></div>
+                        <div class="stat-card"><div class="stat-icon"><i class="fas fa-file-alt"></i></div><div class="stat-value" id="totalTrabalhos">0</div><div class="stat-label">Trabalhos Realizados</div></div>
                     </div>
-                    <div class="card"><div class="card-header"><h2><i class="fas fa-chart-line"></i> Métricas</h2></div><div id="metricasContainer" class="stats-grid" style="grid-template-columns:repeat(3,1fr)"></div></div>
-                    <div class="card"><div class="card-header"><h2><i class="fas fa-bell"></i> Alertas</h2></div><div id="alertasContainer"></div></div>
+
+                    <div class="card">
+                        <div class="card-header"><h2><i class="fas fa-chart-line"></i> Métricas do Sistema</h2></div>
+                        <div id="metricasContainer" class="stats-grid" style="grid-template-columns: repeat(3, 1fr);"></div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header"><h2><i class="fas fa-bell"></i> Alertas do Sistema</h2></div>
+                        <div id="alertasContainer"></div>
+                    </div>
                 </div>
 
                 <!-- PROFESSORES -->
                 <div id="professoresPane" class="tab-pane">
                     <div class="card">
-                        <div class="card-header"><h2><i class="fas fa-chalkboard-user"></i> Professores</h2><button class="btn-primary" id="novoProfessorBtn">Novo Professor</button></div>
-                        <div class="info-card"><p><i class="fas fa-info-circle"></i> Após cadastrar o professor, vá até "Turmas" para associá-lo.</p></div>
-                        <div class="table-wrapper"><tr><thead><tr><th>Nome</th><th>E-mail</th><th>Status</th><th>Data Cadastro</th><th>Ações</th></tr></thead><tbody id="tabelaProfessores"></tbody></table></div>
+                        <div class="card-header">
+                            <h2><i class="fas fa-chalkboard-user"></i> Gestão de Professores</h2>
+                            <button class="btn-primary" id="novoProfessorBtn">Novo Professor</button>
+                        </div>
+                        <div class="card-subtitle">Cadastre os professores que irão lecionar as turmas</div>
+                        <div class="table-wrapper">
+                            <table>
+                                <thead><tr><th>Nome</th><th>E-mail</th><th>Status</th><th>Data Cadastro</th><th>Ações</th></tr></thead>
+                                <tbody id="tabelaProfessores"></tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
 
                 <!-- TURMAS -->
                 <div id="turmasPane" class="tab-pane">
                     <div class="card">
-                        <div class="card-header"><h2><i class="fas fa-layer-group"></i> Turmas</h2><button class="btn-primary" id="novaTurmaBtn">Nova Turma</button></div>
-                        <div class="info-card"><p><i class="fas fa-info-circle"></i> Cadastre uma turma e associe a um professor.</p></div>
-                        <div class="table-wrapper"><tr><thead><tr><th>Nome</th><th>Professor</th><th>Alunos</th><th>Status</th><th>Ações</th></tr></thead><tbody id="tabelaTurmas"></tbody></table></div>
+                        <div class="card-header">
+                            <h2><i class="fas fa-layer-group"></i> Gestão de Turmas</h2>
+                            <button class="btn-primary" id="novaTurmaBtn">Nova Turma</button>
+                        </div>
+                        <div class="card-subtitle">Crie turmas e associe a um professor responsável</div>
+                        <div class="table-wrapper">
+                            <table>
+                                <thead><tr><th>Nome da Turma</th><th>Professor</th><th>Alunos</th><th>Status</th><th>Ações</th></tr></thead>
+                                <tbody id="tabelaTurmas"></tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
 
                 <!-- ALUNOS -->
                 <div id="alunosPane" class="tab-pane">
                     <div class="card">
-                        <div class="card-header"><h2><i class="fas fa-users"></i> Alunos</h2><button class="btn-primary" id="novoAlunoBtn">Novo Aluno</button></div>
-                        <div class="info-card"><p><i class="fas fa-info-circle"></i> Cadastre alunos e associe a professor e turma.</p></div>
-                        <div class="table-wrapper"><tr><thead><tr><th>Nome</th><th>E-mail</th><th>Professor</th><th>Turma</th><th>Status</th><th>Frequência</th><th>Pagamento</th><th>Ações</th></tr></thead><tbody id="tabelaAlunos"></tbody></table></div>
+                        <div class="card-header">
+                            <h2><i class="fas fa-users"></i> Gestão de Alunos</h2>
+                            <button class="btn-primary" id="novoAlunoBtn">Novo Aluno</button>
+                        </div>
+                        <div class="card-subtitle">Cadastre alunos e associe a um professor e uma turma</div>
+                        <div class="table-wrapper">
+                            <table>
+                                <thead><tr><th>Nome</th><th>E-mail</th><th>Professor</th><th>Turma</th><th>Status</th><th>Frequência</th><th>Pagamento</th><th>Ações</th></tr></thead>
+                                <tbody id="tabelaAlunos"></tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
 
                 <!-- FINANCEIRO -->
                 <div id="financeiroPane" class="tab-pane">
-                    <div class="stats-grid" style="grid-template-columns:repeat(3,1fr)">
+                    <div class="stats-grid" style="grid-template-columns: repeat(3, 1fr);">
                         <div class="stat-card"><div class="stat-value" id="receitaTotal">R$0</div><div class="stat-label">Receita Total</div></div>
-                        <div class="stat-card"><div class="stat-value" id="receitaMes">R$0</div><div class="stat-label">Este Mês</div></div>
-                        <div class="stat-card"><div class="stat-value" id="inadimplentesTotal">0</div><div class="stat-label">Inadimplentes</div></div>
+                        <div class="stat-card"><div class="stat-value" id="receitaMes">R$0</div><div class="stat-label">Receita do Mês</div></div>
+                        <div class="stat-card"><div class="stat-value" id="inadimplentesTotal">0</div><div class="stat-label">Alunos Inadimplentes</div></div>
                     </div>
                     <div class="card">
-                        <div class="card-header"><h2><i class="fas fa-dollar-sign"></i> Controle de Pagamentos</h2><button class="btn-primary" id="marcarTodosPagosBtn">Marcar Todos Pagos</button></div>
-                        <div class="table-wrapper"><tr><thead><tr><th>Aluno</th><th>Professor</th><th>Valor</th><th>Vencimento</th><th>Status</th><th>Ações</th></tr></thead><tbody id="tabelaPagamentos"></tbody></td></div>
+                        <div class="card-header">
+                            <h2><i class="fas fa-dollar-sign"></i> Controle de Pagamentos</h2>
+                            <button class="btn-primary" id="marcarTodosPagosBtn">Marcar Todos Pagos</button>
+                        </div>
+                        <div class="card-subtitle">Gerencie os pagamentos dos alunos</div>
+                        <div class="table-wrapper">
+                            <table>
+                                <thead><tr><th>Aluno</th><th>Professor</th><th>Valor</th><th>Vencimento</th><th>Status</th><th>Ações</th></tr></thead>
+                                <tbody id="tabelaPagamentos"></tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
 
                 <!-- CONFIGURAÇÕES -->
                 <div id="configuracoesPane" class="tab-pane">
-                    <div class="card"><div class="card-header"><h2><i class="fas fa-database"></i> Backup</h2></div>
-                        <div class="flex-between"><button class="btn-secondary" id="exportarBackupBtn">Exportar</button><button class="btn-secondary" id="importarBackupBtn">Importar</button><button class="btn-danger" id="resetarDadosBtn">Resetar</button></div>
+                    <div class="card">
+                        <div class="card-header"><h2><i class="fas fa-database"></i> Backup e Restauração</h2></div>
+                        <div class="btn-group">
+                            <button class="btn-secondary" id="exportarBackupBtn">Exportar Backup</button>
+                            <button class="btn-secondary" id="importarBackupBtn">Importar Backup</button>
+                            <button class="btn-danger" id="resetarDadosBtn">Resetar Sistema</button>
+                        </div>
                         <div class="mt-2"><small class="text-muted">Dados sincronizados com Supabase</small></div>
                     </div>
-                    <div class="card"><div class="card-header"><h2><i class="fas fa-sliders-h"></i> Configurações</h2></div>
-                        <div class="form-group"><label>Mensalidade</label><input type="number" id="configMensalidade" class="form-control" value="60"></div>
-                        <div class="form-group"><label>Revisões por Mês</label><input type="number" id="configLimiteRevisoes" class="form-control" value="2"></div>
-                        <div class="form-group"><label>Páginas por Trabalho</label><input type="number" id="configLimitePaginas" class="form-control" value="6"></div>
-                        <button class="btn-primary" id="salvarConfigBtn">Salvar</button>
+
+                    <div class="card">
+                        <div class="card-header"><h2><i class="fas fa-sliders-h"></i> Configurações Gerais</h2></div>
+                        <div class="form-group"><label>Valor da Mensalidade</label><input type="number" id="configMensalidade" class="form-control" value="60"></div>
+                        <div class="form-group"><label>Limite de Revisões por Mês</label><input type="number" id="configLimiteRevisoes" class="form-control" value="2"></div>
+                        <div class="form-group"><label>Limite de Páginas por Trabalho</label><input type="number" id="configLimitePaginas" class="form-control" value="6"></div>
+                        <button class="btn-primary" id="salvarConfigBtn">Salvar Configurações</button>
                     </div>
                 </div>
             </div>
@@ -881,7 +958,7 @@
         document.getElementById('alertasContainer').innerHTML = alertas.join('');
 
         document.getElementById('tabelaProfessores').innerHTML = dados.professores.map(p => `<td style="padding:14px 12px"><strong>${p.nome}</strong></td><td style="padding:14px 12px">${p.email}</td><td style="padding:14px 12px"><span class="badge ${p.status === 'ativo' ? 'badge-active' : 'badge-inactive'}">${p.status}</span></td><td style="padding:14px 12px">${formatarData(p.created_at?.split('T')[0])}</td><td style="padding:14px 12px"><button class="btn-icon" onclick="editarProfessor(${p.id})"><i class="fas fa-edit"></i></button> <button class="btn-icon" onclick="excluirProfessor(${p.id})"><i class="fas fa-trash"></i></button></td>`).join('') || '<td colspan="5" class="empty-state">Nenhum professor</div>';
-        document.getElementById('tabelaTurmas').innerHTML = dados.turmas.map(t => { const p = dados.professores.find(p => p.id === t.professor_id); return `<td style="padding:14px 12px"><strong>${t.nome}</strong></td><td style="padding:14px 12px">${p?.nome || '-'}</td><td style="padding:14px 12px">${dados.alunos.filter(a => a.turma_id === t.id).length}</td><td style="padding:14px 12px"><span class="badge ${t.status === 'ativa' ? 'badge-active' : 'badge-inactive'}">${t.status}</span></td><td style="padding:14px 12px"><button class="btn-icon" onclick="editarTurma(${t.id})"><i class="fas fa-edit"></i></button> <button class="btn-icon" onclick="excluirTurma(${t.id})"><i class="fas fa-trash"></i></button></td>`; }).join('') || '<td colspan="5" class="empty-state">Nenhuma turma</div>';
+        document.getElementById('tabelaTurmas').innerHTML = dados.turmas.map(t => { const p = dados.professores.find(p => p.id === t.professor_id); return `<td style="padding:14px 12px"><strong>${t.nome}</strong></td><td style="padding:14px 12px">${p?.nome || '-'}<td><td style="padding:14px 12px">${dados.alunos.filter(a => a.turma_id === t.id).length}</td><td style="padding:14px 12px"><span class="badge ${t.status === 'ativa' ? 'badge-active' : 'badge-inactive'}">${t.status}</span></td><td style="padding:14px 12px"><button class="btn-icon" onclick="editarTurma(${t.id})"><i class="fas fa-edit"></i></button> <button class="btn-icon" onclick="excluirTurma(${t.id})"><i class="fas fa-trash"></i></button></td>`; }).join('') || '<td colspan="5" class="empty-state">Nenhuma turma</div>';
         document.getElementById('tabelaAlunos').innerHTML = dados.alunos.map(a => { const p = dados.professores.find(p => p.id === a.professor_id); const t = dados.turmas.find(t => t.id === a.turma_id); const pag = dados.pagamentos.find(p => p.aluno_id === a.id); const statusPag = pag ? pag.status : 'pendente'; return `<td style="padding:14px 12px"><strong>${a.nome}</strong></td><td style="padding:14px 12px">${a.email}</td><td style="padding:14px 12px">${p?.nome || '-'}</td><td style="padding:14px 12px">${t?.nome || '-'}</td><td style="padding:14px 12px"><span class="badge ${a.status === 'ativo' ? 'badge-active' : 'badge-inactive'}">${a.status}</span></td><td style="padding:14px 12px"><span class="badge badge-info">${a.frequencia || 0}%</span></td><td style="padding:14px 12px"><span class="badge ${statusPag === 'pago' ? 'badge-paid' : 'badge-pending'}">${statusPag === 'pago' ? 'Pago' : 'Pendente'}</span></td><td style="padding:14px 12px"><button class="btn-icon" onclick="editarAluno(${a.id})"><i class="fas fa-edit"></i></button> <button class="btn-icon" onclick="excluirAluno(${a.id})"><i class="fas fa-trash"></i></button> <button class="btn-icon" onclick="abrirModalPagamento(${a.id}, '${a.nome}')"><i class="fas fa-dollar-sign"></i></button></td>`; }).join('') || '<td colspan="8" class="empty-state">Nenhum aluno</div>';
         const receitaTotal = dados.pagamentos.filter(p => p.status === 'pago').reduce((s, p) => s + (p.valor || dados.config.mensalidade), 0);
         const receitaMes = dados.pagamentos.filter(p => p.status === 'pago' && p.data_pagamento && new Date(p.data_pagamento).getMonth() === new Date().getMonth()).reduce((s, p) => s + (p.valor || dados.config.mensalidade), 0);
@@ -902,21 +979,21 @@
     function abrirModalProfessor(id = null) { if (id) { const p = dados.professores.find(p => p.id === id); if (p) { document.getElementById('professorId').value = p.id; document.getElementById('professorNome').value = p.nome; document.getElementById('professorEmail').value = p.email; document.getElementById('professorStatus').value = p.status; document.getElementById('modalProfessorTitle').innerText = 'Editar Professor'; } } else { document.getElementById('professorId').value = ''; document.getElementById('formProfessor').reset(); document.getElementById('professorSenha').value = 'prof123'; document.getElementById('modalProfessorTitle').innerText = 'Adicionar Professor'; } document.getElementById('modalProfessor').classList.add('active'); }
     async function salvarProfessor(e) { e.preventDefault(); const id = document.getElementById('professorId').value; const nome = document.getElementById('professorNome').value; const email = document.getElementById('professorEmail').value; const senha = document.getElementById('professorSenha').value; const status = document.getElementById('professorStatus').value; const professor = { nome, email, senha, status, created_at: new Date().toISOString() }; if (id) professor.id = parseInt(id); await salvarProfessorNoBanco(professor); mostrarToast('Professor salvo!', 'success'); fecharModal('modalProfessor'); atualizarUI(); }
     async function editarProfessor(id) { abrirModalProfessor(id); }
-    async function excluirProfessor(id) { if (confirm('Excluir?')) { await excluirProfessorDoBanco(id); mostrarToast('Excluído!', 'success'); } }
+    async function excluirProfessor(id) { if (confirm('Excluir este professor?')) { await excluirProfessorDoBanco(id); mostrarToast('Professor excluído!', 'success'); } }
 
     function abrirModalTurma(id = null) { if (id) { const t = dados.turmas.find(t => t.id === id); if (t) { document.getElementById('turmaId').value = t.id; document.getElementById('turmaNome').value = t.nome; document.getElementById('turmaProfessor').value = t.professor_id; document.getElementById('turmaStatus').value = t.status; document.getElementById('modalTurmaTitle').innerText = 'Editar Turma'; } } else { document.getElementById('turmaId').value = ''; document.getElementById('formTurma').reset(); document.getElementById('modalTurmaTitle').innerText = 'Adicionar Turma'; } document.getElementById('modalTurma').classList.add('active'); }
     async function salvarTurma(e) { e.preventDefault(); const id = document.getElementById('turmaId').value; const nome = document.getElementById('turmaNome').value; const professor_id = parseInt(document.getElementById('turmaProfessor').value); const status = document.getElementById('turmaStatus').value; const turma = { nome, professor_id, status }; if (id) turma.id = parseInt(id); await salvarTurmaNoBanco(turma); mostrarToast('Turma salva!', 'success'); fecharModal('modalTurma'); atualizarUI(); }
     async function editarTurma(id) { abrirModalTurma(id); }
-    async function excluirTurma(id) { if (confirm('Excluir?')) { await excluirTurmaDoBanco(id); mostrarToast('Excluída!', 'success'); } }
+    async function excluirTurma(id) { if (confirm('Excluir esta turma?')) { await excluirTurmaDoBanco(id); mostrarToast('Turma excluída!', 'success'); } }
 
     function abrirModalAluno(id = null) { if (id) { const a = dados.alunos.find(a => a.id === id); if (a) { document.getElementById('alunoId').value = a.id; document.getElementById('alunoNome').value = a.nome; document.getElementById('alunoEmail').value = a.email; document.getElementById('alunoProfessor').value = a.professor_id; document.getElementById('alunoTurma').value = a.turma_id; document.getElementById('alunoStatus').value = a.status; document.getElementById('modalAlunoTitle').innerText = 'Editar Aluno'; } } else { document.getElementById('alunoId').value = ''; document.getElementById('formAluno').reset(); document.getElementById('alunoSenha').value = 'aluno123'; document.getElementById('modalAlunoTitle').innerText = 'Adicionar Aluno'; } document.getElementById('modalAluno').classList.add('active'); }
     async function salvarAluno(e) { e.preventDefault(); const id = document.getElementById('alunoId').value; const nome = document.getElementById('alunoNome').value; const email = document.getElementById('alunoEmail').value; const senha = document.getElementById('alunoSenha').value; const professor_id = parseInt(document.getElementById('alunoProfessor').value); const turma_id = parseInt(document.getElementById('alunoTurma').value); const status = document.getElementById('alunoStatus').value; const aluno = { nome, email, senha, professor_id, turma_id, status, frequencia: 0, revisoes_mes: 0, limite_revisoes: dados.config.limiteRevisoes }; if (id) aluno.id = parseInt(id); await salvarAlunoNoBanco(aluno); mostrarToast('Aluno salvo!', 'success'); fecharModal('modalAluno'); atualizarUI(); }
     async function editarAluno(id) { abrirModalAluno(id); }
-    async function excluirAluno(id) { if (confirm('Excluir?')) { await excluirAlunoDoBanco(id); mostrarToast('Excluído!', 'success'); } }
+    async function excluirAluno(id) { if (confirm('Excluir este aluno?')) { await excluirAlunoDoBanco(id); mostrarToast('Aluno excluído!', 'success'); } }
 
     function abrirModalPagamento(alunoId, alunoNome) { document.getElementById('pagamentoAlunoId').value = alunoId; document.getElementById('pagamentoAlunoNome').value = alunoNome; document.getElementById('pagamentoValor').value = dados.config.mensalidade; document.getElementById('pagamentoStatus').value = 'pago'; document.getElementById('modalPagamento').classList.add('active'); }
     async function salvarPagamento(e) { e.preventDefault(); const alunoId = parseInt(document.getElementById('pagamentoAlunoId').value); const valor = parseInt(document.getElementById('pagamentoValor').value); const status = document.getElementById('pagamentoStatus').value; await salvarPagamentoNoBanco({ aluno_id: alunoId, valor, status, vencimento: new Date().toISOString().split('T')[0], data_pagamento: status === 'pago' ? new Date().toISOString().split('T')[0] : null }); mostrarToast('Pagamento registrado!', 'success'); fecharModal('modalPagamento'); atualizarUI(); }
-    async function marcarTodosPagos() { if (confirm('Marcar todos os alunos como pagos?')) { for (const aluno of dados.alunos) { await salvarPagamentoNoBanco({ aluno_id: aluno.id, valor: dados.config.mensalidade, status: 'pago', vencimento: new Date().toISOString().split('T')[0], data_pagamento: new Date().toISOString().split('T')[0] }); } await carregarTodosDados(); mostrarToast('Todos marcados como pagos!', 'success'); } }
+    async function marcarTodosPagos() { if (confirm('Marcar todos os alunos como pagos?')) { for (const aluno of dados.alunos) { await salvarPagamentoNoBanco({ aluno_id: aluno.id, valor: dados.config.mensalidade, status: 'pago', vencimento: new Date().toISOString().split('T')[0], data_pagamento: new Date().toISOString().split('T')[0] }); } await carregarTodosDados(); mostrarToast('Todos os alunos marcados como pagos!', 'success'); } }
     async function salvarConfiguracoes() { const config = { id: 1, mensalidade: parseInt(document.getElementById('configMensalidade').value), limite_revisoes: parseInt(document.getElementById('configLimiteRevisoes').value), limite_paginas: parseInt(document.getElementById('configLimitePaginas').value), updated_at: new Date().toISOString() }; await salvarConfiguracoesNoBanco(config); mostrarToast('Configurações salvas!', 'success'); }
 
     function exportarBackup() { const backup = JSON.stringify(dados, null, 2); const blob = new Blob([backup], { type: 'application/json' }); const link = document.createElement('a'); link.href = URL.createObjectURL(blob); link.download = `backup_mentoria_${new Date().toISOString().split('T')[0]}.json`; link.click(); mostrarToast('Backup exportado!', 'success'); }
