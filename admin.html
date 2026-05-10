@@ -21,6 +21,7 @@
             overflow: hidden;
         }
 
+        /* LOGIN */
         .login-screen {
             position: fixed;
             top: 0;
@@ -152,6 +153,7 @@
             font-weight: 600;
         }
 
+        /* DASHBOARD */
         .dashboard-screen {
             display: none;
             height: 100vh;
@@ -163,6 +165,7 @@
             height: 100vh;
         }
 
+        /* SIDEBAR */
         .sidebar {
             width: 280px;
             background: linear-gradient(180deg, #0f0c29 0%, #1a1a3e 100%);
@@ -170,7 +173,7 @@
             flex-direction: column;
             height: 100vh;
             flex-shrink: 0;
-            box-shadow: 8px 0 24px rgba(0,0,0,0.08);
+            box-shadow: 4px 0 20px rgba(0,0,0,0.1);
         }
 
         .sidebar-header {
@@ -192,7 +195,6 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 8px 20px rgba(102,126,234,0.3);
         }
 
         .logo-icon i {
@@ -220,7 +222,6 @@
             margin-top: 16px;
             display: inline-block;
             color: #a78bfa;
-            border: 1px solid rgba(102,126,234,0.3);
         }
 
         .nav-menu {
@@ -234,7 +235,7 @@
             gap: 14px;
             padding: 12px 18px;
             margin-bottom: 6px;
-            border-radius: 14px;
+            border-radius: 12px;
             cursor: pointer;
             transition: all 0.2s;
             color: #9ca3af;
@@ -250,13 +251,12 @@
         .nav-item:hover {
             background: rgba(102,126,234,0.15);
             color: white;
-            transform: translateX(4px);
         }
 
         .nav-item.active {
-            background: linear-gradient(135deg, rgba(102,126,234,0.2), rgba(118,75,162,0.15));
-            color: #c084fc;
-            border-left: 3px solid #a855f7;
+            background: rgba(102,126,234,0.2);
+            color: #a78bfa;
+            border-left: 3px solid #667eea;
         }
 
         .logout-btn {
@@ -272,15 +272,9 @@
             align-items: center;
             gap: 10px;
             width: calc(100% - 32px);
-            transition: all 0.2s;
         }
 
-        .logout-btn:hover {
-            background: rgba(239,68,68,0.2);
-            border-color: #ef4444;
-            color: #fecaca;
-        }
-
+        /* MAIN */
         .main {
             flex: 1;
             display: flex;
@@ -290,10 +284,9 @@
         }
 
         .top-bar {
-            background: rgba(255,255,255,0.8);
-            backdrop-filter: blur(20px);
+            background: white;
             padding: 16px 28px;
-            border-bottom: 1px solid rgba(0,0,0,0.05);
+            border-bottom: 1px solid #e2e8f0;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -303,20 +296,16 @@
         .page-title {
             font-size: 1.4rem;
             font-weight: 700;
-            background: linear-gradient(135deg, #1e293b, #334155);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
+            color: #1e293b;
         }
 
         .user-info {
             display: flex;
             align-items: center;
             gap: 14px;
-            background: white;
+            background: #f1f5f9;
             padding: 8px 20px 8px 16px;
             border-radius: 50px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
         }
 
         .admin-name {
@@ -336,12 +325,14 @@
             color: white;
         }
 
-        .content-area {
+        /* CONTENT - SEM SCROLL NAS ABAS, APENAS NA ÁREA DE CONTEÚDO */
+        .content-wrapper {
             flex: 1;
             overflow-y: auto;
             padding: 24px 32px;
         }
 
+        /* STATS GRID */
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
@@ -359,27 +350,24 @@
             background: white;
             padding: 20px;
             border-radius: 20px;
-            transition: all 0.3s;
-            border: 1px solid rgba(0,0,0,0.04);
-            box-shadow: 0 4px 14px rgba(0,0,0,0.02);
-            cursor: pointer;
+            border: 1px solid #e2e8f0;
+            transition: all 0.2s;
         }
 
         .stat-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 20px 30px -12px rgba(102,126,234,0.15);
-            border-color: rgba(102,126,234,0.2);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.06);
         }
 
         .stat-icon {
             width: 48px;
             height: 48px;
-            background: linear-gradient(135deg, #eef2ff, #e0e7ff);
+            background: rgba(102,126,234,0.1);
             border-radius: 14px;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-bottom: 14px;
+            margin-bottom: 12px;
         }
 
         .stat-icon i {
@@ -394,18 +382,18 @@
         }
 
         .stat-label {
-            color: #64748b;
             font-size: 0.75rem;
+            color: #64748b;
             margin-top: 6px;
         }
 
+        /* CARDS GERAIS */
         .card {
             background: white;
             border-radius: 20px;
             padding: 24px;
             margin-bottom: 24px;
             border: 1px solid #e2e8f0;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.03);
         }
 
         .card-header {
@@ -426,11 +414,16 @@
             color: #1e293b;
         }
 
+        .card-header h2 i {
+            color: #667eea;
+        }
+
+        /* BOTÕES */
         .btn-primary {
             background: linear-gradient(135deg, #667eea, #764ba2);
             color: white;
             border: none;
-            padding: 10px 20px;
+            padding: 8px 18px;
             border-radius: 40px;
             font-weight: 600;
             font-size: 0.75rem;
@@ -443,33 +436,24 @@
 
         .btn-primary:hover {
             transform: translateY(-1px);
-            box-shadow: 0 6px 14px rgba(102,126,234,0.3);
+            box-shadow: 0 4px 12px rgba(102,126,234,0.3);
         }
 
         .btn-secondary {
             background: white;
-            color: #475569;
             border: 1px solid #e2e8f0;
-            padding: 10px 20px;
+            padding: 8px 18px;
             border-radius: 40px;
-            font-weight: 500;
             font-size: 0.75rem;
             cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .btn-secondary:hover {
-            background: #f8fafc;
-            border-color: #cbd5e1;
         }
 
         .btn-danger {
             background: #ef4444;
             color: white;
             border: none;
-            padding: 10px 20px;
+            padding: 8px 18px;
             border-radius: 40px;
-            font-weight: 600;
             font-size: 0.75rem;
             cursor: pointer;
         }
@@ -482,7 +466,6 @@
             cursor: pointer;
             color: #64748b;
             transition: all 0.2s;
-            font-size: 0.9rem;
         }
 
         .btn-icon:hover {
@@ -490,7 +473,8 @@
             color: #667eea;
         }
 
-        .table-container {
+        /* TABELAS */
+        .table-wrapper {
             overflow-x: auto;
             border-radius: 16px;
         }
@@ -509,21 +493,19 @@
             font-size: 0.7rem;
             color: #475569;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
-            border-bottom: 1px solid #e2e8f0;
         }
 
         .data-table td {
             padding: 14px 12px;
             border-bottom: 1px solid #f1f5f9;
             color: #334155;
-            vertical-align: middle;
         }
 
         .data-table tr:hover td {
             background: #fafaff;
         }
 
+        /* BADGES */
         .badge {
             display: inline-flex;
             padding: 4px 12px;
@@ -536,8 +518,8 @@
         .badge-inactive { background: #fee2e2; color: #b91c1c; }
         .badge-paid { background: #dcfce7; color: #15803d; }
         .badge-pending { background: #fef3c7; color: #b45309; }
-        .badge-info { background: #e0f2fe; color: #0369a1; }
 
+        /* FORMULÁRIOS */
         .form-group {
             margin-bottom: 20px;
         }
@@ -557,20 +539,18 @@
             border-radius: 12px;
             font-size: 0.85rem;
             font-family: inherit;
-            transition: all 0.2s;
         }
 
         .form-control:focus {
             outline: none;
             border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102,126,234,0.1);
         }
 
         select.form-control {
             cursor: pointer;
-            background-color: white;
         }
 
+        /* INFO CARD */
         .info-card {
             background: #f0fdf4;
             border-radius: 16px;
@@ -584,11 +564,7 @@
             color: #166534;
         }
 
-        .info-card i {
-            margin-right: 8px;
-            color: #22c55e;
-        }
-
+        /* MODAL */
         .modal {
             display: none;
             position: fixed;
@@ -637,6 +613,7 @@
             color: #94a3b8;
         }
 
+        /* TOAST */
         .toast-container {
             position: fixed;
             top: 20px;
@@ -665,16 +642,37 @@
             to { opacity: 1; transform: translateX(0); }
         }
 
-        .tab-pane { display: none; }
-        .tab-pane.active { display: block; animation: fadeIn 0.25s ease; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+        /* TABS */
+        .tab-pane {
+            display: none;
+        }
 
-        .empty-state { text-align: center; padding: 60px 20px; color: #94a3b8; }
-        .flex-between { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
-        .w-100 { width: 100%; }
-        .mt-2 { margin-top: 8px; }
-        .text-center { text-align: center; }
-        .text-muted { color: #64748b; font-size: 0.7rem; }
+        .tab-pane.active {
+            display: block;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #94a3b8;
+        }
+
+        .flex-between {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .mt-2 {
+            margin-top: 8px;
+        }
+
+        .text-muted {
+            color: #64748b;
+            font-size: 0.7rem;
+        }
     </style>
 </head>
 <body>
@@ -688,8 +686,8 @@
         </div>
         <div id="loginError" class="error-msg"></div>
         <form id="loginForm">
-            <div class="input-wrapper"><i class="fas fa-envelope"></i><input type="email" id="loginEmail" placeholder="admin@mentoria.com" value="admin@mentoria.com"></div>
-            <div class="input-wrapper"><i class="fas fa-lock"></i><input type="password" id="loginPassword" placeholder="admin123" value="admin123"></div>
+            <div class="input-wrapper"><i class="fas fa-envelope"></i><input type="email" id="loginEmail" value="admin@mentoria.com"></div>
+            <div class="input-wrapper"><i class="fas fa-lock"></i><input type="password" id="loginPassword" value="admin123"></div>
             <button type="submit" class="btn-login">Acessar Painel</button>
         </form>
         <div class="credentials-hint"><strong>Credenciais:</strong> <span>admin@mentoria.com</span> / <span>admin123</span></div>
@@ -708,17 +706,21 @@
                 <div class="nav-item" data-tab="professores"><i class="fas fa-chalkboard-user"></i><span>Professores</span></div>
                 <div class="nav-item" data-tab="turmas"><i class="fas fa-layer-group"></i><span>Turmas</span></div>
                 <div class="nav-item" data-tab="alunos"><i class="fas fa-users"></i><span>Alunos</span></div>
-                <div class="nav-item" data-tab="financeiro"><i class="fas fa-dollar-sign"></i><span>Financeiro</span></div>
                 <div class="nav-item" data-tab="configuracoes"><i class="fas fa-cog"></i><span>Configurações</span></div>
             </div>
             <button class="logout-btn" id="logoutBtn"><i class="fas fa-sign-out-alt"></i><span>Sair</span></button>
         </aside>
 
         <div class="main">
-            <div class="top-bar"><h1 class="page-title" id="pageTitle">Dashboard</h1><div class="user-info"><span class="admin-name" id="adminName">Administrador</span><div class="admin-avatar" id="adminAvatar">A</div></div></div>
-            <div class="content-area">
+            <div class="top-bar">
+                <h1 class="page-title" id="pageTitle">Dashboard</h1>
+                <div class="user-info"><span class="admin-name" id="adminName">Administrador</span><div class="admin-avatar" id="adminAvatar">A</div></div>
+            </div>
+
+            <div class="content-wrapper">
                 <div class="toast-container" id="toastContainer"></div>
 
+                <!-- DASHBOARD -->
                 <div id="dashboardPane" class="tab-pane active">
                     <div class="stats-grid">
                         <div class="stat-card"><div class="stat-icon"><i class="fas fa-chalkboard-user"></i></div><div class="stat-value" id="totalProfessores">0</div><div class="stat-label">Professores</div></div>
@@ -726,59 +728,71 @@
                         <div class="stat-card"><div class="stat-icon"><i class="fas fa-users"></i></div><div class="stat-value" id="totalAlunos">0</div><div class="stat-label">Alunos</div></div>
                         <div class="stat-card"><div class="stat-icon"><i class="fas fa-file-alt"></i></div><div class="stat-value" id="totalTrabalhos">0</div><div class="stat-label">Trabalhos</div></div>
                     </div>
-                    <div class="card"><div class="card-header"><h2><i class="fas fa-chart-line"></i> Métricas</h2></div><div id="metricasContainer" class="stats-grid" style="grid-template-columns:repeat(3,1fr)"></div></div>
-                    <div class="card"><div class="card-header"><h2><i class="fas fa-bell"></i> Alertas</h2></div><div id="alertasContainer"></div></div>
+                    <div class="card">
+                        <div class="card-header"><h2><i class="fas fa-chart-line"></i> Métricas</h2></div>
+                        <div id="metricasContainer" class="stats-grid" style="grid-template-columns:repeat(3,1fr)"></div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header"><h2><i class="fas fa-bell"></i> Alertas</h2></div>
+                        <div id="alertasContainer"></div>
+                    </div>
                 </div>
 
                 <!-- PROFESSORES -->
                 <div id="professoresPane" class="tab-pane">
                     <div class="card">
-                        <div class="card-header"><h2><i class="fas fa-chalkboard-user"></i> Professores</h2><button class="btn-primary" id="novoProfessorBtn">Novo Professor</button></div>
-                        <div class="info-card"><p><i class="fas fa-info-circle"></i> Após cadastrar o professor, vá até "Turmas" para associá-lo a uma turma.</p></div>
-                        <div class="table-container"><table class="data-table"><thead><tr><th>Nome</th><th>E-mail</th><th>Status</th><th>Data Cadastro</th><th>Ações</th></tr></thead><tbody id="tabelaProfessores"></tbody></table></div>
+                        <div class="card-header"><h2><i class="fas fa-chalkboard-user"></i> Gestão de Professores</h2><button class="btn-primary" id="novoProfessorBtn">Novo Professor</button></div>
+                        <div class="info-card"><p><i class="fas fa-info-circle"></i> Cadastre professores aqui. Eles terão acesso ao painel do professor.</p></div>
+                        <div class="table-wrapper">
+                            <table class="data-table">
+                                <thead><tr><th>Nome</th><th>E-mail</th><th>Status</th><th>Data Cadastro</th><th>Ações</th></tr></thead>
+                                <tbody id="tabelaProfessores"></tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
 
                 <!-- TURMAS -->
                 <div id="turmasPane" class="tab-pane">
                     <div class="card">
-                        <div class="card-header"><h2><i class="fas fa-layer-group"></i> Turmas</h2><button class="btn-primary" id="novaTurmaBtn">Nova Turma</button></div>
-                        <div class="info-card"><p><i class="fas fa-info-circle"></i> Cadastre uma turma e associe-a a um professor.</p></div>
-                        <div class="table-container"><table class="data-table"><thead><tr><th>Nome da Turma</th><th>Professor</th><th>Alunos</th><th>Status</th><th>Ações</th></tr></thead><tbody id="tabelaTurmas"></tbody></table></div>
+                        <div class="card-header"><h2><i class="fas fa-layer-group"></i> Gestão de Turmas</h2><button class="btn-primary" id="novaTurmaBtn">Nova Turma</button></div>
+                        <div class="info-card"><p><i class="fas fa-info-circle"></i> Crie turmas e associe a um professor responsável.</p></div>
+                        <div class="table-wrapper">
+                            <table class="data-table">
+                                <thead><tr><th>Nome da Turma</th><th>Professor</th><th>Alunos</th><th>Status</th><th>Ações</th></tr></thead>
+                                <tbody id="tabelaTurmas"></tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
 
                 <!-- ALUNOS -->
                 <div id="alunosPane" class="tab-pane">
                     <div class="card">
-                        <div class="card-header"><h2><i class="fas fa-users"></i> Alunos</h2><button class="btn-primary" id="novoAlunoBtn">Novo Aluno</button></div>
-                        <div class="info-card"><p><i class="fas fa-info-circle"></i> Cadastre alunos e associe-os a um professor e a uma turma.</p></div>
-                        <div class="table-container"><table class="data-table"><thead><tr><th>Nome</th><th>E-mail</th><th>Professor</th><th>Turma</th><th>Status</th><th>Frequência</th><th>Pagamento</th><th>Ações</th></tr></thead><tbody id="tabelaAlunos"></tbody></table></div>
+                        <div class="card-header"><h2><i class="fas fa-users"></i> Gestão de Alunos</h2><button class="btn-primary" id="novoAlunoBtn">Novo Aluno</button></div>
+                        <div class="info-card"><p><i class="fas fa-info-circle"></i> Cadastre alunos e associe a um professor e uma turma.</p></div>
+                        <div class="table-wrapper">
+                            <table class="data-table">
+                                <thead><tr><th>Nome</th><th>E-mail</th><th>Professor</th><th>Turma</th><th>Status</th><th>Pagamento</th><th>Ações</th></tr></thead>
+                                <tbody id="tabelaAlunos"></tbody>
+                            </table>
+                        </div>
                     </div>
-                </div>
-
-                <!-- FINANCEIRO -->
-                <div id="financeiroPane" class="tab-pane">
-                    <div class="stats-grid" style="grid-template-columns:repeat(3,1fr)">
-                        <div class="stat-card"><div class="stat-value" id="receitaTotal">R$0</div><div class="stat-label">Receita Total</div></div>
-                        <div class="stat-card"><div class="stat-value" id="receitaMes">R$0</div><div class="stat-label">Este Mês</div></div>
-                        <div class="stat-card"><div class="stat-value" id="inadimplentesTotal">0</div><div class="stat-label">Inadimplentes</div></div>
-                    </div>
-                    <div class="card"><div class="card-header"><h2><i class="fas fa-dollar-sign"></i> Pagamentos</h2><button class="btn-primary" id="marcarTodosPagosBtn">Marcar Todos Pagos</button></div>
-                        <div class="table-container"><table class="data-table"><thead><tr><th>Aluno</th><th>Professor</th><th>Valor</th><th>Vencimento</th><th>Status</th><th>Ações</th></tr></thead><tbody id="tabelaPagamentos"></tbody></table></div>
                 </div>
 
                 <!-- CONFIGURAÇÕES -->
                 <div id="configuracoesPane" class="tab-pane">
-                    <div class="card"><div class="card-header"><h2><i class="fas fa-database"></i> Backup</h2></div>
-                        <div class="flex-between"><button class="btn-secondary" id="exportarBackupBtn">Exportar</button><button class="btn-secondary" id="importarBackupBtn">Importar</button><button class="btn-danger" id="resetarDadosBtn">Resetar</button></div>
-                        <div class="mt-2"><small class="text-muted">Dados sincronizados com Supabase</small></div>
+                    <div class="card">
+                        <div class="card-header"><h2><i class="fas fa-database"></i> Backup</h2></div>
+                        <div class="flex-between"><button class="btn-secondary" id="exportarBackupBtn">Exportar Backup</button><button class="btn-secondary" id="importarBackupBtn">Importar Backup</button><button class="btn-danger" id="resetarDadosBtn">Resetar Sistema</button></div>
+                        <div class="mt-2"><small class="text-muted">Dados sincronizados no Supabase</small></div>
                     </div>
-                    <div class="card"><div class="card-header"><h2><i class="fas fa-sliders-h"></i> Configurações</h2></div>
-                        <div class="form-group"><label>Mensalidade</label><input type="number" id="configMensalidade" class="form-control" value="60"></div>
-                        <div class="form-group"><label>Revisões por Mês</label><input type="number" id="configLimiteRevisoes" class="form-control" value="2"></div>
-                        <div class="form-group"><label>Páginas por Trabalho</label><input type="number" id="configLimitePaginas" class="form-control" value="6"></div>
-                        <button class="btn-primary" id="salvarConfigBtn">Salvar</button>
+                    <div class="card">
+                        <div class="card-header"><h2><i class="fas fa-sliders-h"></i> Configurações do Sistema</h2></div>
+                        <div class="form-group"><label>Valor da Mensalidade (R$)</label><input type="number" id="configMensalidade" class="form-control" value="60" step="10"></div>
+                        <div class="form-group"><label>Limite de Revisões por Mês</label><input type="number" id="configLimiteRevisoes" class="form-control" value="2" min="1" max="10"></div>
+                        <div class="form-group"><label>Limite de Páginas por Trabalho</label><input type="number" id="configLimitePaginas" class="form-control" value="6" min="1" max="20"></div>
+                        <button class="btn-primary" id="salvarConfigBtn">Salvar Configurações</button>
                     </div>
                 </div>
             </div>
@@ -786,157 +800,420 @@
     </div>
 </div>
 
-<!-- MODAIS -->
-<div id="modalProfessor" class="modal"><div class="modal-content"><div class="modal-header"><h3 id="modalProfessorTitle">Professor</h3><button class="close-modal" data-modal="modalProfessor">&times;</button></div>
-<form id="formProfessor"><input type="hidden" id="professorId"><div class="form-group"><label>Nome</label><input type="text" id="professorNome" class="form-control" required></div>
-<div class="form-group"><label>E-mail</label><input type="email" id="professorEmail" class="form-control" required></div>
-<div class="form-group"><label>Senha</label><input type="password" id="professorSenha" class="form-control" value="prof123"></div>
-<div class="form-group"><label>Status</label><select id="professorStatus" class="form-control"><option value="ativo">Ativo</option><option value="inativo">Inativo</option></select></div>
-<button type="submit" class="btn-primary w-100">Salvar</button></form></div></div>
+<!-- MODAL PROFESSOR -->
+<div id="modalProfessor" class="modal">
+    <div class="modal-content">
+        <div class="modal-header"><h3 id="modalProfessorTitle">Adicionar Professor</h3><button class="close-modal" data-modal="modalProfessor">&times;</button></div>
+        <form id="formProfessor"><input type="hidden" id="professorId">
+            <div class="form-group"><label>Nome Completo</label><input type="text" id="professorNome" class="form-control" required></div>
+            <div class="form-group"><label>E-mail</label><input type="email" id="professorEmail" class="form-control" required></div>
+            <div class="form-group"><label>Senha</label><input type="password" id="professorSenha" class="form-control" value="prof123"></div>
+            <div class="form-group"><label>Status</label><select id="professorStatus" class="form-control"><option value="ativo">Ativo</option><option value="inativo">Inativo</option></select></div>
+            <button type="submit" class="btn-primary w-100">Salvar</button>
+        </form>
+    </div>
+</div>
 
-<div id="modalTurma" class="modal"><div class="modal-content"><div class="modal-header"><h3 id="modalTurmaTitle">Turma</h3><button class="close-modal" data-modal="modalTurma">&times;</button></div>
-<form id="formTurma"><input type="hidden" id="turmaId"><div class="form-group"><label>Nome</label><input type="text" id="turmaNome" class="form-control" required></div>
-<div class="form-group"><label>Professor</label><select id="turmaProfessor" class="form-control"><option value="">Selecione</option></select></div>
-<div class="form-group"><label>Status</label><select id="turmaStatus" class="form-control"><option value="ativa">Ativa</option><option value="inativa">Inativa</option></select></div>
-<button type="submit" class="btn-primary w-100">Salvar</button></form></div></div>
+<!-- MODAL TURMA -->
+<div id="modalTurma" class="modal">
+    <div class="modal-content">
+        <div class="modal-header"><h3 id="modalTurmaTitle">Adicionar Turma</h3><button class="close-modal" data-modal="modalTurma">&times;</button></div>
+        <form id="formTurma"><input type="hidden" id="turmaId">
+            <div class="form-group"><label>Nome da Turma</label><input type="text" id="turmaNome" class="form-control" required></div>
+            <div class="form-group"><label>Professor Responsável</label><select id="turmaProfessor" class="form-control"><option value="">Selecione um professor</option></select></div>
+            <div class="form-group"><label>Status</label><select id="turmaStatus" class="form-control"><option value="ativa">Ativa</option><option value="inativa">Inativa</option></select></div>
+            <button type="submit" class="btn-primary w-100">Salvar</button>
+        </form>
+    </div>
+</div>
 
-<div id="modalAluno" class="modal"><div class="modal-content"><div class="modal-header"><h3 id="modalAlunoTitle">Aluno</h3><button class="close-modal" data-modal="modalAluno">&times;</button></div>
-<form id="formAluno"><input type="hidden" id="alunoId"><div class="form-group"><label>Nome</label><input type="text" id="alunoNome" class="form-control" required></div>
-<div class="form-group"><label>E-mail</label><input type="email" id="alunoEmail" class="form-control" required></div>
-<div class="form-group"><label>Senha</label><input type="password" id="alunoSenha" class="form-control" value="aluno123"></div>
-<div class="form-group"><label>Professor</label><select id="alunoProfessor" class="form-control"><option value="">Selecione</option></select></div>
-<div class="form-group"><label>Turma</label><select id="alunoTurma" class="form-control"><option value="">Selecione</option></select></div>
-<div class="form-group"><label>Status</label><select id="alunoStatus" class="form-control"><option value="ativo">Ativo</option><option value="inativo">Inativo</option></select></div>
-<button type="submit" class="btn-primary w-100">Salvar</button></form></div></div>
-
-<div id="modalPagamento" class="modal"><div class="modal-content"><div class="modal-header"><h3>Pagamento</h3><button class="close-modal" data-modal="modalPagamento">&times;</button></div>
-<form id="formPagamento"><input type="hidden" id="pagamentoAlunoId"><div class="form-group"><label>Aluno</label><input type="text" id="pagamentoAlunoNome" class="form-control" readonly></div>
-<div class="form-group"><label>Valor</label><input type="number" id="pagamentoValor" class="form-control" value="60"></div>
-<div class="form-group"><label>Status</label><select id="pagamentoStatus" class="form-control"><option value="pago">Pago</option><option value="pendente">Pendente</option></select></div>
-<button type="submit" class="btn-primary w-100">Registrar</button></form></div></div>
+<!-- MODAL ALUNO -->
+<div id="modalAluno" class="modal">
+    <div class="modal-content">
+        <div class="modal-header"><h3 id="modalAlunoTitle">Adicionar Aluno</h3><button class="close-modal" data-modal="modalAluno">&times;</button></div>
+        <form id="formAluno"><input type="hidden" id="alunoId">
+            <div class="form-group"><label>Nome Completo</label><input type="text" id="alunoNome" class="form-control" required></div>
+            <div class="form-group"><label>E-mail</label><input type="email" id="alunoEmail" class="form-control" required></div>
+            <div class="form-group"><label>Senha</label><input type="password" id="alunoSenha" class="form-control" value="aluno123"></div>
+            <div class="form-group"><label>Professor</label><select id="alunoProfessor" class="form-control"><option value="">Selecione</option></select></div>
+            <div class="form-group"><label>Turma</label><select id="alunoTurma" class="form-control"><option value="">Selecione</option></select></div>
+            <div class="form-group"><label>Status</label><select id="alunoStatus" class="form-control"><option value="ativo">Ativo</option><option value="inativo">Inativo</option></select></div>
+            <button type="submit" class="btn-primary w-100">Salvar</button>
+        </form>
+    </div>
+</div>
 
 <script>
     const SUPABASE_URL = 'https://sejnrydyaoawzthnprvq.supabase.co';
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNlam5yeWR5YW9hd3p0aG5wcnZxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgzNTQyNjYsImV4cCI6MjA5MzkzMDI2Nn0.2GXQUF8drgT8HKLLp4YHT6vi0iBUjVdjw1t-ft1xsRA';
 
     let supabaseClient = null;
-    let carregando = false;
-
     let dados = {
         professores: [], turmas: [], alunos: [], pagamentos: [], trabalhos: [],
         config: { mensalidade: 60, limiteRevisoes: 2, limitePaginas: 6 }
     };
 
-    function mostrarToast(msg, tipo) { const t = document.createElement('div'); t.className = `toast ${tipo}`; t.innerHTML = `<i class="fas ${tipo === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'}"></i> ${msg}`; document.getElementById('toastContainer').appendChild(t); setTimeout(() => t.remove(), 3000); }
-    function fecharModal(id) { document.getElementById(id).classList.remove('active'); }
-    function formatarData(dataISO) { if (!dataISO) return '-'; try { const [a,m,d] = dataISO.split('-'); return `${d}/${m}/${a}`; } catch(e) { return dataISO; } }
+    function mostrarToast(msg, tipo) {
+        const t = document.createElement('div');
+        t.className = `toast ${tipo}`;
+        t.innerHTML = `<i class="fas ${tipo === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'}"></i> ${msg}`;
+        document.getElementById('toastContainer').appendChild(t);
+        setTimeout(() => t.remove(), 3000);
+    }
 
-    async function initSupabase() { if (!window.supabase) return false; supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY); return true; }
-    async function carregarProfessores() { if (!supabaseClient) return []; const { data, error } = await supabaseClient.from('admin_professores').select('*'); if (error) return []; return data; }
-    async function carregarTurmas() { if (!supabaseClient) return []; const { data, error } = await supabaseClient.from('admin_turmas').select('*, admin_professores(nome)'); if (error) return []; return data; }
-    async function carregarAlunos() { if (!supabaseClient) return []; const { data, error } = await supabaseClient.from('admin_alunos').select('*, admin_professores(nome), admin_turmas(nome)'); if (error) return []; return data; }
-    async function carregarPagamentos() { if (!supabaseClient) return []; const { data, error } = await supabaseClient.from('admin_pagamentos').select('*'); if (error) return []; return data; }
-    async function carregarTrabalhos() { if (!supabaseClient) return []; const { data, error } = await supabaseClient.from('admin_trabalhos').select('*'); if (error) return []; return data; }
-    async function carregarConfiguracoes() { if (!supabaseClient) return { mensalidade: 60, limiteRevisoes: 2, limitePaginas: 6 }; const { data, error } = await supabaseClient.from('admin_configuracoes').select('*').limit(1); if (error || !data || data.length === 0) return { mensalidade: 60, limiteRevisoes: 2, limitePaginas: 6 }; return data[0]; }
+    function fecharModal(id) {
+        document.getElementById(id).classList.remove('active');
+    }
 
-    async function carregarTodosDados() { if (carregando) return; carregando = true; try { dados.professores = await carregarProfessores(); dados.turmas = await carregarTurmas(); dados.alunos = await carregarAlunos(); dados.pagamentos = await carregarPagamentos(); dados.trabalhos = await carregarTrabalhos(); dados.config = await carregarConfiguracoes(); atualizarUI(); } catch(e) { console.error(e); } finally { carregando = false; } }
+    function formatarData(dataISO) {
+        if (!dataISO) return '-';
+        try {
+            const [ano, mes, dia] = dataISO.split('-');
+            return `${dia}/${mes}/${ano}`;
+        } catch { return dataISO; }
+    }
 
-    async function salvarProfessorNoBanco(prof) { if (prof.id) { await supabaseClient.from('admin_professores').update(prof).eq('id', prof.id); } else { await supabaseClient.from('admin_professores').insert(prof); } await carregarTodosDados(); }
-    async function excluirProfessorDoBanco(id) { await supabaseClient.from('admin_professores').delete().eq('id', id); await carregarTodosDados(); }
-    async function salvarTurmaNoBanco(turma) { if (turma.id) { await supabaseClient.from('admin_turmas').update(turma).eq('id', turma.id); } else { await supabaseClient.from('admin_turmas').insert(turma); } await carregarTodosDados(); }
-    async function excluirTurmaDoBanco(id) { await supabaseClient.from('admin_turmas').delete().eq('id', id); await carregarTodosDados(); }
-    async function salvarAlunoNoBanco(aluno) { if (aluno.id) { await supabaseClient.from('admin_alunos').update(aluno).eq('id', aluno.id); } else { await supabaseClient.from('admin_alunos').insert(aluno); } await carregarTodosDados(); }
-    async function excluirAlunoDoBanco(id) { await supabaseClient.from('admin_alunos').delete().eq('id', id); await carregarTodosDados(); }
-    async function salvarPagamentoNoBanco(pag) { const existing = dados.pagamentos.find(p => p.aluno_id === pag.aluno_id); if (existing) { await supabaseClient.from('admin_pagamentos').update(pag).eq('id', existing.id); } else { await supabaseClient.from('admin_pagamentos').insert(pag); } await carregarTodosDados(); }
-    async function salvarConfiguracoesNoBanco(config) { await supabaseClient.from('admin_configuracoes').update(config).eq('id', 1); await carregarTodosDados(); }
+    async function initSupabase() {
+        if (!window.supabase) return false;
+        supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        return true;
+    }
 
-    async function fazerLogin(email, senha) { if (email === 'admin@mentoria.com' && senha === 'admin123') { await initSupabase(); document.getElementById('loginScreen').style.display = 'none'; document.getElementById('dashboardScreen').style.display = 'block'; document.getElementById('adminName').innerText = 'Administrador'; document.getElementById('adminAvatar').innerText = 'A'; await carregarTodosDados(); return true; } document.getElementById('loginError').innerText = 'E-mail ou senha inválidos'; document.getElementById('loginError').classList.add('show'); return false; }
-    function logout() { document.getElementById('loginScreen').style.display = 'flex'; document.getElementById('dashboardScreen').style.display = 'none'; }
+    // CARREGAR DADOS
+    async function carregarProfessores() { const { data } = await supabaseClient.from('admin_professores').select('*'); return data || []; }
+    async function carregarTurmas() { const { data } = await supabaseClient.from('admin_turmas').select('*, admin_professores(nome)'); return data || []; }
+    async function carregarAlunos() { const { data } = await supabaseClient.from('admin_alunos').select('*, admin_professores(nome), admin_turmas(nome)'); return data || []; }
+    async function carregarPagamentos() { const { data } = await supabaseClient.from('admin_pagamentos').select('*'); return data || []; }
+    async function carregarConfiguracoes() { const { data } = await supabaseClient.from('admin_configuracoes').select('*').limit(1); return data?.[0] || { mensalidade: 60, limiteRevisoes: 2, limitePaginas: 6 }; }
 
+    async function carregarTodosDados() {
+        dados.professores = await carregarProfessores();
+        dados.turmas = await carregarTurmas();
+        dados.alunos = await carregarAlunos();
+        dados.pagamentos = await carregarPagamentos();
+        dados.config = await carregarConfiguracoes();
+        atualizarUI();
+    }
+
+    // SALVAR
+    async function salvarProfessor(prof) { if (prof.id) await supabaseClient.from('admin_professores').update(prof).eq('id', prof.id); else await supabaseClient.from('admin_professores').insert(prof); await carregarTodosDados(); }
+    async function excluirProfessor(id) { await supabaseClient.from('admin_professores').delete().eq('id', id); await carregarTodosDados(); }
+    async function salvarTurma(turma) { if (turma.id) await supabaseClient.from('admin_turmas').update(turma).eq('id', turma.id); else await supabaseClient.from('admin_turmas').insert(turma); await carregarTodosDados(); }
+    async function excluirTurma(id) { await supabaseClient.from('admin_turmas').delete().eq('id', id); await carregarTodosDados(); }
+    async function salvarAluno(aluno) { if (aluno.id) await supabaseClient.from('admin_alunos').update(aluno).eq('id', aluno.id); else await supabaseClient.from('admin_alunos').insert(aluno); await carregarTodosDados(); }
+    async function excluirAluno(id) { await supabaseClient.from('admin_alunos').delete().eq('id', id); await carregarTodosDados(); }
+    async function salvarPagamento(pag) { const existing = dados.pagamentos.find(p => p.aluno_id === pag.aluno_id); if (existing) await supabaseClient.from('admin_pagamentos').update(pag).eq('id', existing.id); else await supabaseClient.from('admin_pagamentos').insert(pag); await carregarTodosDados(); }
+    async function salvarConfig(config) { await supabaseClient.from('admin_configuracoes').update(config).eq('id', 1); await carregarTodosDados(); }
+
+    // LOGIN
+    async function fazerLogin(email, senha) {
+        if (email === 'admin@mentoria.com' && senha === 'admin123') {
+            await initSupabase();
+            document.getElementById('loginScreen').style.display = 'none';
+            document.getElementById('dashboardScreen').style.display = 'block';
+            await carregarTodosDados();
+            return true;
+        }
+        document.getElementById('loginError').innerText = 'E-mail ou senha inválidos';
+        document.getElementById('loginError').classList.add('show');
+        return false;
+    }
+
+    function logout() {
+        document.getElementById('loginScreen').style.display = 'flex';
+        document.getElementById('dashboardScreen').style.display = 'none';
+    }
+
+    // ATUALIZAR UI
     function atualizarUI() {
         document.getElementById('totalProfessores').innerText = dados.professores.length;
         document.getElementById('totalTurmas').innerText = dados.turmas.length;
         document.getElementById('totalAlunos').innerText = dados.alunos.length;
         document.getElementById('totalTrabalhos').innerText = dados.trabalhos.length;
+
         const freqMedia = dados.alunos.length ? Math.round(dados.alunos.reduce((s, a) => s + (a.frequencia || 0), 0) / dados.alunos.length) : 0;
         const totalFeedbacks = dados.trabalhos.filter(t => t.status === 'aprovado').length;
-        document.getElementById('metricasContainer').innerHTML = `<div class="stat-card"><div class="stat-value">${freqMedia}%</div><div class="stat-label">Frequência Média</div></div><div class="stat-card"><div class="stat-value">${totalFeedbacks}</div><div class="stat-label">Trabalhos Revisados</div></div><div class="stat-card"><div class="stat-value">${dados.config.limiteRevisoes}</div><div class="stat-label">Revisões/Mês</div></div>`;
+        document.getElementById('metricasContainer').innerHTML = `
+            <div class="stat-card"><div class="stat-value">${freqMedia}%</div><div class="stat-label">Frequência Média</div></div>
+            <div class="stat-card"><div class="stat-value">${totalFeedbacks}</div><div class="stat-label">Trabalhos Revisados</div></div>
+            <div class="stat-card"><div class="stat-value">${dados.config.limiteRevisoes}</div><div class="stat-label">Revisões/Mês</div></div>
+        `;
+
         let alertas = [];
         if (dados.professores.filter(p => p.status === 'inativo').length) alertas.push('<div class="badge-warning" style="padding:12px;border-radius:12px;margin-bottom:8px;">Professores inativos</div>');
         if (dados.alunos.filter(a => a.status === 'inativo').length) alertas.push('<div class="badge-warning" style="padding:12px;border-radius:12px;">Alunos inativos</div>');
-        if (dados.pagamentos.filter(p => p.status === 'pendente').length) alertas.push('<div class="badge-warning" style="padding:12px;border-radius:12px;">Pagamentos pendentes</div>');
         if (alertas.length === 0) alertas.push('<div class="badge-active" style="padding:12px;border-radius:12px;">Sistema normal</div>');
         document.getElementById('alertasContainer').innerHTML = alertas.join('');
 
-        document.getElementById('tabelaProfessores').innerHTML = dados.professores.map(p => `<td style="padding:14px 12px"><strong>${p.nome}</strong></td><td style="padding:14px 12px">${p.email}</td><td style="padding:14px 12px"><span class="badge ${p.status === 'ativo' ? 'badge-active' : 'badge-inactive'}">${p.status}</span></td><td style="padding:14px 12px">${formatarData(p.created_at?.split('T')[0])}</td><td style="padding:14px 12px"><button class="btn-icon" onclick="editarProfessor(${p.id})"><i class="fas fa-edit"></i></button> <button class="btn-icon" onclick="excluirProfessor(${p.id})"><i class="fas fa-trash"></i></button></td>`).join('') || '<td colspan="5" class="empty-state">Nenhum professor</div>';
+        // Professores
+        document.getElementById('tabelaProfessores').innerHTML = dados.professores.map(p => `
+            <td style="padding:14px 12px"><strong>${p.nome}</strong></td>
+            <td style="padding:14px 12px">${p.email}</td>
+            <td style="padding:14px 12px"><span class="badge ${p.status === 'ativo' ? 'badge-active' : 'badge-inactive'}">${p.status}</span></td>
+            <td style="padding:14px 12px">${p.created_at ? formatarData(p.created_at.split('T')[0]) : '-'}</td>
+            <td style="padding:14px 12px"><button class="btn-icon" onclick="editarProfessor(${p.id})"><i class="fas fa-edit"></i></button> <button class="btn-icon" onclick="excluirProfessor(${p.id})"><i class="fas fa-trash"></i></button></td>
+        `).join('') || '<td colspan="5" class="empty-state">Nenhum professor</div>';
 
-        document.getElementById('tabelaTurmas').innerHTML = dados.turmas.map(t => { const p = dados.professores.find(p => p.id === t.professor_id); return `<td style="padding:14px 12px"><strong>${t.nome}</strong></td><td style="padding:14px 12px">${p?.nome || '-'}</td><td style="padding:14px 12px">${dados.alunos.filter(a => a.turma_id === t.id).length}</td><td style="padding:14px 12px"><span class="badge ${t.status === 'ativa' ? 'badge-active' : 'badge-inactive'}">${t.status}</span></td><td style="padding:14px 12px"><button class="btn-icon" onclick="editarTurma(${t.id})"><i class="fas fa-edit"></i></button> <button class="btn-icon" onclick="excluirTurma(${t.id})"><i class="fas fa-trash"></i></button></td>`; }).join('') || '<td colspan="5" class="empty-state">Nenhuma turma</div>';
-        document.getElementById('alunoProfessor').innerHTML = dados.professores.filter(p => p.status === 'ativo').map(p => `<option value="${p.id}">${p.nome}</option>`).join('');
-        document.getElementById('alunoTurma').innerHTML = dados.turmas.filter(t => t.status === 'ativa').map(t => `<option value="${t.id}">${t.nome}</option>`).join('');
-        document.getElementById('turmaProfessor').innerHTML = dados.professores.filter(p => p.status === 'ativo').map(p => `<option value="${p.id}">${p.nome}</option>`).join('');
+        // Turmas
+        document.getElementById('tabelaTurmas').innerHTML = dados.turmas.map(t => {
+            const prof = dados.professores.find(p => p.id === t.professor_id);
+            const qtdAlunos = dados.alunos.filter(a => a.turma_id === t.id).length;
+            return `
+                <td style="padding:14px 12px"><strong>${t.nome}</strong></td>
+                <td style="padding:14px 12px">${prof?.nome || '-'}</td>
+                <td style="padding:14px 12px">${qtdAlunos}</td>
+                <td style="padding:14px 12px"><span class="badge ${t.status === 'ativa' ? 'badge-active' : 'badge-inactive'}">${t.status}</span></td>
+                <td style="padding:14px 12px"><button class="btn-icon" onclick="editarTurma(${t.id})"><i class="fas fa-edit"></i></button> <button class="btn-icon" onclick="excluirTurma(${t.id})"><i class="fas fa-trash"></i></button></td>
+            `;
+        }).join('') || '<td colspan="5" class="empty-state">Nenhuma turma</div>';
 
-        document.getElementById('tabelaAlunos').innerHTML = dados.alunos.map(a => { const p = dados.professores.find(p => p.id === a.professor_id); const t = dados.turmas.find(t => t.id === a.turma_id); const pag = dados.pagamentos.find(p => p.aluno_id === a.id); const statusPag = pag ? pag.status : 'pendente'; return `<td style="padding:14px 12px"><strong>${a.nome}</strong></td><td style="padding:14px 12px">${a.email}</td><td style="padding:14px 12px">${p?.nome || '-'}</td><td style="padding:14px 12px">${t?.nome || '-'}</td><td style="padding:14px 12px"><span class="badge ${a.status === 'ativo' ? 'badge-active' : 'badge-inactive'}">${a.status}</span></td><td style="padding:14px 12px"><span class="badge badge-info">${a.frequencia || 0}%</span></div></td><td style="padding:14px 12px"><span class="badge ${statusPag === 'pago' ? 'badge-paid' : 'badge-pending'}">${statusPag === 'pago' ? 'Pago' : 'Pendente'}</span></td><td style="padding:14px 12px"><button class="btn-icon" onclick="editarAluno(${a.id})"><i class="fas fa-edit"></i></button> <button class="btn-icon" onclick="excluirAluno(${a.id})"><i class="fas fa-trash"></i></button> <button class="btn-icon" onclick="abrirModalPagamento(${a.id}, '${a.nome}')"><i class="fas fa-dollar-sign"></i></button></td>`; }).join('') || '<td colspan="8" class="empty-state">Nenhum aluno</div>';
+        // Alunos
+        document.getElementById('tabelaAlunos').innerHTML = dados.alunos.map(a => {
+            const prof = dados.professores.find(p => p.id === a.professor_id);
+            const turma = dados.turmas.find(t => t.id === a.turma_id);
+            const pag = dados.pagamentos.find(p => p.aluno_id === a.id);
+            return `
+                <td style="padding:14px 12px"><strong>${a.nome}</strong></td>
+                <td style="padding:14px 12px">${a.email}</td>
+                <td style="padding:14px 12px">${prof?.nome || '-'}</td>
+                <td style="padding:14px 12px">${turma?.nome || '-'}</td>
+                <td style="padding:14px 12px"><span class="badge ${a.status === 'ativo' ? 'badge-active' : 'badge-inactive'}">${a.status}</span></td>
+                <td style="padding:14px 12px"><span class="badge ${pag?.status === 'pago' ? 'badge-paid' : 'badge-pending'}">${pag?.status === 'pago' ? 'Pago' : 'Pendente'}</span></td>
+                <td style="padding:14px 12px"><button class="btn-icon" onclick="editarAluno(${a.id})"><i class="fas fa-edit"></i></button> <button class="btn-icon" onclick="excluirAluno(${a.id})"><i class="fas fa-trash"></i></button> <button class="btn-icon" onclick="abrirModalPagamento(${a.id}, '${a.nome}')"><i class="fas fa-dollar-sign"></i></button></td>
+            `;
+        }).join('') || '<td colspan="7" class="empty-state">Nenhum aluno</div>';
 
-        const receitaTotal = dados.pagamentos.filter(p => p.status === 'pago').reduce((s, p) => s + (p.valor || dados.config.mensalidade), 0);
-        const receitaMes = dados.pagamentos.filter(p => p.status === 'pago' && p.data_pagamento && new Date(p.data_pagamento).getMonth() === new Date().getMonth()).reduce((s, p) => s + (p.valor || dados.config.mensalidade), 0);
-        const inadimplentes = dados.pagamentos.filter(p => p.status === 'pendente').length;
-        document.getElementById('receitaTotal').innerText = `R$ ${receitaTotal}`;
-        document.getElementById('receitaMes').innerText = `R$ ${receitaMes}`;
-        document.getElementById('inadimplentesTotal').innerText = inadimplentes;
-        document.getElementById('tabelaPagamentos').innerHTML = dados.alunos.map(a => { const p = dados.professores.find(p => p.id === a.professor_id); const pag = dados.pagamentos.find(p => p.aluno_id === a.id); const status = pag ? pag.status : 'pendente'; return `<td style="padding:14px 12px"><strong>${a.nome}</strong></td><td style="padding:14px 12px">${p?.nome || '-'}</td><td style="padding:14px 12px">R$ ${dados.config.mensalidade}</td><td style="padding:14px 12px">${pag?.vencimento ? formatarData(pag.vencimento) : formatarData(new Date().toISOString().split('T')[0])}</td><td style="padding:14px 12px"><span class="badge ${status === 'pago' ? 'badge-paid' : 'badge-pending'}">${status === 'pago' ? 'Pago' : 'Pendente'}</span></td><td style="padding:14px 12px"><button class="btn-icon" onclick="abrirModalPagamento(${a.id}, '${a.nome}')"><i class="fas fa-dollar-sign"></i></button></td>`; }).join('') || '<td colspan="6" class="empty-state">Nenhum pagamento</div>';
+        // Selects
+        document.getElementById('turmaProfessor').innerHTML = '<option value="">Selecione</option>' + dados.professores.filter(p => p.status === 'ativo').map(p => `<option value="${p.id}">${p.nome}</option>`).join('');
+        document.getElementById('alunoProfessor').innerHTML = '<option value="">Selecione</option>' + dados.professores.filter(p => p.status === 'ativo').map(p => `<option value="${p.id}">${p.nome}</option>`).join('');
+        document.getElementById('alunoTurma').innerHTML = '<option value="">Selecione</option>' + dados.turmas.filter(t => t.status === 'ativa').map(t => `<option value="${t.id}">${t.nome}</option>`).join('');
 
         document.getElementById('configMensalidade').value = dados.config.mensalidade;
         document.getElementById('configLimiteRevisoes').value = dados.config.limiteRevisoes;
         document.getElementById('configLimitePaginas').value = dados.config.limitePaginas;
     }
 
-    function abrirModalProfessor(id = null) { if (id) { const p = dados.professores.find(p => p.id === id); if (p) { document.getElementById('professorId').value = p.id; document.getElementById('professorNome').value = p.nome; document.getElementById('professorEmail').value = p.email; document.getElementById('professorStatus').value = p.status; document.getElementById('modalProfessorTitle').innerText = 'Editar Professor'; } } else { document.getElementById('professorId').value = ''; document.getElementById('formProfessor').reset(); document.getElementById('professorSenha').value = 'prof123'; document.getElementById('modalProfessorTitle').innerText = 'Adicionar Professor'; } document.getElementById('modalProfessor').classList.add('active'); }
-    async function salvarProfessor(e) { e.preventDefault(); const id = document.getElementById('professorId').value; const nome = document.getElementById('professorNome').value; const email = document.getElementById('professorEmail').value; const senha = document.getElementById('professorSenha').value; const status = document.getElementById('professorStatus').value; await salvarProfessorNoBanco({ id: id ? parseInt(id) : undefined, nome, email, senha, status, created_at: new Date().toISOString() }); mostrarToast('Professor salvo!', 'success'); fecharModal('modalProfessor'); }
+    // CRUD
+    function abrirModalProfessor(id = null) {
+        if (id) {
+            const p = dados.professores.find(p => p.id === id);
+            if (p) {
+                document.getElementById('professorId').value = p.id;
+                document.getElementById('professorNome').value = p.nome;
+                document.getElementById('professorEmail').value = p.email;
+                document.getElementById('professorStatus').value = p.status;
+                document.getElementById('modalProfessorTitle').innerText = 'Editar Professor';
+            }
+        } else {
+            document.getElementById('professorId').value = '';
+            document.getElementById('formProfessor').reset();
+            document.getElementById('professorSenha').value = 'prof123';
+            document.getElementById('modalProfessorTitle').innerText = 'Adicionar Professor';
+        }
+        document.getElementById('modalProfessor').classList.add('active');
+    }
+
+    async function salvarProfessorSubmit(e) {
+        e.preventDefault();
+        const id = document.getElementById('professorId').value;
+        const nome = document.getElementById('professorNome').value;
+        const email = document.getElementById('professorEmail').value;
+        const senha = document.getElementById('professorSenha').value;
+        const status = document.getElementById('professorStatus').value;
+        await salvarProfessor({ id: id ? parseInt(id) : undefined, nome, email, senha, status, created_at: new Date().toISOString() });
+        mostrarToast('Professor salvo!', 'success');
+        fecharModal('modalProfessor');
+    }
+
     async function editarProfessor(id) { abrirModalProfessor(id); }
-    async function excluirProfessor(id) { if (confirm('Excluir este professor?')) { await excluirProfessorDoBanco(id); mostrarToast('Professor excluído!', 'success'); } }
+    async function excluirProfessor(id) { if (confirm('Excluir este professor?')) { await excluirProfessor(id); mostrarToast('Professor excluído!', 'success'); } }
 
-    function abrirModalTurma(id = null) { document.getElementById('turmaProfessor').innerHTML = '<option value="">Selecione</option>' + dados.professores.filter(p => p.status === 'ativo').map(p => `<option value="${p.id}">${p.nome}</option>`).join(''); if (id) { const t = dados.turmas.find(t => t.id === id); if (t) { document.getElementById('turmaId').value = t.id; document.getElementById('turmaNome').value = t.nome; document.getElementById('turmaProfessor').value = t.professor_id; document.getElementById('turmaStatus').value = t.status; document.getElementById('modalTurmaTitle').innerText = 'Editar Turma'; } } else { document.getElementById('turmaId').value = ''; document.getElementById('formTurma').reset(); document.getElementById('modalTurmaTitle').innerText = 'Adicionar Turma'; } document.getElementById('modalTurma').classList.add('active'); }
-    async function salvarTurma(e) { e.preventDefault(); const id = document.getElementById('turmaId').value; const nome = document.getElementById('turmaNome').value; const professor_id = parseInt(document.getElementById('turmaProfessor').value); const status = document.getElementById('turmaStatus').value; await salvarTurmaNoBanco({ id: id ? parseInt(id) : undefined, nome, professor_id, status }); mostrarToast('Turma salva!', 'success'); fecharModal('modalTurma'); }
+    function abrirModalTurma(id = null) {
+        document.getElementById('turmaProfessor').innerHTML = '<option value="">Selecione</option>' + dados.professores.filter(p => p.status === 'ativo').map(p => `<option value="${p.id}">${p.nome}</option>`).join('');
+        if (id) {
+            const t = dados.turmas.find(t => t.id === id);
+            if (t) {
+                document.getElementById('turmaId').value = t.id;
+                document.getElementById('turmaNome').value = t.nome;
+                document.getElementById('turmaProfessor').value = t.professor_id || '';
+                document.getElementById('turmaStatus').value = t.status;
+                document.getElementById('modalTurmaTitle').innerText = 'Editar Turma';
+            }
+        } else {
+            document.getElementById('turmaId').value = '';
+            document.getElementById('formTurma').reset();
+            document.getElementById('modalTurmaTitle').innerText = 'Adicionar Turma';
+        }
+        document.getElementById('modalTurma').classList.add('active');
+    }
+
+    async function salvarTurmaSubmit(e) {
+        e.preventDefault();
+        const id = document.getElementById('turmaId').value;
+        const nome = document.getElementById('turmaNome').value;
+        const professor_id = parseInt(document.getElementById('turmaProfessor').value);
+        const status = document.getElementById('turmaStatus').value;
+        await salvarTurma({ id: id ? parseInt(id) : undefined, nome, professor_id: professor_id || null, status });
+        mostrarToast('Turma salva!', 'success');
+        fecharModal('modalTurma');
+    }
+
     async function editarTurma(id) { abrirModalTurma(id); }
-    async function excluirTurma(id) { if (confirm('Excluir esta turma?')) { await excluirTurmaDoBanco(id); mostrarToast('Turma excluída!', 'success'); } }
+    async function excluirTurma(id) { if (confirm('Excluir esta turma?')) { await excluirTurma(id); mostrarToast('Turma excluída!', 'success'); } }
 
-    function abrirModalAluno(id = null) { document.getElementById('alunoProfessor').innerHTML = '<option value="">Selecione</option>' + dados.professores.filter(p => p.status === 'ativo').map(p => `<option value="${p.id}">${p.nome}</option>`).join(''); document.getElementById('alunoTurma').innerHTML = '<option value="">Selecione</option>' + dados.turmas.filter(t => t.status === 'ativa').map(t => `<option value="${t.id}">${t.nome}</option>`).join(''); if (id) { const a = dados.alunos.find(a => a.id === id); if (a) { document.getElementById('alunoId').value = a.id; document.getElementById('alunoNome').value = a.nome; document.getElementById('alunoEmail').value = a.email; document.getElementById('alunoProfessor').value = a.professor_id; document.getElementById('alunoTurma').value = a.turma_id; document.getElementById('alunoStatus').value = a.status; document.getElementById('modalAlunoTitle').innerText = 'Editar Aluno'; } } else { document.getElementById('alunoId').value = ''; document.getElementById('formAluno').reset(); document.getElementById('alunoSenha').value = 'aluno123'; document.getElementById('modalAlunoTitle').innerText = 'Adicionar Aluno'; } document.getElementById('modalAluno').classList.add('active'); }
-    async function salvarAluno(e) { e.preventDefault(); const id = document.getElementById('alunoId').value; const nome = document.getElementById('alunoNome').value; const email = document.getElementById('alunoEmail').value; const senha = document.getElementById('alunoSenha').value; const professor_id = parseInt(document.getElementById('alunoProfessor').value); const turma_id = parseInt(document.getElementById('alunoTurma').value); const status = document.getElementById('alunoStatus').value; await salvarAlunoNoBanco({ id: id ? parseInt(id) : undefined, nome, email, senha, professor_id, turma_id, status, frequencia: 0, revisoes_mes: 0, limite_revisoes: dados.config.limiteRevisoes }); mostrarToast('Aluno salvo!', 'success'); fecharModal('modalAluno'); }
+    function abrirModalAluno(id = null) {
+        document.getElementById('alunoProfessor').innerHTML = '<option value="">Selecione</option>' + dados.professores.filter(p => p.status === 'ativo').map(p => `<option value="${p.id}">${p.nome}</option>`).join('');
+        document.getElementById('alunoTurma').innerHTML = '<option value="">Selecione</option>' + dados.turmas.filter(t => t.status === 'ativa').map(t => `<option value="${t.id}">${t.nome}</option>`).join('');
+        if (id) {
+            const a = dados.alunos.find(a => a.id === id);
+            if (a) {
+                document.getElementById('alunoId').value = a.id;
+                document.getElementById('alunoNome').value = a.nome;
+                document.getElementById('alunoEmail').value = a.email;
+                document.getElementById('alunoProfessor').value = a.professor_id || '';
+                document.getElementById('alunoTurma').value = a.turma_id || '';
+                document.getElementById('alunoStatus').value = a.status;
+                document.getElementById('modalAlunoTitle').innerText = 'Editar Aluno';
+            }
+        } else {
+            document.getElementById('alunoId').value = '';
+            document.getElementById('formAluno').reset();
+            document.getElementById('alunoSenha').value = 'aluno123';
+            document.getElementById('modalAlunoTitle').innerText = 'Adicionar Aluno';
+        }
+        document.getElementById('modalAluno').classList.add('active');
+    }
+
+    async function salvarAlunoSubmit(e) {
+        e.preventDefault();
+        const id = document.getElementById('alunoId').value;
+        const nome = document.getElementById('alunoNome').value;
+        const email = document.getElementById('alunoEmail').value;
+        const senha = document.getElementById('alunoSenha').value;
+        const professor_id = parseInt(document.getElementById('alunoProfessor').value);
+        const turma_id = parseInt(document.getElementById('alunoTurma').value);
+        const status = document.getElementById('alunoStatus').value;
+        await salvarAluno({ id: id ? parseInt(id) : undefined, nome, email, senha, professor_id: professor_id || null, turma_id: turma_id || null, status, frequencia: 0, revisoes_mes: 0, limite_revisoes: dados.config.limiteRevisoes });
+        mostrarToast('Aluno salvo!', 'success');
+        fecharModal('modalAluno');
+    }
+
     async function editarAluno(id) { abrirModalAluno(id); }
-    async function excluirAluno(id) { if (confirm('Excluir este aluno?')) { await excluirAlunoDoBanco(id); mostrarToast('Aluno excluído!', 'success'); } }
+    async function excluirAluno(id) { if (confirm('Excluir este aluno?')) { await excluirAluno(id); mostrarToast('Aluno excluído!', 'success'); } }
 
-    function abrirModalPagamento(alunoId, alunoNome) { document.getElementById('pagamentoAlunoId').value = alunoId; document.getElementById('pagamentoAlunoNome').value = alunoNome; document.getElementById('pagamentoValor').value = dados.config.mensalidade; document.getElementById('pagamentoStatus').value = 'pago'; document.getElementById('modalPagamento').classList.add('active'); }
-    async function salvarPagamento(e) { e.preventDefault(); const alunoId = parseInt(document.getElementById('pagamentoAlunoId').value); const valor = parseInt(document.getElementById('pagamentoValor').value); const status = document.getElementById('pagamentoStatus').value; await salvarPagamentoNoBanco({ aluno_id: alunoId, valor, status, vencimento: new Date().toISOString().split('T')[0], data_pagamento: status === 'pago' ? new Date().toISOString().split('T')[0] : null }); mostrarToast('Pagamento registrado!', 'success'); fecharModal('modalPagamento'); }
-    async function marcarTodosPagos() { if (confirm('Marcar todos os alunos como pagos?')) { for (const aluno of dados.alunos) { await salvarPagamentoNoBanco({ aluno_id: aluno.id, valor: dados.config.mensalidade, status: 'pago', vencimento: new Date().toISOString().split('T')[0], data_pagamento: new Date().toISOString().split('T')[0] }); } await carregarTodosDados(); mostrarToast('Todos os alunos marcados como pagos!', 'success'); } }
-    async function salvarConfiguracoes() { const config = { id: 1, mensalidade: parseInt(document.getElementById('configMensalidade').value), limite_revisoes: parseInt(document.getElementById('configLimiteRevisoes').value), limite_paginas: parseInt(document.getElementById('configLimitePaginas').value), updated_at: new Date().toISOString() }; await salvarConfiguracoesNoBanco(config); mostrarToast('Configurações salvas!', 'success'); }
+    function abrirModalPagamento(alunoId, alunoNome) {
+        document.getElementById('pagamentoAlunoId').value = alunoId;
+        document.getElementById('pagamentoAlunoNome').value = alunoNome;
+        document.getElementById('modalPagamento').classList.add('active');
+    }
 
-    function exportarBackup() { const backup = JSON.stringify(dados, null, 2); const blob = new Blob([backup], { type: 'application/json' }); const link = document.createElement('a'); link.href = URL.createObjectURL(blob); link.download = `backup_mentoria_${new Date().toISOString().split('T')[0]}.json`; link.click(); mostrarToast('Backup exportado!', 'success'); }
-    function importarBackup() { const input = document.createElement('input'); input.type = 'file'; input.accept = '.json'; input.onchange = async (e) => { const file = e.target.files[0]; const reader = new FileReader(); reader.onload = async (ev) => { try { const imp = JSON.parse(ev.target.result); if (imp.professores) await supabaseClient.from('admin_professores').upsert(imp.professores); if (imp.turmas) await supabaseClient.from('admin_turmas').upsert(imp.turmas); if (imp.alunos) await supabaseClient.from('admin_alunos').upsert(imp.alunos); if (imp.pagamentos) await supabaseClient.from('admin_pagamentos').upsert(imp.pagamentos); await carregarTodosDados(); mostrarToast('Backup importado!', 'success'); } catch { mostrarToast('Arquivo inválido', 'error'); } }; reader.readAsText(file); }; input.click(); }
-    function resetarDados() { if (confirm('ATENÇÃO: Isso irá apagar todos os dados?')) { localStorage.removeItem('admin_data'); location.reload(); } }
+    async function salvarConfiguracoes() {
+        await salvarConfig({
+            id: 1,
+            mensalidade: parseInt(document.getElementById('configMensalidade').value),
+            limite_revisoes: parseInt(document.getElementById('configLimiteRevisoes').value),
+            limite_paginas: parseInt(document.getElementById('configLimitePaginas').value),
+            updated_at: new Date().toISOString()
+        });
+        mostrarToast('Configurações salvas!', 'success');
+    }
 
-    function setupNavegacao() { document.querySelectorAll('.nav-item').forEach(item => { item.addEventListener('click', () => { const tab = item.dataset.tab; document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active')); item.classList.add('active'); document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active')); document.getElementById(`${tab}Pane`).classList.add('active'); const titles = { dashboard: 'Dashboard', professores: 'Professores', turmas: 'Turmas', alunos: 'Alunos', financeiro: 'Financeiro', configuracoes: 'Configurações' }; document.getElementById('pageTitle').innerText = titles[tab]; }); }); }
+    function exportarBackup() {
+        const backup = JSON.stringify(dados, null, 2);
+        const blob = new Blob([backup], { type: 'application/json' });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = `backup_mentoria_${new Date().toISOString().split('T')[0]}.json`;
+        link.click();
+        mostrarToast('Backup exportado!', 'success');
+    }
+
+    function importarBackup() {
+        alert('Funcionalidade em desenvolvimento');
+    }
+
+    function resetarDados() {
+        if (confirm('ATENÇÃO: Isso limpará todos os dados locais. Recarregue a página.')) {
+            localStorage.clear();
+            location.reload();
+        }
+    }
+
+    // PAGAMENTO
+    function abrirModalPagamento(alunoId, alunoNome) {
+        document.getElementById('pagamentoAlunoId').value = alunoId;
+        document.getElementById('pagamentoAlunoNome').value = alunoNome;
+        document.getElementById('modalPagamento').classList.add('active');
+    }
+
+    async function salvarPagamentoSubmit(e) {
+        e.preventDefault();
+        const alunoId = parseInt(document.getElementById('pagamentoAlunoId').value);
+        const valor = parseInt(document.getElementById('pagamentoValor').value);
+        const status = document.getElementById('pagamentoStatus').value;
+        await salvarPagamento({
+            aluno_id: alunoId,
+            valor: valor || dados.config.mensalidade,
+            status,
+            vencimento: new Date().toISOString().split('T')[0],
+            data_pagamento: status === 'pago' ? new Date().toISOString().split('T')[0] : null
+        });
+        mostrarToast('Pagamento registrado!', 'success');
+        fecharModal('modalPagamento');
+    }
+
+    // NAVEGAÇÃO
+    function setupNavegacao() {
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', () => {
+                const tab = item.dataset.tab;
+                document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+                item.classList.add('active');
+                document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+                document.getElementById(`${tab}Pane`).classList.add('active');
+                const titles = { dashboard: 'Dashboard', professores: 'Professores', turmas: 'Turmas', alunos: 'Alunos', configuracoes: 'Configurações' };
+                document.getElementById('pageTitle').innerText = titles[tab];
+            });
+        });
+    }
+
     function setupEventos() {
         document.getElementById('loginForm').addEventListener('submit', (e) => { e.preventDefault(); fazerLogin(document.getElementById('loginEmail').value, document.getElementById('loginPassword').value); });
         document.getElementById('logoutBtn').addEventListener('click', logout);
         document.getElementById('novoProfessorBtn').addEventListener('click', () => abrirModalProfessor());
-        document.getElementById('formProfessor').addEventListener('submit', salvarProfessor);
+        document.getElementById('formProfessor').addEventListener('submit', salvarProfessorSubmit);
         document.getElementById('novaTurmaBtn').addEventListener('click', () => abrirModalTurma());
-        document.getElementById('formTurma').addEventListener('submit', salvarTurma);
+        document.getElementById('formTurma').addEventListener('submit', salvarTurmaSubmit);
         document.getElementById('novoAlunoBtn').addEventListener('click', () => abrirModalAluno());
-        document.getElementById('formAluno').addEventListener('submit', salvarAluno);
-        document.getElementById('formPagamento').addEventListener('submit', salvarPagamento);
-        document.getElementById('marcarTodosPagosBtn').addEventListener('click', marcarTodosPagos);
+        document.getElementById('formAluno').addEventListener('submit', salvarAlunoSubmit);
+        document.getElementById('salvarConfigBtn').addEventListener('click', salvarConfiguracoes);
         document.getElementById('exportarBackupBtn').addEventListener('click', exportarBackup);
         document.getElementById('importarBackupBtn').addEventListener('click', importarBackup);
         document.getElementById('resetarDadosBtn').addEventListener('click', resetarDados);
-        document.getElementById('salvarConfigBtn').addEventListener('click', salvarConfiguracoes);
-        document.querySelectorAll('.close-modal').forEach(btn => { btn.addEventListener('click', () => { const id = btn.dataset.modal; if (id) fecharModal(id); }); });
+        document.querySelectorAll('.close-modal').forEach(btn => {
+            btn.addEventListener('click', () => { const id = btn.dataset.modal; if (id) fecharModal(id); });
+        });
         window.addEventListener('click', (e) => { if (e.target.classList.contains('modal')) e.target.classList.remove('active'); });
     }
 
-    (function keepAlive() { let pings = 0; async function ping() { if (!supabaseClient) return; try { await supabaseClient.from('admin_configuracoes').select('id').limit(1); pings++; console.log(`🔵 Keep-alive #${pings}`); } catch(e) { } } setTimeout(ping, 10000); setInterval(ping, 4 * 60 * 60 * 1000); console.log('🟢 Keep-Alive ativado'); })();
+    // MODAL PAGAMENTO (adicionar ao HTML)
+    const modalPagamentoHTML = `
+    <div id="modalPagamento" class="modal">
+        <div class="modal-content">
+            <div class="modal-header"><h3>Registrar Pagamento</h3><button class="close-modal" data-modal="modalPagamento">&times;</button></div>
+            <form id="formPagamento"><input type="hidden" id="pagamentoAlunoId">
+                <div class="form-group"><label>Aluno</label><input type="text" id="pagamentoAlunoNome" class="form-control" readonly></div>
+                <div class="form-group"><label>Valor (R$)</label><input type="number" id="pagamentoValor" class="form-control" value="60" step="10"></div>
+                <div class="form-group"><label>Status</label><select id="pagamentoStatus" class="form-control"><option value="pago">Pago</option><option value="pendente">Pendente</option></select></div>
+                <button type="submit" class="btn-primary w-100">Registrar</button>
+            </form>
+        </div>
+    </div>`;
+    document.body.insertAdjacentHTML('beforeend', modalPagamentoHTML);
+    document.getElementById('formPagamento')?.addEventListener('submit', salvarPagamentoSubmit);
 
-    setupNavegacao(); setupEventos();
+    setupNavegacao();
+    setupEventos();
 </script>
 </body>
 </html>
