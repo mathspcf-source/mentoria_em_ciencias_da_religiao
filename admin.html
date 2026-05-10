@@ -56,7 +56,6 @@
 
         .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-bottom: 24px; }
         @media (max-width: 1000px) { .stats-grid { grid-template-columns: repeat(2, 1fr); } }
-        @media (max-width: 640px) { .stats-grid { grid-template-columns: 1fr; } }
         .stat-card { background: white; padding: 20px; border-radius: 20px; border: 1px solid #e2e8f0; transition: all 0.2s; cursor: pointer; }
         .stat-card:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,0.06); }
         .stat-icon { width: 48px; height: 48px; background: rgba(102,126,234,0.1); border-radius: 14px; display: flex; align-items: center; justify-content: center; margin-bottom: 12px; }
@@ -134,8 +133,8 @@
         </div>
         <div id="loginError" class="error-msg"></div>
         <form id="loginForm">
-            <div class="input-wrapper"><i class="fas fa-envelope"></i><input type="email" id="loginEmail" placeholder="admin@mentoria.com" value="admin@mentoria.com"></div>
-            <div class="input-wrapper"><i class="fas fa-lock"></i><input type="password" id="loginPassword" placeholder="admin123" value="admin123"></div>
+            <div class="input-wrapper"><i class="fas fa-envelope"></i><input type="email" id="loginEmail" placeholder="admin@mentoria.com"></div>
+            <div class="input-wrapper"><i class="fas fa-lock"></i><input type="password" id="loginPassword" placeholder="admin123"></div>
             <button type="submit" class="btn-login">Acessar Painel</button>
         </form>
         <div class="credentials-hint"><strong>Credenciais:</strong> <span>admin@mentoria.com</span> / <span>admin123</span></div>
@@ -183,12 +182,12 @@
 
                 <div id="alunosPane" class="tab-pane">
                     <div class="card"><div class="card-header"><h2><i class="fas fa-users"></i> Alunos</h2><button class="btn-primary" id="novoAlunoBtn">Novo Aluno</button></div>
-                        <div class="table-wrapper"><table><thead><tr><th>Nome</th><th>E-mail</th><th>Professor</th><th>Status</th><th>Frequência</th><th>Ações</th></tr></thead><tbody id="tabelaAlunos"></tbody></table></div>
+                        <div class="table-wrapper"></td><thead></tr><th>Nome</th><th>E-mail</th><th>Professor</th><th>Status</th><th>Frequência</th><th>Ações</th></tr></thead><tbody id="tabelaAlunos"></tbody></table></div>
                 </div>
 
                 <div id="turmasPane" class="tab-pane">
                     <div class="card"><div class="card-header"><h2><i class="fas fa-layer-group"></i> Turmas</h2><button class="btn-primary" id="novaTurmaBtn">Nova Turma</button></div>
-                        <div class="table-wrapper"></tr><thead><tr><th>Turma</th><th>Professor</th><th>Alunos</th><th>Status</th><th>Ações</th></td></thead><tbody id="tabelaTurmas"></tbody></table></div>
+                        <div class="table-wrapper"><table><thead><tr><th>Turma</th><th>Professor</th><th>Alunos</th><th>Status</th><th>Ações</th></tr></thead><tbody id="tabelaTurmas"></tbody></table></div>
                 </div>
 
                 <div id="configuracoesPane" class="tab-pane">
@@ -240,7 +239,6 @@
     let supabaseClient = null;
     let carregando = false;
 
-    // Dados locais para cache
     let dados = {
         professores: [],
         alunos: [],
@@ -252,67 +250,55 @@
     // ============================================
     // FUNÇÕES UTILITÁRIAS
     // ============================================
-    function mostrarToast(msg, tipo) {
-        const t = document.createElement('div');
-        t.className = `toast ${tipo}`;
-        t.innerHTML = `<i class="fas ${tipo === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'}"></i> ${msg}`;
-        document.getElementById('toastContainer').appendChild(t);
-        setTimeout(() => t.remove(), 3000);
-    }
-
-    function fecharModal(id) {
-        document.getElementById(id).classList.remove('active');
-    }
+    function mostrarToast(msg, tipo) { const t = document.createElement('div'); t.className = `toast ${tipo}`; t.innerHTML = `<i class="fas ${tipo === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'}"></i> ${msg}`; document.getElementById('toastContainer').appendChild(t); setTimeout(() => t.remove(), 3000); }
+    function fecharModal(id) { document.getElementById(id).classList.remove('active'); }
 
     // ============================================
     // INICIALIZAR SUPABASE
     // ============================================
     async function initSupabase() {
-        if (!window.supabase) {
-            console.error('Supabase não carregou');
-            return false;
-        }
+        if (!window.supabase) { console.error('Supabase não carregou'); return false; }
         supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
         return true;
     }
 
     // ============================================
-    // FUNÇÕES DE CARREGAMENTO
+    // ROTINAS DE KEEP-ALIVE
     // ============================================
-    async function carregarProfessores() {
-        if (!supabaseClient) return [];
-        const { data, error } = await supabaseClient.from('professores').select('*');
-        if (error) { console.error(error); return []; }
-        return data;
-    }
+    (function iniciarKeepAlive() {
+        let pingsRealizados = 0;
+        
+        async function ping() {
+            if (!supabaseClient) return;
+            try {
+                const { data, error } = await supabaseClient.from('configuracoes').select('id').limit(1);
+                pingsRealizados++;
+                const agora = new Date().toLocaleTimeString();
+                if (!error) {
+                    console.log(`[${agora}] ✅ Keep-alive realizado (Ping #${pingsRealizados})`);
+                }
+            } catch(e) {
+                console.log(`[${new Date().toLocaleTimeString()}] ❌ Erro no keep-alive:`, e.message);
+            }
+        }
+        
+        // Primeiro ping após 5 segundos (quando o dashboard carregar)
+        setTimeout(() => { if (supabaseClient) ping(); }, 5000);
+        
+        // Ping a cada 4 horas
+        setInterval(() => { if (supabaseClient) ping(); }, 4 * 60 * 60 * 1000);
+        
+        console.log('🟢 Keep-Alive do Supabase ativado - Pings a cada 4 horas');
+    });
 
-    async function carregarAlunos() {
-        if (!supabaseClient) return [];
-        const { data, error } = await supabaseClient.from('alunos').select('*');
-        if (error) { console.error(error); return []; }
-        return data;
-    }
-
-    async function carregarTurmas() {
-        if (!supabaseClient) return [];
-        const { data, error } = await supabaseClient.from('turmas').select('*');
-        if (error) { console.error(error); return []; }
-        return data;
-    }
-
-    async function carregarTrabalhos() {
-        if (!supabaseClient) return [];
-        const { data, error } = await supabaseClient.from('trabalhos').select('*');
-        if (error) { console.error(error); return []; }
-        return data;
-    }
-
-    async function carregarConfiguracoes() {
-        if (!supabaseClient) return { limiteRevisoes: 2, limitePaginas: 6 };
-        const { data, error } = await supabaseClient.from('configuracoes').select('*').limit(1);
-        if (error || !data || data.length === 0) return { limiteRevisoes: 2, limitePaginas: 6 };
-        return data[0];
-    }
+    // ============================================
+    // CARREGAR DADOS
+    // ============================================
+    async function carregarProfessores() { if (!supabaseClient) return []; const { data, error } = await supabaseClient.from('professores').select('*'); if (error) { console.error(error); return []; } return data; }
+    async function carregarAlunos() { if (!supabaseClient) return []; const { data, error } = await supabaseClient.from('alunos').select('*'); if (error) { console.error(error); return []; } return data; }
+    async function carregarTurmas() { if (!supabaseClient) return []; const { data, error } = await supabaseClient.from('turmas').select('*'); if (error) { console.error(error); return []; } return data; }
+    async function carregarTrabalhos() { if (!supabaseClient) return []; const { data, error } = await supabaseClient.from('trabalhos').select('*'); if (error) { console.error(error); return []; } return data; }
+    async function carregarConfiguracoes() { if (!supabaseClient) return { limiteRevisoes: 2, limitePaginas: 6 }; const { data, error } = await supabaseClient.from('configuracoes').select('*').limit(1); if (error || !data || data.length === 0) return { limiteRevisoes: 2, limitePaginas: 6 }; return data[0]; }
 
     async function carregarTodosDados() {
         if (carregando) return;
@@ -324,81 +310,43 @@
             dados.trabalhos = await carregarTrabalhos();
             dados.config = await carregarConfiguracoes();
             atualizarUI();
-        } catch (e) {
-            console.error('Erro ao carregar dados:', e);
-        } finally {
-            carregando = false;
-        }
+        } catch (e) { console.error('Erro:', e); } finally { carregando = false; }
     }
 
     // ============================================
     // CRUD PROFESSORES
     // ============================================
     async function salvarProfessorNoBanco(professor) {
-        if (professor.id) {
-            const { error } = await supabaseClient.from('professores').update(professor).eq('id', professor.id);
-            if (error) throw error;
-        } else {
-            const { error } = await supabaseClient.from('professores').insert(professor);
-            if (error) throw error;
-        }
+        if (professor.id) { await supabaseClient.from('professores').update(professor).eq('id', professor.id); }
+        else { await supabaseClient.from('professores').insert(professor); }
         await carregarTodosDados();
     }
-
-    async function excluirProfessorDoBanco(id) {
-        const { error } = await supabaseClient.from('professores').delete().eq('id', id);
-        if (error) throw error;
-        await carregarTodosDados();
-    }
-
-    // ============================================
-    // CRUD ALUNOS
-    // ============================================
-    async function salvarAlunoNoBanco(aluno) {
-        if (aluno.id) {
-            const { error } = await supabaseClient.from('alunos').update(aluno).eq('id', aluno.id);
-            if (error) throw error;
-        } else {
-            const { error } = await supabaseClient.from('alunos').insert(aluno);
-            if (error) throw error;
-        }
-        await carregarTodosDados();
-    }
-
-    async function excluirAlunoDoBanco(id) {
-        const { error } = await supabaseClient.from('alunos').delete().eq('id', id);
-        if (error) throw error;
-        await carregarTodosDados();
-    }
+    async function excluirProfessorDoBanco(id) { await supabaseClient.from('professores').delete().eq('id', id); await carregarTodosDados(); }
 
     // ============================================
     // CRUD TURMAS
     // ============================================
     async function salvarTurmaNoBanco(turma) {
-        if (turma.id) {
-            const { error } = await supabaseClient.from('turmas').update(turma).eq('id', turma.id);
-            if (error) throw error;
-        } else {
-            const { error } = await supabaseClient.from('turmas').insert(turma);
-            if (error) throw error;
-        }
+        if (turma.id) { await supabaseClient.from('turmas').update(turma).eq('id', turma.id); }
+        else { const { data } = await supabaseClient.from('turmas').insert(turma).select(); if (data && data[0]) { await supabaseClient.from('professores').update({ turma_id: data[0].id }).eq('id', turma.professor_id); } }
         await carregarTodosDados();
     }
+    async function excluirTurmaDoBanco(id) { await supabaseClient.from('turmas').delete().eq('id', id); await carregarTodosDados(); }
 
-    async function excluirTurmaDoBanco(id) {
-        const { error } = await supabaseClient.from('turmas').delete().eq('id', id);
-        if (error) throw error;
+    // ============================================
+    // CRUD ALUNOS
+    // ============================================
+    async function salvarAlunoNoBanco(aluno) {
+        if (aluno.id) { await supabaseClient.from('alunos').update(aluno).eq('id', aluno.id); }
+        else { await supabaseClient.from('alunos').insert(aluno); }
         await carregarTodosDados();
     }
+    async function excluirAlunoDoBanco(id) { await supabaseClient.from('alunos').delete().eq('id', id); await carregarTodosDados(); }
 
     // ============================================
     // CONFIGURAÇÕES
     // ============================================
-    async function salvarConfiguracoesNoBanco(config) {
-        const { error } = await supabaseClient.from('configuracoes').update(config).eq('id', 1);
-        if (error) throw error;
-        await carregarTodosDados();
-    }
+    async function salvarConfiguracoesNoBanco(config) { await supabaseClient.from('configuracoes').update(config).eq('id', 1); await carregarTodosDados(); }
 
     // ============================================
     // LOGIN
@@ -418,10 +366,7 @@
         return false;
     }
 
-    function logout() {
-        document.getElementById('loginScreen').style.display = 'flex';
-        document.getElementById('dashboardScreen').style.display = 'none';
-    }
+    function logout() { document.getElementById('loginScreen').style.display = 'flex'; document.getElementById('dashboardScreen').style.display = 'none'; }
 
     // ============================================
     // ATUALIZAR INTERFACE
@@ -431,62 +376,17 @@
         document.getElementById('totalAlunos').innerText = dados.alunos.length;
         document.getElementById('totalTurmas').innerText = dados.turmas.length;
         document.getElementById('totalTrabalhos').innerText = dados.trabalhos.length;
-
         const freqMedia = dados.alunos.length ? Math.round(dados.alunos.reduce((s, a) => s + (a.frequencia || 0), 0) / dados.alunos.length) : 0;
         const totalFeedbacks = dados.trabalhos.filter(t => t.status === 'aprovado').length;
-        document.getElementById('metricasContainer').innerHTML = `
-            <div class="stat-card"><div class="stat-value">${freqMedia}%</div><div class="stat-label">Frequência Média</div></div>
-            <div class="stat-card"><div class="stat-value">${totalFeedbacks}</div><div class="stat-label">Trabalhos Revisados</div></div>
-            <div class="stat-card"><div class="stat-value">${dados.config.limiteRevisoes}</div><div class="stat-label">Revisões/Mês</div></div>
-        `;
-
+        document.getElementById('metricasContainer').innerHTML = `<div class="stat-card"><div class="stat-value">${freqMedia}%</div><div class="stat-label">Frequência Média</div></div><div class="stat-card"><div class="stat-value">${totalFeedbacks}</div><div class="stat-label">Trabalhos Revisados</div></div><div class="stat-card"><div class="stat-value">${dados.config.limiteRevisoes}</div><div class="stat-label">Revisões/Mês</div></div>`;
         let alertas = [];
         if (dados.professores.filter(p => p.status === 'inativo').length) alertas.push('<div class="badge-warning" style="padding:12px;border-radius:12px;margin-bottom:8px;">Professores inativos</div>');
         if (dados.alunos.filter(a => (a.frequencia || 0) < 70).length) alertas.push('<div class="badge-warning" style="padding:12px;border-radius:12px;">Alunos com baixa frequência</div>');
         if (alertas.length === 0) alertas.push('<div class="badge-active" style="padding:12px;border-radius:12px;">Sistema normal</div>');
         document.getElementById('alertasContainer').innerHTML = alertas.join('');
-
-        document.getElementById('tabelaProfessores').innerHTML = dados.professores.map(p => {
-            const turma = dados.turmas.find(t => t.id === p.turma_id);
-            return `
-                <tr>
-                    <td><strong>${p.nome}</strong></td>
-                    <td>${p.email}</td>
-                    <td><span class="badge ${p.status === 'ativo' ? 'badge-active' : 'badge-inactive'}">${p.status}</span></td>
-                    <td>${turma?.nome || '-'}</td>
-                    <td><button class="btn-icon" onclick="editarProfessor(${p.id})"><i class="fas fa-edit"></i></button> <button class="btn-icon" onclick="excluirProfessor(${p.id})"><i class="fas fa-trash"></i></button></td>
-                </tr>
-            `;
-        }).join('') || '</table><td colspan="5" class="empty-state">Nenhum professor</td></tr>';
-
-        document.getElementById('tabelaAlunos').innerHTML = dados.alunos.map(a => {
-            const professor = dados.professores.find(p => p.id === a.professor_id);
-            return `
-                <tr>
-                    <td><strong>${a.nome}</strong></td>
-                    <td>${a.email}</td>
-                    <td>${professor?.nome || '-'}</td>
-                    <td><span class="badge ${a.status === 'ativo' ? 'badge-active' : 'badge-inactive'}">${a.status}</span></td>
-                    <td>${a.frequencia || 0}%<div class="progress-bar"><div class="progress-fill" style="width:${a.frequencia || 0}%"></div></div></td>
-                    <td><button class="btn-icon" onclick="editarAluno(${a.id})"><i class="fas fa-edit"></i></button> <button class="btn-icon" onclick="excluirAluno(${a.id})"><i class="fas fa-trash"></i></button></td>
-                </tr>
-            `;
-        }).join('') || '<tr><td colspan="6" class="empty-state">Nenhum aluno</td></tr>';
-
-        document.getElementById('tabelaTurmas').innerHTML = dados.turmas.map(t => {
-            const professor = dados.professores.find(p => p.id === t.professor_id);
-            const qtd = dados.alunos.filter(a => a.turma_id === t.id).length;
-            return `
-                <tr>
-                    <td><strong>${t.nome}</strong></td>
-                    <td>${professor?.nome || '-'}</td>
-                    <td>${qtd}</td>
-                    <td><span class="badge ${t.status === 'ativa' ? 'badge-active' : 'badge-inactive'}">${t.status}</span></td>
-                    <td><button class="btn-icon" onclick="editarTurma(${t.id})"><i class="fas fa-edit"></i></button> <button class="btn-icon" onclick="excluirTurma(${t.id})"><i class="fas fa-trash"></i></button></td>
-                </tr>
-            `;
-        }).join('') || '<tr><td colspan="5" class="empty-state">Nenhuma turma</td></tr>';
-
+        document.getElementById('tabelaProfessores').innerHTML = dados.professores.map(p => { const t = dados.turmas.find(t => t.id === p.turma_id); return `<td style="padding:14px 12px"><strong>${p.nome}</strong></td><td style="padding:14px 12px">${p.email}</td><td style="padding:14px 12px"><span class="badge ${p.status === 'ativo' ? 'badge-active' : 'badge-inactive'}">${p.status}</span></td><td style="padding:14px 12px">${t?.nome || '-'}</td><td style="padding:14px 12px"><button class="btn-icon" onclick="editarProfessor(${p.id})"><i class="fas fa-edit"></i></button> <button class="btn-icon" onclick="excluirProfessor(${p.id})"><i class="fas fa-trash"></i></button></td>`; }).join('') || '<td colspan="5" class="empty-state">Nenhum professor</div>';
+        document.getElementById('tabelaAlunos').innerHTML = dados.alunos.map(a => { const p = dados.professores.find(p => p.id === a.professor_id); return `<td style="padding:14px 12px"><strong>${a.nome}</strong></td><td style="padding:14px 12px">${a.email}</td><td style="padding:14px 12px">${p?.nome || '-'}</td><td style="padding:14px 12px"><span class="badge ${a.status === 'ativo' ? 'badge-active' : 'badge-inactive'}">${a.status}</span></td><td style="padding:14px 12px">${a.frequencia || 0}%<div class="progress-bar"><div class="progress-fill" style="width:${a.frequencia || 0}%"></div></div></td><td style="padding:14px 12px"><button class="btn-icon" onclick="editarAluno(${a.id})"><i class="fas fa-edit"></i></button> <button class="btn-icon" onclick="excluirAluno(${a.id})"><i class="fas fa-trash"></i></button></td>`; }).join('') || '<td colspan="6" class="empty-state">Nenhum aluno</div>';
+        document.getElementById('tabelaTurmas').innerHTML = dados.turmas.map(t => { const p = dados.professores.find(p => p.id === t.professor_id); const q = dados.alunos.filter(a => a.turma_id === t.id).length; return `<td style="padding:14px 12px"><strong>${t.nome}</strong></td><td style="padding:14px 12px">${p?.nome || '-'}</td><td style="padding:14px 12px">${q}</td><td style="padding:14px 12px"><span class="badge ${t.status === 'ativa' ? 'badge-active' : 'badge-inactive'}">${t.status}</span></td><td style="padding:14px 12px"><button class="btn-icon" onclick="editarTurma(${t.id})"><i class="fas fa-edit"></i></button> <button class="btn-icon" onclick="excluirTurma(${t.id})"><i class="fas fa-trash"></i></button></td>`; }).join('') || '<td colspan="5" class="empty-state">Nenhuma turma</div>';
         document.getElementById('professorTurma').innerHTML = dados.turmas.map(t => `<option value="${t.id}">${t.nome}</option>`).join('');
         document.getElementById('alunoProfessor').innerHTML = dados.professores.filter(p => p.status === 'ativo').map(p => `<option value="${p.id}">${p.nome}</option>`).join('');
         document.getElementById('turmaProfessor').innerHTML = dados.professores.filter(p => p.status === 'ativo').map(p => `<option value="${p.id}">${p.nome}</option>`).join('');
@@ -495,208 +395,34 @@
     }
 
     // ============================================
-    // CRUD FUNCTIONS (Wrappers para UI)
+    // CRUD FUNCTIONS (UI)
     // ============================================
     function abrirModalProfessor(id = null) {
-        if (id) {
-            const p = dados.professores.find(p => p.id === id);
-            if (p) {
-                document.getElementById('professorId').value = p.id;
-                document.getElementById('professorNome').value = p.nome;
-                document.getElementById('professorEmail').value = p.email;
-                document.getElementById('professorStatus').value = p.status;
-                document.getElementById('professorTurma').value = p.turma_id || '';
-                document.getElementById('modalProfessorTitle').innerText = 'Editar Professor';
-            }
-        } else {
-            document.getElementById('professorId').value = '';
-            document.getElementById('formProfessor').reset();
-            document.getElementById('professorSenha').value = 'prof123';
-            document.getElementById('modalProfessorTitle').innerText = 'Adicionar Professor';
-        }
+        if (id) { const p = dados.professores.find(p => p.id === id); if (p) { document.getElementById('professorId').value = p.id; document.getElementById('professorNome').value = p.nome; document.getElementById('professorEmail').value = p.email; document.getElementById('professorStatus').value = p.status; document.getElementById('professorTurma').value = p.turma_id || ''; document.getElementById('modalProfessorTitle').innerText = 'Editar Professor'; } }
+        else { document.getElementById('professorId').value = ''; document.getElementById('formProfessor').reset(); document.getElementById('professorSenha').value = 'prof123'; document.getElementById('modalProfessorTitle').innerText = 'Adicionar Professor'; }
         document.getElementById('modalProfessor').classList.add('active');
     }
-
-    async function salvarProfessor(e) {
-        e.preventDefault();
-        const id = document.getElementById('professorId').value;
-        const nome = document.getElementById('professorNome').value;
-        const email = document.getElementById('professorEmail').value;
-        const senha = document.getElementById('professorSenha').value;
-        const status = document.getElementById('professorStatus').value;
-        const turma_id = parseInt(document.getElementById('professorTurma').value);
-
-        const professor = { nome, email, senha, status, turma_id };
-        if (id) professor.id = parseInt(id);
-
-        await salvarProfessorNoBanco(professor);
-        mostrarToast('Professor salvo!', 'success');
-        fecharModal('modalProfessor');
-    }
-
+    async function salvarProfessor(e) { e.preventDefault(); const id = document.getElementById('professorId').value; const nome = document.getElementById('professorNome').value; const email = document.getElementById('professorEmail').value; const senha = document.getElementById('professorSenha').value; const status = document.getElementById('professorStatus').value; const turma_id = parseInt(document.getElementById('professorTurma').value) || null; const professor = { nome, email, senha, status, turma_id }; if (id) professor.id = parseInt(id); await salvarProfessorNoBanco(professor); mostrarToast('Professor salvo!', 'success'); fecharModal('modalProfessor'); }
     async function editarProfessor(id) { abrirModalProfessor(id); }
+    async function excluirProfessor(id) { if (confirm('Excluir este professor?')) { await excluirProfessorDoBanco(id); mostrarToast('Professor excluído!', 'success'); } }
 
-    async function excluirProfessor(id) {
-        if (confirm('Excluir este professor?')) {
-            await excluirProfessorDoBanco(id);
-            mostrarToast('Professor excluído!', 'success');
-        }
-    }
-
-    function abrirModalAluno(id = null) {
-        document.getElementById('alunoProfessor').innerHTML = dados.professores.filter(p => p.status === 'ativo').map(p => `<option value="${p.id}">${p.nome}</option>`).join('');
-        if (id) {
-            const a = dados.alunos.find(a => a.id === id);
-            if (a) {
-                document.getElementById('alunoId').value = a.id;
-                document.getElementById('alunoNome').value = a.nome;
-                document.getElementById('alunoEmail').value = a.email;
-                document.getElementById('alunoProfessor').value = a.professor_id;
-                document.getElementById('alunoStatus').value = a.status;
-                document.getElementById('modalAlunoTitle').innerText = 'Editar Aluno';
-            }
-        } else {
-            document.getElementById('alunoId').value = '';
-            document.getElementById('formAluno').reset();
-            document.getElementById('alunoSenha').value = 'aluno123';
-            document.getElementById('modalAlunoTitle').innerText = 'Adicionar Aluno';
-        }
-        document.getElementById('modalAluno').classList.add('active');
-    }
-
-    async function salvarAluno(e) {
-        e.preventDefault();
-        const id = document.getElementById('alunoId').value;
-        const nome = document.getElementById('alunoNome').value;
-        const email = document.getElementById('alunoEmail').value;
-        const senha = document.getElementById('alunoSenha').value;
-        const professor_id = parseInt(document.getElementById('alunoProfessor').value);
-        const status = document.getElementById('alunoStatus').value;
-
-        const prof = dados.professores.find(p => p.id === professor_id);
-        const aluno = { nome, email, senha, professor_id, turma_id: prof?.turma_id || 1, status, frequencia: 0, revisoes_mes: 0, limite_revisoes: dados.config.limiteRevisoes };
-        if (id) aluno.id = parseInt(id);
-
-        await salvarAlunoNoBanco(aluno);
-        mostrarToast('Aluno salvo!', 'success');
-        fecharModal('modalAluno');
-    }
-
+    function abrirModalAluno(id = null) { document.getElementById('alunoProfessor').innerHTML = dados.professores.filter(p => p.status === 'ativo').map(p => `<option value="${p.id}">${p.nome}</option>`).join(''); if (id) { const a = dados.alunos.find(a => a.id === id); if (a) { document.getElementById('alunoId').value = a.id; document.getElementById('alunoNome').value = a.nome; document.getElementById('alunoEmail').value = a.email; document.getElementById('alunoProfessor').value = a.professor_id; document.getElementById('alunoStatus').value = a.status; document.getElementById('modalAlunoTitle').innerText = 'Editar Aluno'; } } else { document.getElementById('alunoId').value = ''; document.getElementById('formAluno').reset(); document.getElementById('alunoSenha').value = 'aluno123'; document.getElementById('modalAlunoTitle').innerText = 'Adicionar Aluno'; } document.getElementById('modalAluno').classList.add('active'); }
+    async function salvarAluno(e) { e.preventDefault(); const id = document.getElementById('alunoId').value; const nome = document.getElementById('alunoNome').value; const email = document.getElementById('alunoEmail').value; const senha = document.getElementById('alunoSenha').value; const professor_id = parseInt(document.getElementById('alunoProfessor').value); const status = document.getElementById('alunoStatus').value; const prof = dados.professores.find(p => p.id === professor_id); const aluno = { nome, email, senha, professor_id, turma_id: prof?.turma_id || null, status, frequencia: 0, revisoes_mes: 0, limite_revisoes: dados.config.limiteRevisoes }; if (id) aluno.id = parseInt(id); await salvarAlunoNoBanco(aluno); mostrarToast('Aluno salvo!', 'success'); fecharModal('modalAluno'); }
     async function editarAluno(id) { abrirModalAluno(id); }
+    async function excluirAluno(id) { if (confirm('Excluir este aluno?')) { await excluirAlunoDoBanco(id); mostrarToast('Aluno excluído!', 'success'); } }
 
-    async function excluirAluno(id) {
-        if (confirm('Excluir este aluno?')) {
-            await excluirAlunoDoBanco(id);
-            mostrarToast('Aluno excluído!', 'success');
-        }
-    }
-
-    function abrirModalTurma(id = null) {
-        document.getElementById('turmaProfessor').innerHTML = dados.professores.filter(p => p.status === 'ativo').map(p => `<option value="${p.id}">${p.nome}</option>`).join('');
-        if (id) {
-            const t = dados.turmas.find(t => t.id === id);
-            if (t) {
-                document.getElementById('turmaId').value = t.id;
-                document.getElementById('turmaNome').value = t.nome;
-                document.getElementById('turmaProfessor').value = t.professor_id;
-                document.getElementById('turmaStatus').value = t.status;
-                document.getElementById('modalTurmaTitle').innerText = 'Editar Turma';
-            }
-        } else {
-            document.getElementById('turmaId').value = '';
-            document.getElementById('formTurma').reset();
-            document.getElementById('modalTurmaTitle').innerText = 'Adicionar Turma';
-        }
-        document.getElementById('modalTurma').classList.add('active');
-    }
-
-    async function salvarTurma(e) {
-        e.preventDefault();
-        const id = document.getElementById('turmaId').value;
-        const nome = document.getElementById('turmaNome').value;
-        const professor_id = parseInt(document.getElementById('turmaProfessor').value);
-        const status = document.getElementById('turmaStatus').value;
-
-        const turma = { nome, professor_id, status };
-        if (id) turma.id = parseInt(id);
-
-        await salvarTurmaNoBanco(turma);
-        mostrarToast('Turma salva!', 'success');
-        fecharModal('modalTurma');
-    }
-
+    function abrirModalTurma(id = null) { document.getElementById('turmaProfessor').innerHTML = dados.professores.filter(p => p.status === 'ativo').map(p => `<option value="${p.id}">${p.nome}</option>`).join(''); if (id) { const t = dados.turmas.find(t => t.id === id); if (t) { document.getElementById('turmaId').value = t.id; document.getElementById('turmaNome').value = t.nome; document.getElementById('turmaProfessor').value = t.professor_id; document.getElementById('turmaStatus').value = t.status; document.getElementById('modalTurmaTitle').innerText = 'Editar Turma'; } } else { document.getElementById('turmaId').value = ''; document.getElementById('formTurma').reset(); document.getElementById('modalTurmaTitle').innerText = 'Adicionar Turma'; } document.getElementById('modalTurma').classList.add('active'); }
+    async function salvarTurma(e) { e.preventDefault(); const id = document.getElementById('turmaId').value; const nome = document.getElementById('turmaNome').value; const professor_id = parseInt(document.getElementById('turmaProfessor').value); const status = document.getElementById('turmaStatus').value; const turma = { nome, professor_id, status }; if (id) turma.id = parseInt(id); await salvarTurmaNoBanco(turma); mostrarToast('Turma salva!', 'success'); fecharModal('modalTurma'); }
     async function editarTurma(id) { abrirModalTurma(id); }
+    async function excluirTurma(id) { if (confirm('Excluir esta turma?')) { await excluirTurmaDoBanco(id); mostrarToast('Turma excluída!', 'success'); } }
 
-    async function excluirTurma(id) {
-        if (confirm('Excluir esta turma?')) {
-            await excluirTurmaDoBanco(id);
-            mostrarToast('Turma excluída!', 'success');
-        }
-    }
+    async function salvarConfiguracoes() { const config = { id: 1, limite_revisoes: parseInt(document.getElementById('configLimiteRevisoes').value), limite_paginas: parseInt(document.getElementById('configLimitePaginas').value), updated_at: new Date().toISOString() }; await salvarConfiguracoesNoBanco(config); mostrarToast('Configurações salvas!', 'success'); }
 
-    async function salvarConfiguracoes() {
-        const config = {
-            id: 1,
-            limite_revisoes: parseInt(document.getElementById('configLimiteRevisoes').value),
-            limite_paginas: parseInt(document.getElementById('configLimitePaginas').value),
-            updated_at: new Date().toISOString()
-        };
-        await salvarConfiguracoesNoBanco(config);
-        mostrarToast('Configurações salvas!', 'success');
-    }
+    function exportarBackup() { const backup = JSON.stringify(dados, null, 2); const blob = new Blob([backup], { type: 'application/json' }); const link = document.createElement('a'); link.href = URL.createObjectURL(blob); link.download = `backup_mentoria_${new Date().toISOString().split('T')[0]}.json`; link.click(); mostrarToast('Backup exportado!', 'success'); }
+    function importarBackup() { const input = document.createElement('input'); input.type = 'file'; input.accept = '.json'; input.onchange = async (e) => { const file = e.target.files[0]; const reader = new FileReader(); reader.onload = async (ev) => { try { const imp = JSON.parse(ev.target.result); mostrarToast('Importação concluída', 'success'); } catch { mostrarToast('Arquivo inválido', 'error'); } }; reader.readAsText(file); }; input.click(); }
+    function resetarDados() { if (confirm('ATENÇÃO: Isso irá apagar todos os dados?')) { localStorage.removeItem('mentoria_dados'); location.reload(); } }
 
-    function exportarBackup() {
-        const backup = JSON.stringify(dados, null, 2);
-        const blob = new Blob([backup], { type: 'application/json' });
-        const link = document.createElement('a');
-        link.href = URL.createObjectURL(blob);
-        link.download = `backup_mentoria_${new Date().toISOString().split('T')[0]}.json`;
-        link.click();
-        mostrarToast('Backup exportado!', 'success');
-    }
-
-    function importarBackup() {
-        const input = document.createElement('input');
-        input.type = 'file';
-        input.accept = '.json';
-        input.onchange = async (e) => {
-            const file = e.target.files[0];
-            const reader = new FileReader();
-            reader.onload = async (ev) => {
-                try {
-                    const imp = JSON.parse(ev.target.result);
-                    mostrarToast('Importação concluída', 'success');
-                } catch { mostrarToast('Arquivo inválido', 'error'); }
-            };
-            reader.readAsText(file);
-        };
-        input.click();
-    }
-
-    function resetarDados() {
-        if (confirm('ATENÇÃO: Isso irá apagar todos os dados? Esta ação é irreversível.')) {
-            localStorage.removeItem('mentoria_dados');
-            location.reload();
-        }
-    }
-
-    // ============================================
-    // NAVEGAÇÃO E EVENTOS
-    // ============================================
-    function setupNavegacao() {
-        document.querySelectorAll('.nav-item').forEach(item => {
-            item.addEventListener('click', () => {
-                const tab = item.dataset.tab;
-                document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-                item.classList.add('active');
-                document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
-                document.getElementById(`${tab}Pane`).classList.add('active');
-                const titles = { dashboard: 'Dashboard', professores: 'Professores', alunos: 'Alunos', turmas: 'Turmas', configuracoes: 'Configurações' };
-                document.getElementById('pageTitle').innerText = titles[tab];
-            });
-        });
-    }
-
+    function setupNavegacao() { document.querySelectorAll('.nav-item').forEach(item => { item.addEventListener('click', () => { const tab = item.dataset.tab; document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active')); item.classList.add('active'); document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active')); document.getElementById(`${tab}Pane`).classList.add('active'); const titles = { dashboard: 'Dashboard', professores: 'Professores', alunos: 'Alunos', turmas: 'Turmas', configuracoes: 'Configurações' }; document.getElementById('pageTitle').innerText = titles[tab]; }); }); }
     function setupEventos() {
         document.getElementById('loginForm').addEventListener('submit', (e) => { e.preventDefault(); fazerLogin(document.getElementById('loginEmail').value, document.getElementById('loginPassword').value); });
         document.getElementById('logoutBtn').addEventListener('click', logout);
@@ -710,18 +436,31 @@
         document.getElementById('importarBackupBtn').addEventListener('click', importarBackup);
         document.getElementById('resetarDadosBtn').addEventListener('click', resetarDados);
         document.getElementById('salvarConfigBtn').addEventListener('click', salvarConfiguracoes);
-
-        document.querySelectorAll('.close-modal').forEach(btn => {
-            btn.addEventListener('click', () => { const id = btn.dataset.modal; if (id) fecharModal(id); });
-        });
+        document.querySelectorAll('.close-modal').forEach(btn => { btn.addEventListener('click', () => { const id = btn.dataset.modal; if (id) fecharModal(id); }); });
         window.addEventListener('click', (e) => { if (e.target.classList.contains('modal')) e.target.classList.remove('active'); });
     }
 
-    // ============================================
-    // INICIALIZAÇÃO
-    // ============================================
     setupNavegacao();
     setupEventos();
+    
+    // Iniciar Keep-Alive quando o Supabase estiver pronto
+    setTimeout(() => {
+        if (supabaseClient) {
+            (function iniciarKeepAlive() {
+                let pings = 0;
+                async function ping() {
+                    try {
+                        await supabaseClient.from('configuracoes').select('id').limit(1);
+                        pings++;
+                        console.log(`✅ Keep-alive #${pings} - ${new Date().toLocaleTimeString()}`);
+                    } catch(e) {}
+                }
+                setTimeout(ping, 5000);
+                setInterval(ping, 4 * 60 * 60 * 1000);
+                console.log('🟢 Keep-Alive ativado (pings a cada 4 horas)');
+            })();
+        }
+    }, 3000);
 </script>
 </body>
 </html>
