@@ -2,15 +2,15 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>Aluno | Mentoria em Ciências da Religião</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aluno | Mentoria</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Inter', sans-serif; background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%); height: 100vh; overflow: hidden; }
+        body { font-family: 'Inter', sans-serif; background: #f1f5f9; height: 100vh; overflow: hidden; }
 
-        /* LOGIN SCREEN */
         .login-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(135deg, #0f0c29 0%, #1a1a3e 50%, #1e1b4b 100%); display: flex; align-items: center; justify-content: center; z-index: 1000; }
         .login-card { background: white; border-radius: 32px; padding: 40px; width: 400px; max-width: 90%; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); }
         .login-header { text-align: center; margin-bottom: 32px; }
@@ -20,17 +20,15 @@
         .login-header p { color: #64748b; font-size: 0.85rem; }
         .input-wrapper { position: relative; margin-bottom: 20px; }
         .input-wrapper i { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: #94a3b8; }
-        .input-wrapper input { width: 100%; padding: 12px 16px 12px 44px; border: 1.5px solid #e2e8f0; border-radius: 16px; font-size: 0.9rem; font-family: inherit; transition: all 0.2s; }
+        .input-wrapper input { width: 100%; padding: 12px 16px 12px 44px; border: 1.5px solid #e2e8f0; border-radius: 16px; font-size: 0.9rem; font-family: inherit; background: white; }
         .input-wrapper input:focus { outline: none; border-color: #667eea; box-shadow: 0 0 0 3px rgba(102,126,234,0.1); }
         .btn-login { width: 100%; background: linear-gradient(135deg, #667eea, #764ba2); color: white; border: none; padding: 14px; border-radius: 16px; font-weight: 600; cursor: pointer; transition: all 0.2s; }
         .btn-login:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(102,126,234,0.4); }
         .error-msg { background: #fee2e2; color: #b91c1c; padding: 10px; border-radius: 12px; font-size: 0.8rem; margin-bottom: 20px; display: none; }
+        .credentials-hint { margin-top: 24px; padding-top: 20px; border-top: 1px solid #e2e8f0; text-align: center; font-size: 0.75rem; color: #64748b; }
 
-        /* DASHBOARD SCREEN */
         .dashboard-screen { display: none; height: 100vh; overflow: hidden; }
         .app { display: flex; height: 100vh; }
-
-        /* SIDEBAR */
         .sidebar { width: 260px; background: linear-gradient(180deg, #1e1b4b 0%, #2d2a5e 100%); display: flex; flex-direction: column; height: 100vh; flex-shrink: 0; box-shadow: 4px 0 20px rgba(0,0,0,0.1); }
         .sidebar-header { padding: 24px 20px; border-bottom: 1px solid rgba(255,255,255,0.08); }
         .logo { display: flex; align-items: center; gap: 12px; }
@@ -41,39 +39,34 @@
         .role-badge { background: rgba(102,126,234,0.2); padding: 4px 10px; border-radius: 20px; font-size: 0.65rem; margin-top: 12px; display: inline-block; color: #a78bfa; }
         .nav-menu { flex: 1; padding: 16px 12px; }
         .nav-item { display: flex; align-items: center; gap: 12px; padding: 10px 16px; margin-bottom: 4px; border-radius: 12px; cursor: pointer; color: #94a3b8; font-weight: 500; font-size: 0.85rem; transition: all 0.2s; }
-        .nav-item i { width: 20px; font-size: 0.9rem; }
+        .nav-item i { width: 20px; }
         .nav-item:hover { background: rgba(102,126,234,0.15); color: white; transform: translateX(4px); }
         .nav-item.active { background: rgba(102,126,234,0.2); color: #a78bfa; border-left: 3px solid #667eea; }
         .logout-btn { margin: 16px; padding: 10px 16px; background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.25); color: #f87171; border-radius: 12px; cursor: pointer; font-weight: 600; display: flex; align-items: center; gap: 12px; transition: all 0.2s; }
-        .logout-btn:hover { background: rgba(239,68,68,0.2); }
+        .logout-btn:hover { background: rgba(239,68,68,0.2); border-color: #ef4444; }
 
-        /* MAIN */
         .main { flex: 1; display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
-        .top-bar { background: rgba(255,255,255,0.95); backdrop-filter: blur(20px); padding: 12px 24px; border-bottom: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center; flex-shrink: 0; }
-        .page-title { font-size: 1.2rem; font-weight: 700; background: linear-gradient(135deg, #1e293b, #334155); -webkit-background-clip: text; background-clip: text; color: transparent; }
-        .user-info { display: flex; align-items: center; gap: 12px; background: #f8fafc; padding: 6px 16px; border-radius: 40px; border: 1px solid #e2e8f0; }
+        .top-bar { background: white; padding: 12px 24px; border-bottom: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center; flex-shrink: 0; }
+        .page-title { font-size: 1.2rem; font-weight: 700; color: #1e293b; }
+        .user-info { display: flex; align-items: center; gap: 12px; background: #f1f5f9; padding: 6px 16px; border-radius: 40px; }
         .user-name { font-size: 0.85rem; font-weight: 500; }
         .user-avatar { width: 34px; height: 34px; background: linear-gradient(135deg, #667eea, #764ba2); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 600; color: white; }
+        .content-area { flex: 1; overflow-y: auto; padding: 20px 24px; }
 
-        .content-area { flex: 1; overflow-y: auto; padding: 24px 28px; }
-
-        /* STATS CARDS */
         .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 24px; }
         @media (max-width: 800px) { .stats-grid { grid-template-columns: 1fr; } }
-        .stat-card { background: white; padding: 20px; border-radius: 20px; border: 1px solid #e2e8f0; transition: all 0.2s; }
+        .stat-card { background: white; padding: 20px; border-radius: 20px; border: 1px solid #e2e8f0; transition: all 0.2s; cursor: pointer; }
         .stat-card:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,0.06); }
         .stat-icon { width: 48px; height: 48px; background: rgba(102,126,234,0.1); border-radius: 14px; display: flex; align-items: center; justify-content: center; margin-bottom: 12px; }
         .stat-icon i { font-size: 1.3rem; color: #667eea; }
         .stat-value { font-size: 1.8rem; font-weight: 800; color: #0f172a; }
         .stat-label { font-size: 0.75rem; color: #64748b; margin-top: 6px; }
 
-        /* CARDS PADRÃO */
-        .card { background: white; border-radius: 20px; padding: 24px; margin-bottom: 24px; border: 1px solid #e2e8f0; box-shadow: 0 1px 2px rgba(0,0,0,0.03); }
-        .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-bottom: 12px; border-bottom: 1px solid #e2e8f0; flex-wrap: wrap; gap: 12px; }
+        .card { background: white; border-radius: 20px; padding: 24px; margin-bottom: 24px; border: 1px solid #e2e8f0; }
+        .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 12px; }
         .card-header h2 { font-size: 1rem; font-weight: 600; display: flex; align-items: center; gap: 8px; color: #1e293b; }
         .card-header h2 i { color: #667eea; }
 
-        /* BOTÕES */
         .btn-primary { background: linear-gradient(135deg, #667eea, #764ba2); color: white; border: none; padding: 8px 18px; border-radius: 40px; font-weight: 600; font-size: 0.75rem; cursor: pointer; transition: all 0.2s; display: inline-flex; align-items: center; gap: 8px; }
         .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(102,126,234,0.3); }
         .btn-secondary { background: white; border: 1px solid #e2e8f0; padding: 8px 18px; border-radius: 40px; font-size: 0.75rem; cursor: pointer; transition: all 0.2s; }
@@ -81,41 +74,33 @@
         .btn-icon { background: transparent; border: none; padding: 8px; border-radius: 8px; cursor: pointer; color: #64748b; transition: all 0.2s; font-size: 0.9rem; }
         .btn-icon:hover { background: #f1f5f9; color: #667eea; }
 
-        /* TABELAS */
         .table-wrapper { overflow-x: auto; border-radius: 16px; margin-top: 8px; }
         table { width: 100%; border-collapse: collapse; min-width: 500px; }
         th { text-align: left; padding: 14px 12px; background: #f8fafc; font-size: 0.7rem; font-weight: 700; color: #475569; text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 1px solid #e2e8f0; }
         td { padding: 14px 12px; border-bottom: 1px solid #f1f5f9; font-size: 0.85rem; color: #334155; vertical-align: middle; }
         tr:hover td { background: #fafaff; }
 
-        /* BADGES */
         .badge { display: inline-flex; padding: 5px 12px; border-radius: 30px; font-size: 0.7rem; font-weight: 600; align-items: center; gap: 6px; }
         .badge-pending { background: #fef3c7; color: #b45309; }
         .badge-approved { background: #dcfce7; color: #15803d; }
         .badge-present { background: #dcfce7; color: #15803d; }
         .badge-absent { background: #fee2e2; color: #b91c1c; }
-        .badge-warning { background: #fef3c7; color: #b45309; }
 
-        /* PROGRESS BAR */
         .progress-bar { width: 100%; height: 8px; background: #e2e8f0; border-radius: 10px; overflow: hidden; margin: 12px 0 8px 0; }
         .progress-fill { height: 100%; background: #10b981; border-radius: 10px; transition: width 0.3s; }
 
-        /* FORMULÁRIOS */
         .form-group { margin-bottom: 20px; }
         .form-group label { display: block; margin-bottom: 8px; font-weight: 600; font-size: 0.8rem; color: #334155; }
-        .form-control { width: 100%; padding: 12px 16px; border: 1.5px solid #e2e8f0; border-radius: 14px; font-size: 0.85rem; font-family: inherit; transition: all 0.2s; }
+        .form-control { width: 100%; padding: 12px 16px; border: 1.5px solid #e2e8f0; border-radius: 14px; font-size: 0.85rem; font-family: inherit; background: white; }
         .form-control:focus { outline: none; border-color: #667eea; box-shadow: 0 0 0 3px rgba(102,126,234,0.1); }
-        select.form-control { cursor: pointer; background-color: white; }
-        textarea.form-control { resize: vertical; min-height: 100px; }
+        select.form-control { cursor: pointer; }
 
-        /* FEEDBACK CARDS */
         .feedback-box { background: #f8fafc; border-radius: 16px; padding: 16px; margin-bottom: 16px; border-left: 4px solid #667eea; transition: all 0.2s; }
         .feedback-box:hover { transform: translateX(4px); }
         .feedback-title { font-weight: 700; font-size: 0.9rem; margin-bottom: 8px; color: #1e293b; }
         .feedback-text { font-size: 0.85rem; color: #475569; line-height: 1.5; margin-bottom: 8px; }
         .feedback-meta { font-size: 0.7rem; color: #94a3b8; display: flex; gap: 12px; flex-wrap: wrap; }
 
-        /* MATERIAIS CARDS */
         .materiais-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; margin-top: 8px; }
         .material-card { background: #f8fafc; border-radius: 20px; padding: 20px; border: 1px solid #e2e8f0; transition: all 0.2s; }
         .material-card:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,0.06); }
@@ -127,21 +112,18 @@
         .material-link { font-size: 0.75rem; color: #667eea; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; font-weight: 500; }
         .material-link:hover { text-decoration: underline; }
 
-        /* MODAL */
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); backdrop-filter: blur(4px); justify-content: center; align-items: center; z-index: 1001; }
         .modal.active { display: flex; }
-        .modal-content { background: white; border-radius: 28px; padding: 28px; width: 90%; max-width: 500px; max-height: 85vh; overflow-y: auto; }
-        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; padding-bottom: 12px; border-bottom: 1px solid #e2e8f0; }
+        .modal-content { background: white; border-radius: 24px; padding: 24px; width: 90%; max-width: 500px; max-height: 85vh; overflow-y: auto; }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
         .modal-header h3 { font-size: 1.1rem; font-weight: 700; }
         .close-modal { background: none; border: none; font-size: 1.2rem; cursor: pointer; color: #94a3b8; transition: all 0.2s; }
         .close-modal:hover { color: #ef4444; }
 
-        /* TOAST */
         .toast-container { position: fixed; top: 20px; right: 20px; z-index: 1100; }
-        .toast { background: white; border-radius: 14px; padding: 12px 20px; margin-bottom: 10px; display: flex; align-items: center; gap: 12px; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1); border-left: 4px solid; animation: slideIn 0.2s ease; }
+        .toast { background: white; border-radius: 12px; padding: 10px 16px; margin-bottom: 8px; display: flex; align-items: center; gap: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); border-left: 3px solid; animation: slideIn 0.2s ease; }
         .toast.success { border-left-color: #10b981; }
         .toast.error { border-left-color: #ef4444; }
-        .toast.warning { border-left-color: #f59e0b; }
         @keyframes slideIn { from { opacity: 0; transform: translateX(100px); } to { opacity: 1; transform: translateX(0); } }
 
         .tab-pane { display: none; }
@@ -167,10 +149,11 @@
         </div>
         <div id="loginError" class="error-msg"></div>
         <form id="loginForm">
-            <div class="input-wrapper"><i class="fas fa-envelope"></i><input type="email" id="loginEmail" placeholder="lucas.fernandes@estudante.com"></div>
-            <div class="input-wrapper"><i class="fas fa-lock"></i><input type="password" id="loginPassword" placeholder="aluno123"></div>
+            <div class="input-wrapper"><i class="fas fa-envelope"></i><input type="email" id="loginEmail" placeholder="seu@email.com"></div>
+            <div class="input-wrapper"><i class="fas fa-lock"></i><input type="password" id="loginPassword" placeholder="••••••"></div>
             <button type="submit" class="btn-login">Acessar Painel</button>
         </form>
+        <div class="credentials-hint"><strong>Credenciais cadastradas pelo administrador</strong></div>
     </div>
 </div>
 
@@ -197,7 +180,6 @@
             <div class="content-area">
                 <div class="toast-container" id="toastContainer"></div>
 
-                <!-- DASHBOARD -->
                 <div id="dashboardPane" class="tab-pane active">
                     <div class="stats-grid">
                         <div class="stat-card"><div class="stat-icon"><i class="fas fa-file-alt"></i></div><div class="stat-value" id="totalTrabalhos">0</div><div class="stat-label">Trabalhos Enviados</div></div>
@@ -209,7 +191,6 @@
                     <div class="card"><div class="card-header"><h2><i class="fas fa-info-circle"></i> Informações do Aluno</h2></div><div id="infoContainer"></div></div>
                 </div>
 
-                <!-- MEUS TRABALHOS -->
                 <div id="trabalhosPane" class="tab-pane">
                     <div class="card"><div class="card-header"><h2><i class="fas fa-plus-circle"></i> Enviar Novo Trabalho</h2></div>
                         <form id="formTrabalho">
@@ -220,48 +201,27 @@
                         </form>
                     </div>
                     <div class="card"><div class="card-header"><h2><i class="fas fa-list"></i> Meus Trabalhos Enviados</h2></div>
-                        <div class="table-wrapper">
-                            <table><thead><tr><th>Título</th><th>Data</th><th>Status</th><th>Páginas</th></tr></thead>
-                            <tbody id="tabelaTrabalhos"></tbody>
-                        </table>
-                    </div>
+                        <div class="table-wrapper"><tr><thead><tr><th>Título</th><th>Data</th><th>Status</th><th>Páginas</th></tr></thead><tbody id="tabelaTrabalhos"></tbody></table></div>
                 </div>
 
-                <!-- FEEDBACKS -->
-                <div id="feedbackPane" class="tab-pane">
-                    <div class="card"><div class="card-header"><h2><i class="fas fa-comment-dots"></i> Feedbacks Recebidos</h2></div>
-                        <div id="listaFeedbacks"></div>
-                    </div>
-                </div>
+                <div id="feedbackPane" class="tab-pane"><div class="card"><div class="card-header"><h2><i class="fas fa-comment-dots"></i> Feedbacks Recebidos</h2></div><div id="listaFeedbacks"></div></div></div>
 
-                <!-- PRESENÇAS -->
                 <div id="presencasPane" class="tab-pane">
                     <div class="card"><div class="card-header"><h2><i class="fas fa-calendar-check"></i> Histórico de Presenças</h2></div>
-                        <div class="table-wrapper">
-                            <table><thead><tr><th>Data da Aula</th><th>Tema / Conteúdo</th><th>Presença</th></tr></thead>
-                            <tbody id="tabelaPresencas"></tbody>
-                        </table>
+                        <div class="table-wrapper"><tr><thead><tr><th>Data da Aula</th><th>Tema / Conteúdo</th><th>Presença</th></tr></thead><tbody id="tabelaPresencas"></tbody></table></div>
                         <div class="progress-bar"><div class="progress-fill" id="progressFrequencia" style="width: 0%"></div></div>
                         <p class="text-muted text-center" id="textoFrequencia">Carregando informações...</p>
                     </div>
                 </div>
 
-                <!-- MATERIAL -->
-                <div id="materialPane" class="tab-pane">
-                    <div class="card"><div class="card-header"><h2><i class="fas fa-book-open"></i> Materiais Disponíveis</h2></div>
-                        <div id="materiaisDisponiveis" class="materiais-grid"></div>
-                    </div>
-                </div>
+                <div id="materialPane" class="tab-pane"><div class="card"><div class="card-header"><h2><i class="fas fa-book-open"></i> Materiais Disponíveis</h2></div><div id="materiaisDisponiveis" class="materiais-grid"></div></div></div>
 
-                <!-- PERFIL -->
                 <div id="perfilPane" class="tab-pane">
                     <div class="card"><div class="card-header"><h2><i class="fas fa-user-circle"></i> Meus Dados Pessoais</h2></div>
-                        <form id="formPerfil">
-                            <div class="form-group"><label>Nome Completo</label><input type="text" id="perfilNome" class="form-control" required></div>
-                            <div class="form-group"><label>E-mail</label><input type="email" id="perfilEmail" class="form-control" required></div>
-                            <div class="form-group"><label>Nova Senha</label><input type="password" id="perfilSenha" class="form-control" placeholder="Deixe em branco para manter"></div>
-                            <button type="submit" class="btn-primary w-100"><i class="fas fa-save"></i> Atualizar Cadastro</button>
-                        </form>
+                        <form id="formPerfil"><div class="form-group"><label>Nome Completo</label><input type="text" id="perfilNome" class="form-control" required></div>
+                        <div class="form-group"><label>E-mail</label><input type="email" id="perfilEmail" class="form-control" required></div>
+                        <div class="form-group"><label>Nova Senha</label><input type="password" id="perfilSenha" class="form-control" placeholder="Deixe em branco para manter"></div>
+                        <button type="submit" class="btn-primary w-100">Atualizar Cadastro</button></form>
                     </div>
                 </div>
             </div>
@@ -270,149 +230,61 @@
 </div>
 
 <script>
-    let dados = {
-        professores: [{ id: 1, nome: 'Carlos Alberto Silva', email: 'carlos.silva@mentoria.com', senha: 'prof123', turma_id: 1 }],
-        alunos: [
-            { id: 1, nome: 'Lucas Fernandes de Souza', email: 'lucas.fernandes@estudante.com', senha: 'aluno123', professor_id: 1, frequencia: 88, revisoesMes: 0, limiteRevisoes: 2 },
-            { id: 2, nome: 'Ana Beatriz Costa Mendes', email: 'ana.mendes@estudante.com', senha: 'aluno123', professor_id: 1, frequencia: 72, revisoesMes: 1, limiteRevisoes: 2 },
-            { id: 3, nome: 'Rafael Augusto Lima', email: 'rafael.lima@estudante.com', senha: 'aluno123', professor_id: 1, frequencia: 94, revisoesMes: 2, limiteRevisoes: 2 },
-            { id: 4, nome: 'Camila Rodrigues Alves', email: 'camila.alves@estudante.com', senha: 'aluno123', professor_id: 1, frequencia: 67, revisoesMes: 0, limiteRevisoes: 2 },
-            { id: 5, nome: 'Thiago Nascimento Silva', email: 'thiago.nascimento@estudante.com', senha: 'aluno123', professor_id: 1, frequencia: 81, revisoesMes: 1, limiteRevisoes: 2 }
-        ],
-        trabalhos: [
-            { id: 1, aluno_id: 1, aluno_nome: 'Lucas Fernandes de Souza', titulo: 'Análise do Sagrado em Durkheim', data: '10/05/2025', status: 'pendente', paginas: 4 },
-            { id: 2, aluno_id: 2, aluno_nome: 'Ana Beatriz Costa Mendes', titulo: 'Weber e a Ética Protestante', data: '12/05/2025', status: 'pendente', paginas: 5 },
-            { id: 3, aluno_id: 3, aluno_nome: 'Rafael Augusto Lima', titulo: 'Eliade e o Conceito de Hierofania', data: '08/05/2025', status: 'aprovado', desempenho: 'Excelente', feedback: 'Excelente trabalho, muito bem estruturado e com ótima argumentação. Parabéns!', data_revisao: '11/05/2025', paginas: 6 }
-        ],
-        aulas: [
-            { id: 1, data: '2025-05-15', tema: 'Durkheim - Formas Elementares', meetLink: 'https://meet.google.com/xxx', professor_id: 1 },
-            { id: 2, data: '2025-05-22', tema: 'Weber - Ética Protestante', meetLink: 'https://meet.google.com/yyy', professor_id: 1 },
-            { id: 3, data: '2025-05-29', tema: 'Eliade - O Sagrado e o Profano', meetLink: 'https://meet.google.com/zzz', professor_id: 1 }
-        ],
-        presencas: [
-            { aluno_id: 1, aula_id: 1, presente: true }, { aluno_id: 2, aula_id: 1, presente: true }, { aluno_id: 3, aula_id: 1, presente: true }, { aluno_id: 4, aula_id: 1, presente: false }, { aluno_id: 5, aula_id: 1, presente: true },
-            { aluno_id: 1, aula_id: 2, presente: true }, { aluno_id: 2, aula_id: 2, presente: false }, { aluno_id: 3, aula_id: 2, presente: true }, { aluno_id: 4, aula_id: 2, presente: false }, { aluno_id: 5, aula_id: 2, presente: true },
-            { aluno_id: 1, aula_id: 3, presente: false }, { aluno_id: 2, aula_id: 3, presente: true }, { aluno_id: 3, aula_id: 3, presente: true }, { aluno_id: 4, aula_id: 3, presente: false }, { aluno_id: 5, aula_id: 3, presente: true }
-        ],
-        materiais: [
-            { id: 1, titulo: 'Apostila sobre Durkheim', link: '#', descricao: 'Material complementar sobre as formas elementares da vida religiosa', data: '10/05/2025', professor_id: 1 },
-            { id: 2, titulo: 'Leitura complementar - Max Weber', link: '#', descricao: 'Texto sobre a ética protestante e o espírito do capitalismo', data: '12/05/2025', professor_id: 1 },
-            { id: 3, titulo: 'Vídeo - Introdução a Eliade', link: '#', descricao: 'Gravação da aula sobre o sagrado e o profano', data: '14/05/2025', professor_id: 1 }
-        ],
-        config: { limiteRevisoes: 2, limitePaginas: 6 }
-    };
+    const SUPABASE_URL = 'https://sejnrydyaoawzthnprvq.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNlam5yeWR5YW9hd3p0aG5wcnZxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgzNTQyNjYsImV4cCI6MjA5MzkzMDI2Nn0.2GXQUF8drgT8HKLLp4YHT6vi0iBUjVdjw1t-ft1xsRA';
 
+    let supabaseClient = null;
+    let carregando = false;
+    let dados = { professores: [], alunos: [], turmas: [], trabalhos: [], materiais: [], aulas: [], presencas: [], config: { limiteRevisoes: 2, limitePaginas: 6 } };
     let usuarioLogado = null;
 
-    function salvarDados() { localStorage.setItem('mentoria_dados', JSON.stringify(dados)); }
-    function carregarDados() { const s = localStorage.getItem('mentoria_dados'); if (s) { try { const p = JSON.parse(s); dados = { ...dados, ...p }; } catch(e) {} } salvarDados(); }
+    function mostrarToast(msg, tipo) { const t = document.createElement('div'); t.className = `toast ${tipo}`; t.innerHTML = `<i class="fas ${tipo === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'}"></i> ${msg}`; document.getElementById('toastContainer').appendChild(t); setTimeout(() => t.remove(), 3000); }
+    function formatarData(dataISO) { if (!dataISO) return '-'; try { const [a,m,d] = dataISO.split('-'); return `${d}/${m}/${a}`; } catch(e) { return dataISO; } }
 
-    function fazerLogin(email, senha) {
-        const aluno = dados.alunos.find(a => a.email === email && a.senha === senha);
-        if (aluno) {
-            usuarioLogado = aluno;
-            document.getElementById('loginScreen').style.display = 'none';
-            document.getElementById('dashboardScreen').style.display = 'block';
-            document.getElementById('userName').innerText = aluno.nome;
-            document.getElementById('userAvatar').innerText = aluno.nome.charAt(0);
-            document.getElementById('perfilNome').value = aluno.nome;
-            document.getElementById('perfilEmail').value = aluno.email;
-            atualizarUI();
-            return true;
-        }
-        document.getElementById('loginError').innerText = 'E-mail ou senha inválidos. Tente: lucas.fernandes@estudante.com / aluno123';
-        document.getElementById('loginError').classList.add('show');
-        return false;
-    }
+    async function initSupabase() { if (!window.supabase) return false; supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY); return true; }
 
+    async function carregarProfessores() { if (!supabaseClient) return []; const { data, error } = await supabaseClient.from('professores').select('*'); if (error) return []; return data; }
+    async function carregarAlunos() { if (!supabaseClient) return []; const { data, error } = await supabaseClient.from('alunos').select('*'); if (error) return []; return data; }
+    async function carregarTurmas() { if (!supabaseClient) return []; const { data, error } = await supabaseClient.from('turmas').select('*'); if (error) return []; return data; }
+    async function carregarTrabalhos() { if (!supabaseClient) return []; const { data, error } = await supabaseClient.from('trabalhos').select('*'); if (error) return []; return data; }
+    async function carregarMateriais() { if (!supabaseClient) return []; const { data, error } = await supabaseClient.from('materiais').select('*'); if (error) return []; return data; }
+    async function carregarAulas() { if (!supabaseClient) return []; const { data, error } = await supabaseClient.from('aulas').select('*'); if (error) return []; return data; }
+    async function carregarPresencas() { if (!supabaseClient) return []; const { data, error } = await supabaseClient.from('presencas').select('*'); if (error) return []; return data; }
+    async function carregarConfiguracoes() { if (!supabaseClient) return { limiteRevisoes: 2, limitePaginas: 6 }; const { data, error } = await supabaseClient.from('configuracoes').select('*').limit(1); if (error || !data || data.length === 0) return { limiteRevisoes: 2, limitePaginas: 6 }; return data[0]; }
+
+    async function carregarTodosDados() { if (carregando) return; carregando = true; try { dados.professores = await carregarProfessores(); dados.alunos = await carregarAlunos(); dados.turmas = await carregarTurmas(); dados.trabalhos = await carregarTrabalhos(); dados.materiais = await carregarMateriais(); dados.aulas = await carregarAulas(); dados.presencas = await carregarPresencas(); dados.config = await carregarConfiguracoes(); atualizarUI(); } catch(e) { console.error(e); } finally { carregando = false; } }
+
+    async function fazerLogin(email, senha) { await initSupabase(); await carregarTodosDados(); const aluno = dados.alunos.find(a => a.email === email && a.senha === senha); if (aluno && aluno.status === 'ativo') { usuarioLogado = aluno; document.getElementById('loginScreen').style.display = 'none'; document.getElementById('dashboardScreen').style.display = 'block'; document.getElementById('userName').innerText = aluno.nome; document.getElementById('userAvatar').innerText = aluno.nome.charAt(0); document.getElementById('perfilNome').value = aluno.nome; document.getElementById('perfilEmail').value = aluno.email; atualizarUI(); return true; } document.getElementById('loginError').innerText = 'E-mail ou senha inválidos'; document.getElementById('loginError').classList.add('show'); return false; }
     function logout() { usuarioLogado = null; document.getElementById('loginScreen').style.display = 'flex'; document.getElementById('dashboardScreen').style.display = 'none'; }
 
-    function formatarData(dataISO) { if (!dataISO) return '-'; try { const [a,m,d] = dataISO.split('-'); return `${d}/${m}/${a}`; } catch(e) { return dataISO; } }
-    function mostrarToast(msg, tipo) { const t = document.createElement('div'); t.className = `toast ${tipo}`; t.innerHTML = `<i class="fas ${tipo === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'}"></i> ${msg}`; document.getElementById('toastContainer').appendChild(t); setTimeout(() => t.remove(), 3000); }
+    async function enviarTrabalho(e) { e.preventDefault(); const titulo = document.getElementById('trabalhoTitulo').value; const tipo = document.getElementById('trabalhoTipo').value; const paginas = parseInt(document.getElementById('trabalhoPaginas').value); const limitePaginas = dados.config.limitePaginas || 6; const limiteRevisoes = usuarioLogado.limite_revisoes || 2; if (!titulo) { mostrarToast('Informe o título', 'error'); return; } if (paginas > limitePaginas) { mostrarToast(`Limite de ${limitePaginas} páginas`, 'warning'); return; } if ((usuarioLogado.revisoes_mes || 0) >= limiteRevisoes) { mostrarToast(`Você já usou ${limiteRevisoes} revisões`, 'warning'); return; } const novoTrabalho = { aluno_id: usuarioLogado.id, aluno_nome: usuarioLogado.nome, titulo, tipo, paginas, data: new Date().toLocaleDateString(), status: 'pendente' }; const { error } = await supabaseClient.from('trabalhos').insert(novoTrabalho); if (error) { mostrarToast('Erro ao enviar', 'error'); return; } await supabaseClient.from('alunos').update({ revisoes_mes: (usuarioLogado.revisoes_mes || 0) + 1 }).eq('id', usuarioLogado.id); await carregarTodosDados(); mostrarToast('Trabalho enviado!', 'success'); document.getElementById('formTrabalho').reset(); }
 
-    function atualizarUI() {
-        if (!usuarioLogado) return;
-        const meusTrabalhos = dados.trabalhos.filter(t => t.aluno_id === usuarioLogado.id);
-        const aprovados = meusTrabalhos.filter(t => t.status === 'aprovado');
-        const presencasAluno = dados.presencas.filter(p => p.aluno_id === usuarioLogado.id);
-        const totalPresencas = presencasAluno.length;
-        const presentesCount = presencasAluno.filter(p => p.presente).length;
-        const frequencia = totalPresencas === 0 ? 0 : Math.round((presentesCount / totalPresencas) * 100);
-        usuarioLogado.frequencia = frequencia;
-        const idx = dados.alunos.findIndex(a => a.id === usuarioLogado.id);
-        if (idx >= 0) dados.alunos[idx].frequencia = frequencia;
-        document.getElementById('totalTrabalhos').innerText = meusTrabalhos.length;
-        document.getElementById('trabalhosAprovados').innerText = aprovados.length;
-        document.getElementById('minhaFrequencia').innerText = frequencia + '%';
-        const hoje = new Date().toISOString().split('T')[0];
-        const aulasFuturas = dados.aulas.filter(a => a.data >= hoje).slice(0, 3);
-        document.getElementById('proximasAulas').innerHTML = aulasFuturas.map(a => `<div style="padding: 12px; border-bottom: 1px solid #e2e8f0;"><strong>${formatarData(a.data)}</strong><br><span style="font-size: 0.8rem;">${a.tema}</span>${a.meetLink ? `<br><a href="${a.meetLink}" target="_blank" class="btn-outline" style="font-size: 0.7rem; margin-top: 6px; display: inline-block;"><i class="fas fa-video"></i> Link da aula</a>` : ''}</div>`).join('') || '<div class="empty-state">Nenhuma aula agendada</div>';
-        const ultimoFeedback = aprovados.sort((a, b) => new Date(b.data_revisao) - new Date(a.data_revisao))[0];
-        if (ultimoFeedback) {
-            document.getElementById('ultimoFeedback').innerHTML = `<div class="feedback-box"><div class="feedback-title">${ultimoFeedback.titulo}</div><div class="feedback-text">${ultimoFeedback.feedback || 'Sem comentários adicionais.'}</div><div class="feedback-meta"><i class="fas fa-star"></i> ${ultimoFeedback.desempenho || '-'} | Revisado em: ${ultimoFeedback.data_revisao}</div></div>`;
-        } else { document.getElementById('ultimoFeedback').innerHTML = '<div class="empty-state">Nenhum feedback recebido ainda</div>'; }
-        const revisoesRestantes = (usuarioLogado.limiteRevisoes || 2) - (usuarioLogado.revisoesMes || 0);
-        document.getElementById('infoContainer').innerHTML = `<div class="stats-grid"><div class="stat-card"><div class="stat-value">${revisoesRestantes}</div><div class="stat-label">Revisões Restantes</div></div><div class="stat-card"><div class="stat-value">${dados.config?.limitePaginas || 6}</div><div class="stat-label">Páginas Máximas</div></div><div class="stat-card"><div class="stat-value">${usuarioLogado.revisoesMes || 0}</div><div class="stat-label">Revisões Utilizadas</div></div></div>`;
-        document.getElementById('tabelaTrabalhos').innerHTML = meusTrabalhos.map(t => `<tr><td style="padding:12px;"><strong>${t.titulo}</strong></td><td style="padding:12px;">${t.data}</td><td style="padding:12px;"><span class="badge ${t.status === 'pendente' ? 'badge-pending' : 'badge-approved'}">${t.status === 'pendente' ? 'Aguardando' : 'Aprovado'}</span></td><td style="padding:12px;">${t.paginas} / 6</td></tr>`).join('') || '<tr><td colspan="4" class="empty-state">Nenhum trabalho enviado</td></tr>';
-        document.getElementById('listaFeedbacks').innerHTML = aprovados.map(t => `<div class="feedback-box"><div class="feedback-title">${t.titulo}</div><div class="feedback-text">${t.feedback || 'Sem comentários adicionais.'}</div><div class="feedback-meta"><i class="fas fa-calendar-alt"></i> Revisado em: ${t.data_revisao} | <i class="fas fa-star"></i> ${t.desempenho || '-'}</div></div>`).join('') || '<div class="empty-state">Nenhum feedback recebido ainda</div>';
-        const todasAulas = [...dados.aulas].sort((a, b) => b.data.localeCompare(a.data));
-        const presencasMap = new Map(); presencasAluno.forEach(p => presencasMap.set(p.aula_id, p.presente));
-        document.getElementById('tabelaPresencas').innerHTML = todasAulas.map(a => `<tr><td style="padding:12px;">${formatarData(a.data)}</td><td style="padding:12px;">${a.tema}</td><td style="padding:12px;"><span class="badge ${presencasMap.get(a.id) ? 'badge-present' : 'badge-absent'}">${presencasMap.get(a.id) ? 'Presente' : 'Ausente'}</span></td></tr>`).join('') || '<tr><td colspan="3" class="empty-state">Nenhuma aula registrada</td></tr>';
-        document.getElementById('progressFrequencia').style.width = frequencia + '%';
-        document.getElementById('textoFrequencia').innerHTML = `Frequência: ${frequencia}% (${presentesCount} de ${totalPresencas} aulas)`;
-        const professor = dados.professores.find(p => p.id === usuarioLogado.professor_id);
-        const meusMateriais = dados.materiais.filter(m => m.professor_id === professor?.id);
-        document.getElementById('materiaisDisponiveis').innerHTML = meusMateriais.map(m => `<div class="material-card"><div class="material-icon"><i class="fas fa-file-pdf"></i></div><div class="material-title">${m.titulo}</div><div class="material-date"><i class="far fa-calendar-alt"></i> ${m.data}</div><div class="material-desc">${m.descricao.substring(0, 80)}${m.descricao.length > 80 ? '...' : ''}</div><a href="${m.link}" target="_blank" class="material-link"><i class="fas fa-external-link-alt"></i> Acessar Material</a></div>`).join('') || '<div class="empty-state">Nenhum material disponível no momento</div>';
-    }
+    async function atualizarPerfil(e) { e.preventDefault(); const nome = document.getElementById('perfilNome').value; const email = document.getElementById('perfilEmail').value; const senha = document.getElementById('perfilSenha').value; if (!nome || !email) { mostrarToast('Preencha os campos', 'error'); return; } const updates = { nome, email }; if (senha) updates.senha = senha; await supabaseClient.from('alunos').update(updates).eq('id', usuarioLogado.id); usuarioLogado.nome = nome; usuarioLogado.email = email; if (senha) usuarioLogado.senha = senha; document.getElementById('userName').innerText = nome; document.getElementById('userAvatar').innerText = nome.charAt(0); mostrarToast('Perfil atualizado!', 'success'); }
 
-    function enviarTrabalho(e) {
-        e.preventDefault();
-        const titulo = document.getElementById('trabalhoTitulo').value;
-        const tipo = document.getElementById('trabalhoTipo').value;
-        const paginas = parseInt(document.getElementById('trabalhoPaginas').value);
-        const limitePaginas = dados.config?.limitePaginas || 6;
-        const limiteRevisoes = usuarioLogado.limiteRevisoes || 2;
-        if (!titulo) { mostrarToast('Informe o título do trabalho', 'error'); return; }
-        if (paginas > limitePaginas) { mostrarToast(`O trabalho excede o limite de ${limitePaginas} páginas`, 'warning'); return; }
-        if ((usuarioLogado.revisoesMes || 0) >= limiteRevisoes) { mostrarToast(`Você já utilizou todas as ${limiteRevisoes} revisões deste mês`, 'warning'); return; }
-        const novoTrabalho = { id: dados.trabalhos.length + 1, aluno_id: usuarioLogado.id, aluno_nome: usuarioLogado.nome, titulo, tipo, paginas, data: new Date().toLocaleDateString(), status: 'pendente' };
-        dados.trabalhos.push(novoTrabalho);
-        usuarioLogado.revisoesMes = (usuarioLogado.revisoesMes || 0) + 1;
-        const index = dados.alunos.findIndex(a => a.id === usuarioLogado.id);
-        if (index >= 0) dados.alunos[index] = usuarioLogado;
-        salvarDados();
-        atualizarUI();
-        mostrarToast('Trabalho enviado com sucesso!', 'success');
-        document.getElementById('formTrabalho').reset();
-    }
+    function atualizarUI() { if (!usuarioLogado) return; const meusTrabalhos = dados.trabalhos.filter(t => t.aluno_id === usuarioLogado.id); const aprovados = meusTrabalhos.filter(t => t.status === 'aprovado'); const presencasAluno = dados.presencas.filter(p => p.aluno_id === usuarioLogado.id); const totalPresencas = presencasAluno.length; const presentesCount = presencasAluno.filter(p => p.presente === true).length; const frequencia = totalPresencas === 0 ? 0 : Math.round((presentesCount / totalPresencas) * 100); usuarioLogado.frequencia = frequencia; document.getElementById('totalTrabalhos').innerText = meusTrabalhos.length; document.getElementById('trabalhosAprovados').innerText = aprovados.length; document.getElementById('minhaFrequencia').innerText = frequencia + '%'; const hoje = new Date().toISOString().split('T')[0]; const aulasFuturas = dados.aulas.filter(a => a.data >= hoje).slice(0, 3); document.getElementById('proximasAulas').innerHTML = aulasFuturas.map(a => `<div style="padding:12px;border-bottom:1px solid #e2e8f0;"><strong>${formatarData(a.data)}</strong><br><span style="font-size:0.8rem">${a.tema}</span>${a.meet_link ? `<br><a href="${a.meet_link}" target="_blank" class="btn-outline" style="font-size:0.7rem">Link</a>` : ''}</div>`).join('') || '<div class="empty-state">Nenhuma aula agendada</div>'; const ultimoFeedback = aprovados.sort((a,b) => new Date(b.data_revisao) - new Date(a.data_revisao))[0]; if (ultimoFeedback) { document.getElementById('ultimoFeedback').innerHTML = `<div class="feedback-box"><div class="feedback-title">${ultimoFeedback.titulo}</div><div class="feedback-text">${ultimoFeedback.feedback || 'Sem comentários'}</div><div class="feedback-meta"><i class="fas fa-star"></i> ${ultimoFeedback.desempenho || '-'} | Revisado em: ${ultimoFeedback.data_revisao}</div></div>`; } else { document.getElementById('ultimoFeedback').innerHTML = '<div class="empty-state">Nenhum feedback recebido ainda</div>'; } const revisoesRestantes = (usuarioLogado.limite_revisoes || 2) - (usuarioLogado.revisoes_mes || 0); document.getElementById('infoContainer').innerHTML = `<div class="stats-grid"><div class="stat-card"><div class="stat-value">${revisoesRestantes}</div><div class="stat-label">Revisões Restantes</div></div><div class="stat-card"><div class="stat-value">${dados.config.limitePaginas}</div><div class="stat-label">Páginas Máximas</div></div><div class="stat-card"><div class="stat-value">${usuarioLogado.revisoes_mes || 0}</div><div class="stat-label">Revisões Utilizadas</div></div></div>`; document.getElementById('tabelaTrabalhos').innerHTML = meusTrabalhos.map(t => `<tr><td style="padding:12px"><strong>${t.titulo}</strong></td><td style="padding:12px">${t.data}</td><td style="padding:12px"><span class="badge ${t.status === 'pendente' ? 'badge-pending' : 'badge-approved'}">${t.status === 'pendente' ? 'Aguardando' : 'Aprovado'}</span></td><td style="padding:12px">${t.paginas} / 6</div></td></tr>`).join('') || '</table><td colspan="4" class="empty-state">Nenhum trabalho</div>'; document.getElementById('listaFeedbacks').innerHTML = aprovados.map(t => `<div class="feedback-box"><div class="feedback-title">${t.titulo}</div><div class="feedback-text">${t.feedback || 'Sem comentários'}</div><div class="feedback-meta"><i class="fas fa-calendar-alt"></i> ${t.data_revisao} | <i class="fas fa-star"></i> ${t.desempenho || '-'}</div></div>`).join('') || '<div class="empty-state">Nenhum feedback</div>'; const todasAulas = [...dados.aulas].sort((a,b) => b.data.localeCompare(a.data)); const presencasMap = new Map(); presencasAluno.forEach(p => presencasMap.set(p.aula_id, p.presente)); document.getElementById('tabelaPresencas').innerHTML = todasAulas.map(a => `<tr><td style="padding:12px">${formatarData(a.data)}</td><td style="padding:12px">${a.tema}</td><td style="padding:12px"><span class="badge ${presencasMap.get(a.id) ? 'badge-present' : 'badge-absent'}">${presencasMap.get(a.id) ? 'Presente' : 'Ausente'}</span></td>`).join('') || '<table><td colspan="3" class="empty-state">Nenhuma aula registrada</div>'; document.getElementById('progressFrequencia').style.width = frequencia + '%'; document.getElementById('textoFrequencia').innerHTML = `Frequência: ${frequencia}% (${presentesCount} de ${totalPresencas} aulas)`; const professor = dados.professores.find(p => p.id === usuarioLogado.professor_id); const meusMateriais = dados.materiais.filter(m => m.professor_id === professor?.id); document.getElementById('materiaisDisponiveis').innerHTML = meusMateriais.map(m => `<div class="material-card"><div class="material-icon"><i class="fas fa-file-pdf"></i></div><div class="material-title">${m.titulo}</div><div class="material-date">${m.data}</div><div class="material-desc">${m.descricao.substring(0,80)}${m.descricao.length > 80 ? '...' : ''}</div><a href="${m.link}" target="_blank" class="material-link">Acessar Material</a></div>`).join('') || '<div class="empty-state">Nenhum material disponível</div>'; }
 
-    function atualizarPerfil(e) {
-        e.preventDefault();
-        const nome = document.getElementById('perfilNome').value;
-        const email = document.getElementById('perfilEmail').value;
-        const senha = document.getElementById('perfilSenha').value;
-        if (!nome || !email) { mostrarToast('Preencha nome e e-mail', 'error'); return; }
-        usuarioLogado.nome = nome; usuarioLogado.email = email;
-        if (senha) usuarioLogado.senha = senha;
-        const index = dados.alunos.findIndex(a => a.id === usuarioLogado.id);
-        if (index >= 0) dados.alunos[index] = usuarioLogado;
-        salvarDados();
-        document.getElementById('userName').innerText = nome;
-        document.getElementById('userAvatar').innerText = nome.charAt(0);
-        mostrarToast('Perfil atualizado com sucesso!', 'success');
-    }
+    function setupNavegacao() { document.querySelectorAll('.nav-item').forEach(item => { item.addEventListener('click', () => { const tab = item.dataset.tab; document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active')); item.classList.add('active'); document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active')); document.getElementById(`${tab}Pane`).classList.add('active'); const titles = { dashboard: 'Dashboard', trabalhos: 'Meus Trabalhos', feedback: 'Feedbacks', presencas: 'Presenças', material: 'Material', perfil: 'Meu Perfil' }; document.getElementById('pageTitle').innerText = titles[tab]; }); }); }
+    function setupEventos() { document.getElementById('loginForm').addEventListener('submit', (e) => { e.preventDefault(); fazerLogin(document.getElementById('loginEmail').value, document.getElementById('loginPassword').value); }); document.getElementById('logoutBtn').addEventListener('click', logout); document.getElementById('formTrabalho').addEventListener('submit', enviarTrabalho); document.getElementById('formPerfil').addEventListener('submit', atualizarPerfil); }
 
-    function setupNavegacao() { document.querySelectorAll('.nav-item').forEach(item => { item.addEventListener('click', () => { const tab = item.dataset.tab; document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active')); item.classList.add('active'); document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active')); document.getElementById(`${tab}Pane`).classList.add('active'); const t = { dashboard: 'Dashboard', trabalhos: 'Meus Trabalhos', feedback: 'Feedbacks', presencas: 'Presenças', material: 'Material', perfil: 'Meu Perfil' }; document.getElementById('pageTitle').innerText = t[tab]; }); }); }
-    function setupEventos() {
-        document.getElementById('loginForm').addEventListener('submit', (e) => { e.preventDefault(); fazerLogin(document.getElementById('loginEmail').value, document.getElementById('loginPassword').value); });
-        document.getElementById('logoutBtn').addEventListener('click', logout);
-        document.getElementById('formTrabalho').addEventListener('submit', enviarTrabalho);
-        document.getElementById('formPerfil').addEventListener('submit', atualizarPerfil);
-    }
-
-    carregarDados();
-    setupNavegacao();
-    setupEventos();
+    setupNavegacao(); setupEventos();
+    
+    // ============================================
+    // KEEP-ALIVE (evita hibernação do Supabase)
+    // ============================================
+    (function keepAlive() {
+        let pings = 0;
+        async function ping() {
+            if (!supabaseClient) return;
+            try {
+                await supabaseClient.from('configuracoes').select('id').limit(1);
+                pings++;
+                console.log(`🔵 Keep-alive #${pings} - ${new Date().toLocaleTimeString()}`);
+            } catch(e) {}
+        }
+        setTimeout(ping, 10000);
+        setInterval(ping, 4 * 60 * 60 * 1000);
+        console.log('🟢 Keep-Alive ativado - Pings a cada 4 horas');
+    })();
 </script>
 </body>
 </html>
