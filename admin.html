@@ -132,20 +132,6 @@
             display: none;
         }
 
-        .credentials-hint {
-            margin-top: 24px;
-            padding-top: 20px;
-            border-top: 1px solid #e2e8f0;
-            text-align: center;
-            font-size: 0.75rem;
-            color: #64748b;
-        }
-
-        .credentials-hint span {
-            color: #667eea;
-            font-weight: 600;
-        }
-
         /* DASHBOARD */
         .dashboard-screen {
             display: none;
@@ -269,7 +255,7 @@
             background: rgba(239,68,68,0.2);
         }
 
-        /* MAIN */
+        /* MAIN - SEM SCROLL GLOBAL */
         .main {
             flex: 1;
             display: flex;
@@ -543,6 +529,7 @@
         .badge-paid { background: #dcfce7; color: #15803d; }
         .badge-pending { background: #fef3c7; color: #b45309; }
         .badge-info { background: #e0f2fe; color: #0369a1; }
+        .badge-warning { background: #fef3c7; color: #b45309; }
 
         /* FORMULÁRIOS */
         .form-group {
@@ -713,6 +700,56 @@
             color: #64748b;
             font-size: 0.7rem;
         }
+
+        /* LISTA ORGANIZADA */
+        .lista-container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .lista-item {
+            background: #f8fafc;
+            border-radius: 16px;
+            padding: 16px 20px;
+            border: 1px solid #e2e8f0;
+            transition: all 0.2s;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .lista-item:hover {
+            background: #f1f5f9;
+            transform: translateX(4px);
+        }
+
+        .lista-info {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .lista-nome {
+            font-weight: 700;
+            font-size: 0.95rem;
+            color: #1e293b;
+        }
+
+        .lista-detalhe {
+            font-size: 0.75rem;
+            color: #64748b;
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .lista-acoes {
+            display: flex;
+            gap: 8px;
+        }
     </style>
 </head>
 <body>
@@ -726,11 +763,10 @@
         </div>
         <div id="loginError" class="error-msg"></div>
         <form id="loginForm">
-            <div class="input-wrapper"><i class="fas fa-envelope"></i><input type="email" id="loginEmail" value="admin@mentoria.com"></div>
-            <div class="input-wrapper"><i class="fas fa-lock"></i><input type="password" id="loginPassword" value="admin123"></div>
+            <div class="input-wrapper"><i class="fas fa-envelope"></i><input type="email" id="loginEmail" placeholder="seu@email.com"></div>
+            <div class="input-wrapper"><i class="fas fa-lock"></i><input type="password" id="loginPassword" placeholder="••••••"></div>
             <button type="submit" class="btn-login">Acessar Painel</button>
         </form>
-        <div class="credentials-hint"><strong>Credenciais:</strong> <span>admin@mentoria.com</span> / <span>admin123</span></div>
     </div>
 </div>
 
@@ -773,11 +809,11 @@
 
                     <div class="card">
                         <div class="card-header"><h2><i class="fas fa-bell"></i> Alertas do Sistema</h2></div>
-                        <div id="alertasContainer"></div>
+                        <div id="alertasContainer" class="lista-container"></div>
                     </div>
                 </div>
 
-                <!-- PROFESSORES -->
+                <!-- PROFESSORES - ORGANIZADO EM LISTA -->
                 <div id="professoresPane" class="tab-pane">
                     <div class="card">
                         <div class="card-header">
@@ -785,16 +821,11 @@
                             <button class="btn-primary" id="novoProfessorBtn">Novo Professor</button>
                         </div>
                         <div class="card-subtitle">Cadastre os professores que irão lecionar as turmas</div>
-                        <div class="table-wrapper">
-                            <table>
-                                <thead><tr><th>Nome</th><th>E-mail</th><th>Status</th><th>Data Cadastro</th><th>Ações</th></tr></thead>
-                                <tbody id="tabelaProfessores"></tbody>
-                            </table>
-                        </div>
+                        <div id="listaProfessores" class="lista-container"></div>
                     </div>
                 </div>
 
-                <!-- TURMAS -->
+                <!-- TURMAS - ORGANIZADO EM LISTA -->
                 <div id="turmasPane" class="tab-pane">
                     <div class="card">
                         <div class="card-header">
@@ -802,16 +833,11 @@
                             <button class="btn-primary" id="novaTurmaBtn">Nova Turma</button>
                         </div>
                         <div class="card-subtitle">Crie turmas e associe a um professor responsável</div>
-                        <div class="table-wrapper">
-                            <table>
-                                <thead><tr><th>Nome da Turma</th><th>Professor</th><th>Alunos</th><th>Status</th><th>Ações</th></tr></thead>
-                                <tbody id="tabelaTurmas"></tbody>
-                            </table>
-                        </div>
+                        <div id="listaTurmas" class="lista-container"></div>
                     </div>
                 </div>
 
-                <!-- ALUNOS -->
+                <!-- ALUNOS - ORGANIZADO EM LISTA -->
                 <div id="alunosPane" class="tab-pane">
                     <div class="card">
                         <div class="card-header">
@@ -819,16 +845,11 @@
                             <button class="btn-primary" id="novoAlunoBtn">Novo Aluno</button>
                         </div>
                         <div class="card-subtitle">Cadastre alunos e associe a um professor e uma turma</div>
-                        <div class="table-wrapper">
-                            <table>
-                                <thead><tr><th>Nome</th><th>E-mail</th><th>Professor</th><th>Turma</th><th>Status</th><th>Frequência</th><th>Pagamento</th><th>Ações</th></tr></thead>
-                                <tbody id="tabelaAlunos"></tbody>
-                            </table>
-                        </div>
+                        <div id="listaAlunos" class="lista-container"></div>
                     </div>
                 </div>
 
-                <!-- FINANCEIRO -->
+                <!-- FINANCEIRO - ORGANIZADO EM LISTA -->
                 <div id="financeiroPane" class="tab-pane">
                     <div class="stats-grid" style="grid-template-columns: repeat(3, 1fr);">
                         <div class="stat-card"><div class="stat-value" id="receitaTotal">R$0</div><div class="stat-label">Receita Total</div></div>
@@ -841,12 +862,7 @@
                             <button class="btn-primary" id="marcarTodosPagosBtn">Marcar Todos Pagos</button>
                         </div>
                         <div class="card-subtitle">Gerencie os pagamentos dos alunos</div>
-                        <div class="table-wrapper">
-                            <table>
-                                <thead><tr><th>Aluno</th><th>Professor</th><th>Valor</th><th>Vencimento</th><th>Status</th><th>Ações</th></tr></thead>
-                                <tbody id="tabelaPagamentos"></tbody>
-                            </table>
-                        </div>
+                        <div id="listaPagamentos" class="lista-container"></div>
                     </div>
                 </div>
 
@@ -939,7 +955,21 @@
     async function salvarPagamentoNoBanco(pag) { const existing = dados.pagamentos.find(p => p.aluno_id === pag.aluno_id); if (existing) { await supabaseClient.from('admin_pagamentos').update(pag).eq('id', existing.id); } else { await supabaseClient.from('admin_pagamentos').insert(pag); } await carregarTodosDados(); }
     async function salvarConfiguracoesNoBanco(config) { await supabaseClient.from('admin_configuracoes').update(config).eq('id', 1); await carregarTodosDados(); }
 
-    async function fazerLogin(email, senha) { if (email === 'admin@mentoria.com' && senha === 'admin123') { await initSupabase(); document.getElementById('loginScreen').style.display = 'none'; document.getElementById('dashboardScreen').style.display = 'block'; document.getElementById('adminName').innerText = 'Administrador'; document.getElementById('adminAvatar').innerText = 'A'; await carregarTodosDados(); return true; } document.getElementById('loginError').innerText = 'E-mail ou senha inválidos'; document.getElementById('loginError').classList.add('show'); return false; }
+    async function fazerLogin(email, senha) { 
+        await initSupabase(); 
+        await carregarTodosDados();
+        if (email === 'admin@mentoria.com' && senha === 'admin123') { 
+            document.getElementById('loginScreen').style.display = 'none'; 
+            document.getElementById('dashboardScreen').style.display = 'block'; 
+            document.getElementById('adminName').innerText = 'Administrador'; 
+            document.getElementById('adminAvatar').innerText = 'A'; 
+            return true; 
+        } 
+        document.getElementById('loginError').innerText = 'E-mail ou senha inválidos'; 
+        document.getElementById('loginError').style.display = 'block'; 
+        setTimeout(() => { document.getElementById('loginError').style.display = 'none'; }, 3000);
+        return false; 
+    }
     function logout() { document.getElementById('loginScreen').style.display = 'flex'; document.getElementById('dashboardScreen').style.display = 'none'; }
 
     function atualizarUI() {
@@ -950,24 +980,98 @@
         const freqMedia = dados.alunos.length ? Math.round(dados.alunos.reduce((s, a) => s + (a.frequencia || 0), 0) / dados.alunos.length) : 0;
         const totalFeedbacks = dados.trabalhos.filter(t => t.status === 'aprovado').length;
         document.getElementById('metricasContainer').innerHTML = `<div class="stat-card"><div class="stat-value">${freqMedia}%</div><div class="stat-label">Frequência Média</div></div><div class="stat-card"><div class="stat-value">${totalFeedbacks}</div><div class="stat-label">Trabalhos Revisados</div></div><div class="stat-card"><div class="stat-value">${dados.config.limiteRevisoes}</div><div class="stat-label">Revisões/Mês</div></div>`;
+        
         let alertas = [];
-        if (dados.professores.filter(p => p.status === 'inativo').length) alertas.push('<div class="badge-warning" style="padding:12px;border-radius:12px;margin-bottom:8px;">Professores inativos</div>');
-        if (dados.alunos.filter(a => a.status === 'inativo').length) alertas.push('<div class="badge-warning" style="padding:12px;border-radius:12px;">Alunos inativos</div>');
-        if (dados.pagamentos.filter(p => p.status === 'pendente').length) alertas.push('<div class="badge-warning" style="padding:12px;border-radius:12px;">Pagamentos pendentes</div>');
-        if (alertas.length === 0) alertas.push('<div class="badge-active" style="padding:12px;border-radius:12px;">Sistema normal</div>');
+        if (dados.professores.filter(p => p.status === 'inativo').length) alertas.push('<div class="lista-item"><div class="lista-info"><span class="lista-nome">⚠️ Professores Inativos</span><span class="lista-detalhe">Há professores com status inativo no sistema</span></div></div>');
+        if (dados.alunos.filter(a => a.status === 'inativo').length) alertas.push('<div class="lista-item"><div class="lista-info"><span class="lista-nome">⚠️ Alunos Inativos</span><span class="lista-detalhe">Há alunos com status inativo no sistema</span></div></div>');
+        if (dados.pagamentos.filter(p => p.status === 'pendente').length) alertas.push('<div class="lista-item"><div class="lista-info"><span class="lista-nome">⚠️ Pagamentos Pendentes</span><span class="lista-detalhe">Existem pagamentos em aberto</span></div></div>');
+        if (alertas.length === 0) alertas.push('<div class="lista-item"><div class="lista-info"><span class="lista-nome">✅ Sistema Normal</span><span class="lista-detalhe">Todas as métricas estão dentro da normalidade</span></div></div>');
         document.getElementById('alertasContainer').innerHTML = alertas.join('');
 
-        document.getElementById('tabelaProfessores').innerHTML = dados.professores.map(p => `<td style="padding:14px 12px"><strong>${p.nome}</strong></td><td style="padding:14px 12px">${p.email}</td><td style="padding:14px 12px"><span class="badge ${p.status === 'ativo' ? 'badge-active' : 'badge-inactive'}">${p.status}</span></td><td style="padding:14px 12px">${formatarData(p.created_at?.split('T')[0])}</td><td style="padding:14px 12px"><button class="btn-icon" onclick="editarProfessor(${p.id})"><i class="fas fa-edit"></i></button> <button class="btn-icon" onclick="excluirProfessor(${p.id})"><i class="fas fa-trash"></i></button></td>`).join('') || '<td colspan="5" class="empty-state">Nenhum professor</div>';
-        document.getElementById('tabelaTurmas').innerHTML = dados.turmas.map(t => { const p = dados.professores.find(p => p.id === t.professor_id); return `<td style="padding:14px 12px"><strong>${t.nome}</strong></td><td style="padding:14px 12px">${p?.nome || '-'}<td><td style="padding:14px 12px">${dados.alunos.filter(a => a.turma_id === t.id).length}</td><td style="padding:14px 12px"><span class="badge ${t.status === 'ativa' ? 'badge-active' : 'badge-inactive'}">${t.status}</span></td><td style="padding:14px 12px"><button class="btn-icon" onclick="editarTurma(${t.id})"><i class="fas fa-edit"></i></button> <button class="btn-icon" onclick="excluirTurma(${t.id})"><i class="fas fa-trash"></i></button></td>`; }).join('') || '<td colspan="5" class="empty-state">Nenhuma turma</div>';
-        document.getElementById('tabelaAlunos').innerHTML = dados.alunos.map(a => { const p = dados.professores.find(p => p.id === a.professor_id); const t = dados.turmas.find(t => t.id === a.turma_id); const pag = dados.pagamentos.find(p => p.aluno_id === a.id); const statusPag = pag ? pag.status : 'pendente'; return `<td style="padding:14px 12px"><strong>${a.nome}</strong></td><td style="padding:14px 12px">${a.email}</td><td style="padding:14px 12px">${p?.nome || '-'}</td><td style="padding:14px 12px">${t?.nome || '-'}</td><td style="padding:14px 12px"><span class="badge ${a.status === 'ativo' ? 'badge-active' : 'badge-inactive'}">${a.status}</span></td><td style="padding:14px 12px"><span class="badge badge-info">${a.frequencia || 0}%</span></td><td style="padding:14px 12px"><span class="badge ${statusPag === 'pago' ? 'badge-paid' : 'badge-pending'}">${statusPag === 'pago' ? 'Pago' : 'Pendente'}</span></td><td style="padding:14px 12px"><button class="btn-icon" onclick="editarAluno(${a.id})"><i class="fas fa-edit"></i></button> <button class="btn-icon" onclick="excluirAluno(${a.id})"><i class="fas fa-trash"></i></button> <button class="btn-icon" onclick="abrirModalPagamento(${a.id}, '${a.nome}')"><i class="fas fa-dollar-sign"></i></button></td>`; }).join('') || '<td colspan="8" class="empty-state">Nenhum aluno</div>';
+        // Professores em lista
+        document.getElementById('listaProfessores').innerHTML = dados.professores.map(p => `
+            <div class="lista-item">
+                <div class="lista-info">
+                    <span class="lista-nome">${p.nome}</span>
+                    <span class="lista-detalhe">${p.email} • <span class="badge ${p.status === 'ativo' ? 'badge-active' : 'badge-inactive'}">${p.status}</span> • Cadastro: ${formatarData(p.created_at?.split('T')[0])}</span>
+                </div>
+                <div class="lista-acoes">
+                    <button class="btn-icon" onclick="editarProfessor(${p.id})"><i class="fas fa-edit"></i></button>
+                    <button class="btn-icon" onclick="excluirProfessor(${p.id})"><i class="fas fa-trash"></i></button>
+                </div>
+            </div>
+        `).join('') || '<div class="empty-state">Nenhum professor cadastrado</div>';
+
+        // Turmas em lista
+        document.getElementById('listaTurmas').innerHTML = dados.turmas.map(t => { 
+            const p = dados.professores.find(p => p.id === t.professor_id); 
+            const qtdAlunos = dados.alunos.filter(a => a.turma_id === t.id).length;
+            return `
+            <div class="lista-item">
+                <div class="lista-info">
+                    <span class="lista-nome">${t.nome}</span>
+                    <span class="lista-detalhe">Professor: ${p?.nome || '-'} • ${qtdAlunos} alunos • <span class="badge ${t.status === 'ativa' ? 'badge-active' : 'badge-inactive'}">${t.status}</span></span>
+                </div>
+                <div class="lista-acoes">
+                    <button class="btn-icon" onclick="editarTurma(${t.id})"><i class="fas fa-edit"></i></button>
+                    <button class="btn-icon" onclick="excluirTurma(${t.id})"><i class="fas fa-trash"></i></button>
+                </div>
+            </div>
+        `; }).join('') || '<div class="empty-state">Nenhuma turma cadastrada</div>';
+
+        // Alunos em lista
+        document.getElementById('listaAlunos').innerHTML = dados.alunos.map(a => { 
+            const p = dados.professores.find(p => p.id === a.professor_id); 
+            const t = dados.turmas.find(t => t.id === a.turma_id); 
+            const pag = dados.pagamentos.find(p => p.aluno_id === a.id); 
+            const statusPag = pag ? pag.status : 'pendente'; 
+            return `
+            <div class="lista-item">
+                <div class="lista-info">
+                    <span class="lista-nome">${a.nome}</span>
+                    <span class="lista-detalhe">
+                        ${a.email} • Professor: ${p?.nome || '-'} • Turma: ${t?.nome || '-'} • 
+                        <span class="badge ${a.status === 'ativo' ? 'badge-active' : 'badge-inactive'}">${a.status}</span> • 
+                        Frequência: <span class="badge badge-info">${a.frequencia || 0}%</span> • 
+                        Pagamento: <span class="badge ${statusPag === 'pago' ? 'badge-paid' : 'badge-pending'}">${statusPag === 'pago' ? 'Pago' : 'Pendente'}</span>
+                    </span>
+                </div>
+                <div class="lista-acoes">
+                    <button class="btn-icon" onclick="editarAluno(${a.id})"><i class="fas fa-edit"></i></button>
+                    <button class="btn-icon" onclick="excluirAluno(${a.id})"><i class="fas fa-trash"></i></button>
+                    <button class="btn-icon" onclick="abrirModalPagamento(${a.id}, '${a.nome}')"><i class="fas fa-dollar-sign"></i></button>
+                </div>
+            </div>
+        `; }).join('') || '<div class="empty-state">Nenhum aluno cadastrado</div>';
+
         const receitaTotal = dados.pagamentos.filter(p => p.status === 'pago').reduce((s, p) => s + (p.valor || dados.config.mensalidade), 0);
         const receitaMes = dados.pagamentos.filter(p => p.status === 'pago' && p.data_pagamento && new Date(p.data_pagamento).getMonth() === new Date().getMonth()).reduce((s, p) => s + (p.valor || dados.config.mensalidade), 0);
         const inadimplentes = dados.pagamentos.filter(p => p.status === 'pendente').length;
         document.getElementById('receitaTotal').innerText = `R$ ${receitaTotal}`;
         document.getElementById('receitaMes').innerText = `R$ ${receitaMes}`;
         document.getElementById('inadimplentesTotal').innerText = inadimplentes;
-        document.getElementById('tabelaPagamentos').innerHTML = dados.alunos.map(a => { const p = dados.professores.find(p => p.id === a.professor_id); const pag = dados.pagamentos.find(p => p.aluno_id === a.id); const status = pag ? pag.status : 'pendente'; return `<td style="padding:14px 12px"><strong>${a.nome}</strong></td><td style="padding:14px 12px">${p?.nome || '-'}</td><td style="padding:14px 12px">R$ ${dados.config.mensalidade}</td><td style="padding:14px 12px">${pag?.vencimento ? formatarData(pag.vencimento) : formatarData(new Date().toISOString().split('T')[0])}</td><td style="padding:14px 12px"><span class="badge ${status === 'pago' ? 'badge-paid' : 'badge-pending'}">${status === 'pago' ? 'Pago' : 'Pendente'}</span></td><td style="padding:14px 12px"><button class="btn-icon" onclick="abrirModalPagamento(${a.id}, '${a.nome}')"><i class="fas fa-dollar-sign"></i></button></td>`; }).join('') || '<td colspan="6" class="empty-state">Nenhum pagamento</div>';
-        document.getElementById('professorTurma').innerHTML = '<option value="">Selecione</option>' + dados.professores.filter(p => p.status === 'ativo').map(p => `<option value="${p.id}">${p.nome}</option>`).join('');
+
+        // Pagamentos em lista
+        document.getElementById('listaPagamentos').innerHTML = dados.alunos.map(a => { 
+            const p = dados.professores.find(p => p.id === a.professor_id); 
+            const pag = dados.pagamentos.find(p => p.aluno_id === a.id); 
+            const status = pag ? pag.status : 'pendente'; 
+            return `
+            <div class="lista-item">
+                <div class="lista-info">
+                    <span class="lista-nome">${a.nome}</span>
+                    <span class="lista-detalhe">
+                        Professor: ${p?.nome || '-'} • Valor: R$ ${dados.config.mensalidade} • 
+                        Vencimento: ${pag?.vencimento ? formatarData(pag.vencimento) : formatarData(new Date().toISOString().split('T')[0])} • 
+                        <span class="badge ${status === 'pago' ? 'badge-paid' : 'badge-pending'}">${status === 'pago' ? 'Pago' : 'Pendente'}</span>
+                    </span>
+                </div>
+                <div class="lista-acoes">
+                    <button class="btn-icon" onclick="abrirModalPagamento(${a.id}, '${a.nome}')"><i class="fas fa-dollar-sign"></i></button>
+                </div>
+            </div>
+        `; }).join('') || '<div class="empty-state">Nenhum pagamento registrado</div>';
+
         document.getElementById('turmaProfessor').innerHTML = '<option value="">Selecione</option>' + dados.professores.filter(p => p.status === 'ativo').map(p => `<option value="${p.id}">${p.nome}</option>`).join('');
         document.getElementById('alunoProfessor').innerHTML = '<option value="">Selecione</option>' + dados.professores.filter(p => p.status === 'ativo').map(p => `<option value="${p.id}">${p.nome}</option>`).join('');
         document.getElementById('alunoTurma').innerHTML = '<option value="">Selecione</option>' + dados.turmas.filter(t => t.status === 'ativa').map(t => `<option value="${t.id}">${t.nome}</option>`).join('');
