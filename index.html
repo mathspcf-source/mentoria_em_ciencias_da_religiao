@@ -2,40 +2,75 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MentorCR</title>
+    <title>MentorCR - Login</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <link rel="stylesheet" href="style.css">
     <style>
-        .login-wrapper{display:flex;align-items:center;justify-content:center;min-height:100vh;padding:16px}
-        .login-card{background:#111;padding:32px 28px;width:100%;max-width:320px;text-align:center}
-        .login-card svg{width:48px;height:48px;margin-bottom:10px}
-        .login-card h1{font-size:20px;font-weight:300;margin-bottom:4px;letter-spacing:-.5px}
-        .login-card p{color:#777;font-size:10px;margin-bottom:18px}
-        .login-card select,.login-card input{width:100%;padding:8px 10px;background:#0a0a0a;border:1px solid #333;color:#fff;font-size:11px;margin-bottom:8px;font-family:inherit;border-radius:2px}
-        .login-card select:focus,.login-card input:focus{outline:none;border-color:#555}
-        .login-card select option{background:#111;color:#fff}
-        .login-btn{width:100%;padding:8px;background:var(--tile-cyan);color:#000;border:none;font-size:12px;cursor:pointer;font-family:inherit;border-radius:2px;letter-spacing:.3px;margin-top:4px}
-        .login-btn:hover{filter:brightness(1.1)}
-        .login-error{color:var(--tile-red);font-size:9px;margin-top:6px;display:none}
+        :root{--bg:#f1f5f9;--primary:#3b82f6;--primary-dark:#2563eb;--text:#1e293b;--text-light:#64748b;--border:#e2e8f0;--danger:#ef4444}
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{font-family:'Inter','Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;display:flex;align-items:center;justify-content:center}
+        .loading{display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:9999;justify-content:center;align-items:center}
+        .loading.show{display:flex}
+        .spinner{width:32px;height:32px;border:3px solid #e2e8f0;border-top-color:var(--primary);border-radius:50%;animation:spin .6s linear infinite}
+        @keyframes spin{to{transform:rotate(360deg)}}
+        .login-wrapper{width:100%;max-width:380px;padding:20px}
+        .login-card{background:#fff;border-radius:12px;padding:32px 28px;box-shadow:0 4px 16px rgba(0,0,0,.06);border:1px solid var(--border);text-align:center}
+        .login-card svg{width:48px;height:48px;margin-bottom:12px}
+        .login-card h1{font-size:20px;font-weight:600;color:var(--text);margin-bottom:4px;letter-spacing:-.3px}
+        .login-card .subtitle{font-size:11px;color:var(--text-light);margin-bottom:22px}
+        .form-group{margin-bottom:10px;text-align:left}
+        .form-group label{display:block;font-size:10px;font-weight:500;color:var(--text-light);margin-bottom:3px;text-transform:uppercase;letter-spacing:.3px}
+        .form-group select,.form-group input{width:100%;padding:9px 12px;background:#f8fafc;border:1px solid var(--border);border-radius:6px;font-size:12px;color:var(--text);font-family:inherit;transition:all .15s}
+        .form-group select:focus,.form-group input:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 3px rgba(59,130,246,.08)}
+        .form-group select option{background:#fff;color:var(--text)}
+        .btn-login{width:100%;padding:10px;background:var(--primary);color:#fff;border:none;border-radius:6px;font-size:13px;font-weight:500;cursor:pointer;margin-top:6px;font-family:inherit;transition:all .15s}
+        .btn-login:hover{background:var(--primary-dark)}
+        .login-error{color:var(--danger);font-size:10px;text-align:center;margin-top:8px;display:none}
+        .footer{position:fixed;bottom:0;left:0;right:0;padding:8px;text-align:center;font-size:9px;color:var(--text-light);background:#fff;border-top:1px solid var(--border)}
+        .footer span{color:var(--primary);font-weight:500}
     </style>
 </head>
 <body>
 <div class="loading" id="loading"><div class="spinner"></div></div>
+
 <div class="login-wrapper">
     <div class="login-card">
-        <svg viewBox="0 0 52 52"><rect x="3" y="3" width="46" height="46" rx="6" fill="#0d9488"/><text x="26" y="33" text-anchor="middle" fill="#fff" font-size="18" font-weight="300">CR</text></svg>
-        <h1>MentorCR</h1><p>Mentoria em Ciencias da Religiao</p>
-        <select id="loginTipo"><option value="admin">Administrador</option><option value="professor">Professor</option><option value="aluno">Aluno</option></select>
-        <input type="email" id="loginEmail" placeholder="Email">
-        <input type="password" id="loginSenha" placeholder="Senha">
-        <button class="login-btn" id="btnLogin">Entrar</button>
+        <svg viewBox="0 0 52 52"><defs><linearGradient id="lg"><stop offset="0%" stop-color="#3b82f6"/><stop offset="100%" stop-color="#6366f1"/></linearGradient></defs><rect x="3" y="3" width="46" height="46" rx="10" fill="url(#lg)"/><text x="26" y="33" text-anchor="middle" fill="#fff" font-size="18" font-weight="600">CR</text></svg>
+        <h1>MentorCR</h1>
+        <p class="subtitle">Mentoria em Ciencias da Religiao</p>
+        <div class="form-group"><label>Tipo de Acesso</label><select id="loginTipo"><option value="admin">Administrador</option><option value="professor">Professor</option><option value="aluno">Aluno</option></select></div>
+        <div class="form-group"><label>Email</label><input type="email" id="loginEmail" placeholder="email@exemplo.com"></div>
+        <div class="form-group"><label>Senha</label><input type="password" id="loginSenha" placeholder="********"></div>
+        <button class="btn-login" id="btnLogin">Entrar</button>
         <p class="login-error" id="loginError"></p>
     </div>
 </div>
-<div class="footer">Criado por <span>Matheus Pacifico Evangelista</span> | <a href="https://wa.me/5579996458399">(79) 99645-8399</a></div>
+
+<div class="footer">Criado por <span>Matheus Pacifico Evangelista</span> | <a href="https://wa.me/5579996458399" style="color:#10b981;text-decoration:none">(79) 99645-8399</a></div>
+
 <script src="supabase.js"></script>
 <script>
-$('btnLogin').addEventListener('click',async()=>{const t=$('loginTipo').value,e=$('loginEmail').value.trim(),s=$('loginSenha').value.trim(),r=$('loginError');r.style.display='none';if(!e||!s){r.textContent='Preencha todos os campos.';r.style.display='block';return}showLoading();try{if(t==='admin'){const{data:c}=await sb.from('configuracoes').select('valor').eq('chave','admin_senha').single();if(e===ADMIN_EMAIL&&s===(c?c.valor:'admin123'))window.location.href='admin.html';else{r.textContent='Email ou senha incorretos.';r.style.display='block'}}else if(t==='professor'){const{data:p}=await sb.from('professores').select('*').eq('email',e).eq('senha',s).eq('ativo',true);if(p&&p.length>0){localStorage.setItem('mentorcr_user_id',p[0].id);localStorage.setItem('mentorcr_user_nome',p[0].nome);localStorage.setItem('mentorcr_user_tipo','professor');window.location.href='professor.html'}else{r.textContent='Email ou senha incorretos.';r.style.display='block'}}else{const{data:a}=await sb.from('alunos').select('*').eq('email',e).eq('senha',s).eq('ativo',true);if(a&&a.length>0){localStorage.setItem('mentorcr_user_id',a[0].id);localStorage.setItem('mentorcr_user_nome',a[0].nome);localStorage.setItem('mentorcr_user_tipo','aluno');window.location.href='aluno.html'}else{r.textContent='Email ou senha incorretos.';r.style.display='block'}}}catch(ex){r.textContent='Erro de conexao.';r.style.display='block'}hideLoading()});
+$('btnLogin').addEventListener('click',async()=>{
+    const t=$('loginTipo').value,e=$('loginEmail').value.trim(),s=$('loginSenha').value.trim(),r=$('loginError');
+    r.style.display='none';
+    if(!e||!s){r.textContent='Preencha todos os campos.';r.style.display='block';return}
+    showLoading();
+    try{
+        if(t==='admin'){
+            const{data:c}=await sb.from('configuracoes').select('valor').eq('chave','admin_senha').single();
+            if(e===ADMIN_EMAIL&&s===(c?c.valor:'admin123'))window.location.href='admin.html';
+            else{r.textContent='Email ou senha incorretos.';r.style.display='block'}
+        }else if(t==='professor'){
+            const{data:p}=await sb.from('professores').select('*').eq('email',e).eq('senha',s).eq('ativo',true);
+            if(p&&p.length>0){localStorage.setItem('mentorcr_user_id',p[0].id);localStorage.setItem('mentorcr_user_nome',p[0].nome);localStorage.setItem('mentorcr_user_tipo','professor');window.location.href='professor.html'}
+            else{r.textContent='Email ou senha incorretos.';r.style.display='block'}
+        }else{
+            const{data:a}=await sb.from('alunos').select('*').eq('email',e).eq('senha',s).eq('ativo',true);
+            if(a&&a.length>0){localStorage.setItem('mentorcr_user_id',a[0].id);localStorage.setItem('mentorcr_user_nome',a[0].nome);localStorage.setItem('mentorcr_user_tipo','aluno');window.location.href='aluno.html'}
+            else{r.textContent='Email ou senha incorretos.';r.style.display='block'}
+        }
+    }catch(ex){r.textContent='Erro de conexao.';r.style.display='block'}
+    hideLoading()
+});
 </script>
 </body>
 </html>
