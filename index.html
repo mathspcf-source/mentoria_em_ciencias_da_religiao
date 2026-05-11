@@ -1,109 +1,76 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MentorCR - Login</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <link rel="stylesheet" href="style.css">
     <style>
-        :root{--bg:#0f1923;--surface:#1a2733;--surface-light:#1f2d3a;--primary:#5eead4;--accent:#818cf8;--text:#f1f5f9;--text-bright:#fff;--text-secondary:#cbd5e1;--danger:#f87171;--border:#334155}
-        *{margin:0;padding:0;box-sizing:border-box}
-        body{font-family:'Segoe UI',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;display:flex;align-items:center;justify-content:center;background-image:radial-gradient(ellipse at 30% 20%,rgba(94,234,212,.04) 0%,transparent 50%),radial-gradient(ellipse at 70% 60%,rgba(129,140,248,.04) 0%,transparent 50%)}
-        .login-card{background:var(--surface);border-radius:16px;padding:35px 30px;width:100%;max-width:380px;box-shadow:0 12px 40px rgba(0,0,0,.6);border:1px solid var(--border);position:relative}
-        .login-card::before{content:'';display:block;height:3px;background:linear-gradient(90deg,var(--primary),var(--accent));border-radius:16px 16px 0 0;margin:-35px -30px 25px -30px}
-        .login-header{text-align:center;margin-bottom:22px}
-        .login-header svg{width:56px;height:56px}
-        .login-header h1{font-size:22px;font-weight:600;color:var(--text-bright);margin-top:8px}
-        .login-header p{color:var(--text-secondary);font-size:11px;margin-top:4px}
-        .form-group{margin-bottom:12px}
-        .form-group label{display:block;font-size:10px;font-weight:600;color:var(--primary);text-transform:uppercase;margin-bottom:4px}
-        .form-group select,.form-group input{width:100%;padding:11px 14px;background:var(--surface-light);border:1px solid var(--border);border-radius:8px;color:var(--text-bright);font-size:13px;font-family:inherit}
-        .form-group select:focus,.form-group input:focus{outline:none;border-color:var(--primary)}
-        .form-group select option{background:var(--surface);color:var(--text)}
-        .btn-login{width:100%;padding:12px;background:var(--primary);color:#0f1923;border:none;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;margin-top:8px;transition:.3s}
-        .btn-login:hover{background:#14b8a6}
-        .login-error{color:var(--danger);font-size:11px;text-align:center;margin-top:10px;display:none}
-        .loading{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.7);z-index:9999;justify-content:center;align-items:center}
-        .loading.show{display:flex}
-        .spinner{width:40px;height:40px;border:3px solid var(--border);border-top-color:var(--primary);border-radius:50%;animation:spin .8s linear infinite}
-        @keyframes spin{to{transform:rotate(360deg)}}
-        .footer{position:fixed;bottom:0;left:0;right:0;padding:10px;text-align:center;font-size:10px;color:var(--text-secondary);background:var(--surface);border-top:1px solid var(--border)}
-        .footer span{color:var(--primary);font-weight:600}
+        .login-wrapper { display: flex; align-items: center; justify-content: center; min-height: 100vh; padding: 16px; position: relative; z-index: 1; }
+        .login-card { background: var(--surface); border-radius: 12px; padding: 28px 24px; width: 100%; max-width: 340px; box-shadow: 0 16px 48px rgba(0,0,0,.5); border: 1px solid var(--border); }
+        .login-card::before { content: ''; display: block; height: 2px; background: linear-gradient(90deg, var(--primary), var(--accent)); border-radius: 12px 12px 0 0; margin: -28px -24px 20px -24px; }
+        .login-header { text-align: center; margin-bottom: 18px; }
+        .login-header svg { width: 48px; height: 48px; }
+        .login-header h1 { font-size: 20px; font-weight: 600; color: var(--text-bright); margin-top: 6px; }
+        .login-header p { color: var(--text-secondary); font-size: 10px; margin-top: 2px; }
+        .form-group { margin-bottom: 10px; }
+        .form-group label { display: block; font-size: 9px; font-weight: 600; color: var(--primary); text-transform: uppercase; margin-bottom: 3px; }
+        .form-group select, .form-group input { width: 100%; padding: 9px 12px; background: var(--surface-light); border: 1px solid var(--border); border-radius: 6px; color: var(--text-bright); font-size: 12px; font-family: inherit; }
+        .form-group select:focus, .form-group input:focus { outline: none; border-color: var(--primary); }
+        .form-group select option { background: var(--surface); color: var(--text); }
+        .btn-login { width: 100%; padding: 10px; background: var(--primary); color: #0a0f18; border: none; border-radius: 6px; font-size: 13px; font-weight: 600; cursor: pointer; margin-top: 4px; transition: var(--transition); }
+        .btn-login:hover { background: var(--primary-dark); }
+        .login-error { color: var(--danger); font-size: 10px; text-align: center; margin-top: 8px; display: none; }
     </style>
 </head>
 <body>
-    <div class="loading" id="loading"><div class="spinner"></div></div>
-
+<div class="bg-pattern"></div>
+<div class="loading" id="loading"><div class="spinner"></div></div>
+<div class="login-wrapper">
     <div class="login-card">
         <div class="login-header">
-            <svg viewBox="0 0 52 52"><defs><linearGradient id="lg"><stop offset="0%" stop-color="#5eead4"/><stop offset="100%" stop-color="#818cf8"/></linearGradient></defs><rect x="3" y="3" width="46" height="46" rx="13" fill="url(#lg)"/><text x="26" y="32" text-anchor="middle" fill="#0f1923" font-size="19" font-weight="700">CR</text></svg>
-            <h1>MentorCR</h1>
-            <p>Mentoria em Ciencias da Religiao</p>
+            <svg viewBox="0 0 52 52"><defs><linearGradient id="lg"><stop offset="0%" stop-color="#5eead4"/><stop offset="100%" stop-color="#818cf8"/></linearGradient></defs><rect x="3" y="3" width="46" height="46" rx="13" fill="url(#lg)"/><text x="26" y="32" text-anchor="middle" fill="#0a0f18" font-size="19" font-weight="700">CR</text></svg>
+            <h1>MentorCR</h1><p>Mentoria em Ciencias da Religiao</p>
         </div>
         <div class="form-group"><label>Tipo de Acesso</label><select id="loginTipo"><option value="admin">Administrador</option><option value="professor">Professor</option><option value="aluno">Aluno</option></select></div>
         <div class="form-group"><label>Email</label><input type="email" id="loginEmail" placeholder="email@exemplo.com"></div>
         <div class="form-group"><label>Senha</label><input type="password" id="loginSenha" placeholder="********"></div>
-        <button class="btn-login" id="btnLogin">Entrar</button>
-        <p class="login-error" id="loginError"></p>
+        <button class="btn-login" id="btnLogin">Entrar</button><p class="login-error" id="loginError"></p>
     </div>
-
-    <div class="footer">Criado por <span>Matheus Pacifico Evangelista</span> | <a href="https://wa.me/5579996458399" style="color:#34d399;text-decoration:none">(79) 99645-8399</a></div>
-
-    <script src="supabase.js"></script>
-    <script>
-        $('btnLogin').addEventListener('click', async () => {
-            const tipo = $('loginTipo').value;
-            const email = $('loginEmail').value.trim();
-            const senha = $('loginSenha').value.trim();
-            const err = $('loginError');
-            err.style.display = 'none';
-
-            if (!email || !senha) {
-                err.textContent = 'Preencha todos os campos.';
-                err.style.display = 'block';
-                return;
-            }
-
-            showLoading();
-            try {
-                if (tipo === 'admin') {
-                    const { data: cfg } = await sb.from('configuracoes').select('valor').eq('chave', 'admin_senha').single();
-                    const adminSenha = cfg ? cfg.valor : 'admin123';
-                    if (email === ADMIN_EMAIL && senha === adminSenha) {
-                        window.location.href = 'admin.html';
-                    } else {
-                        err.textContent = 'Email ou senha incorretos.';
-                        err.style.display = 'block';
-                    }
-                } else if (tipo === 'professor') {
-                    const { data: profs } = await sb.from('professores').select('*').eq('email', email).eq('senha', senha).eq('ativo', true);
-                    if (profs && profs.length > 0) {
-                        localStorage.setItem('mentorcr_user_id', profs[0].id);
-                        localStorage.setItem('mentorcr_user_nome', profs[0].nome);
-                        localStorage.setItem('mentorcr_user_tipo', 'professor');
-                        window.location.href = 'professor.html';
-                    } else {
-                        err.textContent = 'Email ou senha incorretos.';
-                        err.style.display = 'block';
-                    }
-                } else {
-                    const { data: als } = await sb.from('alunos').select('*').eq('email', email).eq('senha', senha).eq('ativo', true);
-                    if (als && als.length > 0) {
-                        localStorage.setItem('mentorcr_user_id', als[0].id);
-                        localStorage.setItem('mentorcr_user_nome', als[0].nome);
-                        localStorage.setItem('mentorcr_user_tipo', 'aluno');
-                        window.location.href = 'aluno.html';
-                    } else {
-                        err.textContent = 'Email ou senha incorretos.';
-                        err.style.display = 'block';
-                    }
-                }
-            } catch (e) {
-                err.textContent = 'Erro de conexao.';
-                err.style.display = 'block';
-            }
-            hideLoading();
-        });
-    </script>
+</div>
+<div class="footer">Criado por <span>Matheus Pacifico Evangelista</span> | <a href="https://wa.me/5579996458399">(79) 99645-8399</a></div>
+<script src="supabase.js"></script>
+<script>
+$('btnLogin').addEventListener('click', async () => {
+    const tipo = $('loginTipo').value, email = $('loginEmail').value.trim(), senha = $('loginSenha').value.trim(), err = $('loginError');
+    err.style.display = 'none';
+    if (!email || !senha) { err.textContent = 'Preencha todos os campos.'; err.style.display = 'block'; return; }
+    showLoading();
+    try {
+        if (tipo === 'admin') {
+            const { data: cfg } = await sb.from('configuracoes').select('valor').eq('chave','admin_senha').single();
+            if (email === ADMIN_EMAIL && senha === (cfg?cfg.valor:'admin123')) window.location.href = 'admin.html';
+            else { err.textContent = 'Email ou senha incorretos.'; err.style.display = 'block'; }
+        } else if (tipo === 'professor') {
+            const { data: profs } = await sb.from('professores').select('*').eq('email',email).eq('senha',senha).eq('ativo',true);
+            if (profs && profs.length > 0) {
+                localStorage.setItem('mentorcr_user_id', profs[0].id);
+                localStorage.setItem('mentorcr_user_nome', profs[0].nome);
+                localStorage.setItem('mentorcr_user_tipo', 'professor');
+                window.location.href = 'professor.html';
+            } else { err.textContent = 'Email ou senha incorretos.'; err.style.display = 'block'; }
+        } else {
+            const { data: als } = await sb.from('alunos').select('*').eq('email',email).eq('senha',senha).eq('ativo',true);
+            if (als && als.length > 0) {
+                localStorage.setItem('mentorcr_user_id', als[0].id);
+                localStorage.setItem('mentorcr_user_nome', als[0].nome);
+                localStorage.setItem('mentorcr_user_tipo', 'aluno');
+                window.location.href = 'aluno.html';
+            } else { err.textContent = 'Email ou senha incorretos.'; err.style.display = 'block'; }
+        }
+    } catch(e) { err.textContent = 'Erro de conexao.'; err.style.display = 'block'; }
+    hideLoading();
+});
+</script>
 </body>
 </html>
