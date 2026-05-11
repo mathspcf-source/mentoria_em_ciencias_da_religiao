@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MentorCR - Professor</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="bg-pattern"></div>
+<div class="loading" id="loading"><div class="spinner"></div></div>
+
+<div class="panel-header">
+    <div class="brand"><svg viewBox="0 0 30 30"><rect x="2" y="2" width="26" height="26" rx="7" fill="url(#grad)"/><text x="15" y="19" text-anchor="middle" fill="#0f1923" font-size="11" font-weight="700">CR</text><defs><linearGradient id="grad"><stop offset="0%" stop-color="#5eead4"/><stop offset="100%" stop-color="#818cf8"/></linearGradient></defs></svg><h2>MentorCR - Professor</h2></div>
+    <div style="display:flex;align-items:center;gap:10px"><span id="nomeHeader" style="font-size:11px;color:var(--text-secondary)"></span><button class="btn-logout" onclick="logout()">Sair</button></div>
+</div>
+
+<div class="panel-content">
+    <div class="tabs" id="profTabs">
+        <button class="tab active" data-tab="turmas">Minhas Turmas</button>
+        <button class="tab" data-tab="encontros">Encontros</button>
+        <button class="tab" data-tab="revisoes">Revisoes</button>
+        <button class="tab" data-tab="biblioteca">Biblioteca</button>
+    </div>
+
+    <div id="turmas" class="tab-content active"><h3 class="section-title">Minhas Turmas</h3><div class="cards-grid" id="cardsTurmas"></div></div>
+    <div id="encontros" class="tab-content"><div style="display:flex;justify-content:space-between;margin-bottom:14px"><h3 class="section-title">Encontros</h3><button class="btn btn-primary" onclick="openModal('modalEncontro')">Novo</button></div><div class="table-container"><table><thead><tr><th>Turma</th><th>Data</th><th>Horario</th><th>Meet</th><th>Material</th><th>Acoes</th></tr></thead><tbody id="tabelaEncontros"></tbody></table></div></div>
+    <div id="revisoes" class="tab-content"><h3 class="section-title">Trabalhos para Revisao</h3><div class="table-container"><table><thead><tr><th>Aluno</th><th>Turma</th><th>Trabalho</th><th>Envio</th><th>Status</th><th>Acoes</th></tr></thead><tbody id="tabelaRevisoes"></tbody></table></div></div>
+    <div id="biblioteca" class="tab-content"><h3 class="section-title">Biblioteca</h3><div class="biblioteca-grid" id="gridBiblioteca"></div></div>
+</div>
+
+<div id="modalEncontro" class="modal"><div class="modal-content"><div class="modal-header"><h3>Agendar Encontro</h3><button class="modal-close" onclick="closeModal('modalEncontro')">&times;</button></div><form id="formEncontro"><div class="form-group"><label>Turma</label><select id="encontroTurma" required><option value="">Selecione</option></select></div><div class="form-row"><div class="form-group"><label>Data</label><input type="date" id="encontroData" required></div><div class="form-group"><label>Horario</label><input type="time" id="encontroHora" required></div></div><div class="form-group"><label>Link Meet</label><input type="url" id="encontroMeet" required></div><div class="form-group"><label>Link Material</label><input type="url" id="encontroMaterial" required></div><button type="submit" class="btn btn-primary" style="width:100%">Agendar</button></form></div></div>
+<div id="modalBarema" class="modal"><div class="modal-content"><div class="modal-header"><h3>Barema</h3><button class="modal-close" onclick="closeModal('modalBarema')">&times;</button></div><form id="formBarema"><input type="hidden" id="baremaTrabalhoId"><div class="form-row"><div class="form-group"><label>Clareza (0-10)</label><input type="number" id="bClareza" min="0" max="10" required></div><div class="form-group"><label>Fundamentacao (0-10)</label><input type="number" id="bFund" min="0" max="10" required></div></div><div class="form-row"><div class="form-group"><label>Estrutura (0-10)</label><input type="number" id="bEst" min="0" max="10" required></div><div class="form-group"><label>Originalidade (0-10)</label><input type="number" id="bOrig" min="0" max="10" required></div></div><p style="color:var(--primary)">Total: <strong id="bTotal">0</strong>/40</p><div class="form-group"><label>Comentarios</label><textarea id="bComentarios" required></textarea></div><button type="submit" class="btn btn-primary" style="width:100%">Enviar</button></form></div></div>
+
+<div class="footer">Criado por <span>Matheus Pacifico Evangelista</span> | <a href="https://wa.me/5579996458399" style="color:#34d399;text-decoration:none">(79) 99645-8399</a></div>
+
+<script src="supabase.js"></script>
+<script src="style.js"></script>
+<script>
+    const userId = localStorage.getItem('mentorcr_user_id');
+    const userNome = localStorage.getItem('mentorcr_user_nome');
+    if (!userId) window.location.href = 'index.html';
+    currentUserId = userId;
+    $('nomeHeader').textContent = userNome || 'Professor';
+
+    document.querySelectorAll('#profTabs .tab').forEach(tab => {
+        tab.addEventListener('click', function() {
+            document.querySelectorAll('#profTabs .tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            this.classList.add('active');
+            const target = $(this.dataset.tab);
+            if (target) target.classList.add('active');
+            if (this.dataset.tab === 'turmas') carregarTurmas();
+            else if (this.dataset.tab === 'encontros') carregarEncontros();
+            else if (this.dataset.tab === 'revisoes') carregarRevisoes();
+            else if (this.dataset.tab === 'biblioteca') carregarBiblioteca();
+        });
+    });
+
+    async function carregarTurmas() {
+        const { data } = await sb.from('turmas').select('*').eq('ativo', true).eq('professor_id', currentUserId);
+        $('cardsTurmas').innerHTML = (!data || data.length === 0) ? '<div class="empty-state">Nenhuma turma atribuida</div>' : data.map(t => `<div class="card"><div class="card-icon" style="background:rgba(129,140,248,.12);color:var(--accent)">T</div><h3>${t.nome}</h3><p style="font-size:11px;color:var(--text-secondary)">${t.descricao}</p><p style="font-size:10px">Carga: ${t.carga} | Valor: R$ ${Number(t.valor).toFixed(2)}</p></div>`).join('');
+    }
+
+    async function carregarSelectTurmas() {
+        const { data } = await sb.from('turmas').select('*').eq('ativo', true).eq('professor_id', currentUserId);
+        const s = $('encontroTurma');
+        s.innerHTML = '<option value="">Selecione</option>';
+        if (!data || data.length === 0) s.innerHTML += '<option disabled>Nenhuma turma</option>';
+        else data.forEach(t => s.innerHTML += `<option value="${t.id}">${t.nome}</option>`);
+    }
+
+    async function salvarEncontro(e) {
+        e.preventDefault();
+        const tid = $('encontroTurma').value, data = $('encontroData').value, hora = $('encontroHora').value;
+        const meet = $('encontroMeet').value, mat = $('encontroMaterial').value;
+        if (!tid || !data || !hora || !meet || !mat) { alert('Preencha todos os campos.'); return; }
+        showLoading();
+        await sb.from('encontros').insert({ id: uid(), turma_id: tid, data, hora, link_meet: meet, link_material: mat });
+        hideLoading();
+        closeModal('modalEncontro'); $('formEncontro').reset();
+        carregarEncontros(); toast('Encontro agendado!');
+    }
+
+    async function carregarEncontros() {
+        const { data: tu } = await sb.from('turmas').select('id,nome').eq('professor_id', currentUserId);
+        if (!tu || tu.length === 0) { $('tabelaEncontros').innerHTML = '<tr><td colspan="6" class="empty-state">Nenhum encontro</td></tr>'; return; }
+        const ids = tu.map(t => t.id);
+        const { data: en } = await sb.from('encontros').select('*').in('turma_id', ids).order('data', { ascending: true });
+        $('tabelaEncontros').innerHTML = (!en || en.length === 0) ? '<tr><td colspan="6" class="empty-state">Nenhum encontro</td></tr>' : en.map(e => { const t = tu.find(x => x.id == e.turma_id); return `<tr><td>${t ? t.nome : '-'}</td><td>${e.data}</td><td>${e.hora}</td><td><a href="${e.link_meet}" target="_blank">Meet</a></td><td><a href="${e.link_material}" target="_blank">Material</a></td><td><button class="btn btn-danger btn-sm" onclick="removerEncontro('${e.id}')">X</button></td></tr>`; }).join('');
+    }
+
+    async function removerEncontro(id) { showLoading(); await sb.from('encontros').delete().eq('id', id); hideLoading(); carregarEncontros(); }
+
+    async function carregarRevisoes() {
+        const { data: tu } = await sb.from('turmas').select('id,nome').eq('professor_id', currentUserId);
+        if (!tu || tu.length === 0) { $('tabelaRevisoes').innerHTML = '<tr><td colspan="6" class="empty-state">Nenhum trabalho</td></tr>'; return; }
+        const ids = tu.map(t => t.id);
+        const { data: tr } = await sb.from('trabalhos').select('*').in('turma_id', ids).order('created_at', { ascending: false });
+        if (!tr || tr.length === 0) { $('tabelaRevisoes').innerHTML = '<tr><td colspan="6" class="empty-state">Nenhum trabalho</td></tr>'; return; }
+        const { data: al } = await sb.from('alunos').select('id,nome');
+        const ma = {}; if (al) al.forEach(a => ma[a.id] = a.nome);
+        $('tabelaRevisoes').innerHTML = tr.map(t => {
+            const btn = t.status !== 'devolvido' ? `<button class="btn btn-outline btn-sm" onclick="abrirBarema('${t.id}')">Avaliar</button>` : 'Concluido';
+            const nt = tu.find(x => x.id == t.turma_id);
+            return `<tr><td>${ma[t.aluno_id] || '-'}</td><td>${nt ? nt.nome : '-'}</td><td>${t.titulo}</td><td>${t.data_envio}</td><td>${t.status === 'devolvido' ? '<span class="badge badge-success">Devolvido</span>' : '<span class="badge badge-warning">Aguardando</span>'}</td><td>${btn}</td></tr>`;
+        }).join('');
+    }
+
+    function abrirBarema(id) {
+        $('baremaTrabalhoId').value = id;
+        openModal('modalBarema');
+        ['bClareza', 'bFund', 'bEst', 'bOrig'].forEach(c => {
+            $(c).oninput = () => {
+                $('bTotal').textContent = ['bClareza', 'bFund', 'bEst', 'bOrig'].reduce((s, x) => s + (parseInt($(x).value) || 0), 0);
+            };
+        });
+    }
+
+    async function salvarBarema(e) {
+        e.preventDefault();
+        const ba = { clareza: +$('bClareza').value, fundamentacao: +$('bFund').value, estrutura: +$('bEst').value, originalidade: +$('bOrig').value };
+        showLoading();
+        await sb.from('trabalhos').update({ barema: ba, devolutiva: $('bComentarios').value, status: 'devolvido', data_devolucao: new Date().toISOString().split('T')[0] }).eq('id', $('baremaTrabalhoId').value);
+        hideLoading();
+        closeModal('modalBarema'); $('formBarema').reset();
+        carregarRevisoes(); toast('Devolutiva enviada!');
+    }
+
+    async function carregarBiblioteca() {
+        const { data } = await sb.from('biblioteca').select('*').order('created_at', { ascending: false });
+        $('gridBiblioteca').innerHTML = (!data || data.length === 0) ? '<div class="empty-state">Nenhum material</div>' : data.map(b => `<div class="biblioteca-item"><h4>${b.titulo}</h4><p>${b.descricao}</p><a href="${b.link}" target="_blank">Acessar</a></div>`).join('');
+    }
+
+    const origOpenModal = openModal;
+    openModal = function(id) { origOpenModal(id); if (id === 'modalEncontro') carregarSelectTurmas(); };
+
+    $('formEncontro').addEventListener('submit', salvarEncontro);
+    $('formBarema').addEventListener('submit', salvarBarema);
+
+    carregarTurmas();
+</script>
+</body>
+</html>
