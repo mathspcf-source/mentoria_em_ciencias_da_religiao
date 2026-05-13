@@ -3,6 +3,17 @@
 <head>
     <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MentorCR - Professor</title>
+    <script>
+        (function() {
+            const d = localStorage.getItem('mentorcr_session');
+            if (!d) { window.location.href = 'index.html'; return; }
+            try {
+                const s = JSON.parse(d);
+                if (Date.now() - s.timestamp > 7200000) { localStorage.removeItem('mentorcr_session'); window.location.href = 'index.html'; return; }
+                if (s.tipo !== 'professor') { window.location.href = 'index.html'; return; }
+            } catch(e) { window.location.href = 'index.html'; }
+        })();
+    </script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <link rel="stylesheet" href="style.css">
 </head>
@@ -40,35 +51,23 @@
 <script src="supabase.js"></script>
 <script>
 const userId=localStorage.getItem('mentorcr_user_id'),userNome=localStorage.getItem('mentorcr_user_nome');
-if(!userId)window.location.href='index.html';
 currentUserId=userId;$('nomeHeader').textContent=userNome||'Professor';
 
 document.querySelectorAll('#sidebarNav button').forEach(btn=>{btn.addEventListener('click',function(){document.querySelectorAll('#sidebarNav button').forEach(b=>b.classList.remove('active'));this.classList.add('active');const s=this.dataset.section;document.querySelectorAll('[id^="section-"]').forEach(x=>x.classList.add('hidden'));const t=$('section-'+s);if(t)t.classList.remove('hidden');const a={turmas:carregarTurmas,encontros:carregarEncontros,revisoes:carregarRevisoes,alunos:carregarAlunos,biblioteca:carregarBiblioteca,perfil:carregarPerfil};if(a[s])a[s]()})});
-
 async function carregarTurmas(){const{data}=await sb.from('turmas').select('*').eq('ativo',true).eq('professor_id',currentUserId);$('cardsTurmas').innerHTML=(!data||data.length===0)?'<div class="empty-state" style="grid-column:1/-1">Nenhuma turma atribuida</div>':data.map(t=>`<div class="card card-purple"><div class="card-icon">T</div><div class="card-label">${t.nome}</div><div class="card-value" style="font-size:15px;font-weight:400">${t.descricao}</div><div style="font-size:10px;color:var(--text-light);margin-top:6px">Carga: ${t.carga} | Valor: R$ ${Number(t.valor).toFixed(2)}</div></div>`).join('')}
-
 async function carregarSelectTurmas(){const{data}=await sb.from('turmas').select('*').eq('ativo',true).eq('professor_id',currentUserId);const s=$('encontroTurma');s.innerHTML='<option value="">Selecione</option>';if(!data||data.length===0)s.innerHTML+='<option disabled>Nenhuma turma disponivel</option>';else data.forEach(t=>s.innerHTML+=`<option value="${t.id}">${t.nome}</option>`)}
-
 async function salvarEncontro(e){e.preventDefault();const tid=$('encontroTurma').value,d=$('encontroData').value,h=$('encontroHora').value,m=$('encontroMeet').value,mt=$('encontroMaterial').value;if(!tid||!d||!h||!m||!mt){alert('Preencha todos os campos.');return}showLoading();await sb.from('encontros').insert({id:uid(),turma_id:tid,data:d,hora:h,link_meet:m,link_material:mt});hideLoading();closeModal('modalEncontro');$('formEncontro').reset();carregarEncontros();toast('Encontro agendado com sucesso!')}
-
 async function carregarEncontros(){const{data:tu}=await sb.from('turmas').select('id,nome').eq('professor_id',currentUserId);if(!tu||tu.length===0){$('tabelaEncontros').innerHTML='<tr><td colspan="6" class="empty-state">Nenhum encontro agendado</td></tr>';return}const ids=tu.map(t=>t.id);const{data:en}=await sb.from('encontros').select('*').in('turma_id',ids).order('data',{ascending:true});$('tabelaEncontros').innerHTML=(!en||en.length===0)?'<tr><td colspan="6" class="empty-state">Nenhum encontro agendado</td></tr>':en.map(e=>{const t=tu.find(x=>x.id==e.turma_id);return`<tr><td>${t?t.nome:'-'}</td><td>${e.data}</td><td>${e.hora}</td><td><a href="${e.link_meet}" target="_blank">Acessar Meet</a></td><td><a href="${e.link_material}" target="_blank">Acessar Material</a></td><td><button class="btn btn-danger btn-xs" onclick="removerEncontro('${e.id}')">X</button></td></tr>`}).join('')}
 async function removerEncontro(id){showLoading();await sb.from('encontros').delete().eq('id',id);hideLoading();carregarEncontros()}
-
 async function carregarRevisoes(){const{data:tu}=await sb.from('turmas').select('id,nome').eq('professor_id',currentUserId);if(!tu||tu.length===0){$('tabelaRevisoes').innerHTML='<tr><td colspan="9" class="empty-state">Nenhum trabalho enviado</td></tr>';return}const ids=tu.map(t=>t.id);const{data:tr}=await sb.from('trabalhos').select('*').in('turma_id',ids).order('created_at',{ascending:false});if(!tr||tr.length===0){$('tabelaRevisoes').innerHTML='<tr><td colspan="9" class="empty-state">Nenhum trabalho enviado</td></tr>';return}const{data:al}=await sb.from('alunos').select('id,nome');const ma={};if(al)al.forEach(a=>ma[a.id]=a.nome);$('tabelaRevisoes').innerHTML=tr.map(t=>{const btn=t.status!=='devolvido'?`<button class="btn btn-outline btn-xs" onclick="abrirBarema('${t.id}')">Avaliar</button>`:'Concluido';const nt=tu.find(x=>x.id==t.turma_id);let b='-';if(t.barema)b=`${(t.barema.clareza||0)+(t.barema.fundamentacao||0)+(t.barema.estrutura||0)+(t.barema.originalidade||0)}/40`;const dl=t.arquivo_original?`<a href="${t.arquivo_original}" download="${t.nome_arquivo_original||'trabalho'}">Baixar PDF</a>`:'-';return`<tr><td>${ma[t.aluno_id]||'-'}</td><td>${nt?nt.nome:'-'}</td><td>${t.titulo}</td><td>${dl}</td><td>${t.data_envio}</td><td>${t.status==='devolvido'?'<span class="badge badge-success">Devolvido</span>':'<span class="badge badge-warning">Aguardando</span>'}</td><td>${b}</td><td style="max-width:100px;overflow:hidden;text-overflow:ellipsis">${t.devolutiva||'-'}</td><td>${btn}</td></tr>`}).join('')}
-
 function abrirBarema(id){$('baremaTrabalhoId').value=id;openModal('modalBarema');['bClareza','bFund','bEst','bOrig'].forEach(c=>{$(c).oninput=()=>{$('bTotal').textContent=['bClareza','bFund','bEst','bOrig'].reduce((s,x)=>s+(parseInt($(x).value)||0),0)}})}
-
 async function salvarBarema(e){e.preventDefault();const tid=$('baremaTrabalhoId').value;const ba={clareza:+$('bClareza').value,fundamentacao:+$('bFund').value,estrutura:+$('bEst').value,originalidade:+$('bOrig').value};const update={barema:ba,devolutiva:$('bComentarios').value,status:'devolvido',data_devolucao:new Date().toISOString().split('T')[0]};const arq=$('bArquivo');if(arq.files[0]){const reader=new FileReader();reader.onload=async function(ev){update.arquivo_corrigido=ev.target.result;update.nome_arquivo_corrigido=arq.files[0].name;showLoading();await sb.from('trabalhos').update(update).eq('id',tid);hideLoading();finalizarBarema()};reader.readAsDataURL(arq.files[0])}else{showLoading();await sb.from('trabalhos').update(update).eq('id',tid);hideLoading();finalizarBarema()}}
 function finalizarBarema(){closeModal('modalBarema');$('formBarema').reset();$('bTotal').textContent='0';carregarRevisoes();toast('Devolutiva enviada com sucesso!')}
-
 async function carregarAlunos(){const{data:tu}=await sb.from('turmas').select('id,nome').eq('professor_id',currentUserId);if(!tu||tu.length===0){$('tabelaAlunosProf').innerHTML='<tr><td colspan="4" class="empty-state">Nenhum aluno matriculado</td></tr>';return}const ids=tu.map(t=>t.id);const{data:al}=await sb.from('alunos').select('*').in('turma_id',ids).eq('ativo',true);if(!al||al.length===0){$('tabelaAlunosProf').innerHTML='<tr><td colspan="4" class="empty-state">Nenhum aluno matriculado</td></tr>';return}const{data:tr}=await sb.from('trabalhos').select('aluno_id').in('turma_id',ids);const cont={};if(tr)tr.forEach(t=>cont[t.aluno_id]=(cont[t.aluno_id]||0)+1);$('tabelaAlunosProf').innerHTML=al.map(a=>{const t=tu.find(x=>x.id==a.turma_id);return`<tr><td>${a.nome}</td><td>${a.email}</td><td>${t?t.nome:'-'}</td><td>${cont[a.id]||0}</td></tr>`}).join('')}
-
 async function carregarBiblioteca(){const{data}=await sb.from('biblioteca').select('*').order('created_at',{ascending:false});$('gridBiblioteca').innerHTML=(!data||data.length===0)?'<div class="empty-state">Nenhum material disponivel</div>':data.map(b=>`<div class="bib-item"><h4>${b.titulo}</h4><p>${b.descricao}</p><a href="${b.link}" target="_blank">Acessar Material</a></div>`).join('')}
-
 async function carregarPerfil(){const{data}=await sb.from('professores').select('*').eq('id',currentUserId).single();if(data){$('profNomePerfil').value=data.nome;$('profEmailPerfil').value=data.email;$('profEspecialidadePerfil').value=data.especialidade}const{data:ft}=await sb.from('fotos_perfil').select('foto_base64').eq('user_key','prof_'+currentUserId).single();const el=$('profAvatar');el.innerHTML=ft?`<img src="${ft.foto_base64}" style="width:100%;height:100%;object-fit:cover">`:'P'}
 async function atualizarFoto(){const f=$('profPhoto').files[0];if(!f)return;const r=new FileReader();r.onload=async e=>{showLoading();await sb.from('fotos_perfil').upsert({id:uid(),user_key:'prof_'+currentUserId,foto_base64:e.target.result},{onConflict:'user_key'});hideLoading();carregarPerfil();toast('Foto atualizada!')};r.readAsDataURL(f)}
 async function salvarPerfil(){const d={nome:$('profNomePerfil').value,email:$('profEmailPerfil').value,especialidade:$('profEspecialidadePerfil').value};const s=$('profSenhaPerfil').value;if(s)d.senha=s;showLoading();await sb.from('professores').update(d).eq('id',currentUserId);hideLoading();$('nomeHeader').textContent=d.nome;localStorage.setItem('mentorcr_user_nome',d.nome);toast('Perfil atualizado!')}
-
 const oOM=openModal;openModal=function(id){oOM(id);if(id==='modalEncontro')carregarSelectTurmas()};
 $('formEncontro').addEventListener('submit',salvarEncontro);$('formBarema').addEventListener('submit',salvarBarema);
 carregarTurmas();
