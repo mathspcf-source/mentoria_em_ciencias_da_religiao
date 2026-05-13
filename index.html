@@ -54,16 +54,22 @@ $('btnLogin').addEventListener('click',async()=>{
     try{
         if(t==='admin'){
             const{data:c}=await sb.from('configuracoes').select('valor').eq('chave','admin_senha').single();
-            if(e===ADMIN_EMAIL&&s===(c?c.valor:'admin123'))window.location.href='admin.html';
-            else{r.textContent='Email ou senha incorretos.';r.style.display='block'}
+            if(e===ADMIN_EMAIL&&s===(c?c.valor:'admin123')){
+                criarSessao('admin','admin','Administrador');
+                window.location.href='admin.html';
+            }else{r.textContent='Email ou senha incorretos.';r.style.display='block'}
         }else if(t==='professor'){
             const{data:p}=await sb.from('professores').select('*').eq('email',e).eq('senha',s).eq('ativo',true);
-            if(p&&p.length>0){localStorage.setItem('mentorcr_user_id',p[0].id);localStorage.setItem('mentorcr_user_nome',p[0].nome);localStorage.setItem('mentorcr_user_tipo','professor');window.location.href='professor.html'}
-            else{r.textContent='Email ou senha incorretos.';r.style.display='block'}
+            if(p&&p.length>0){
+                criarSessao('professor',p[0].id,p[0].nome);
+                window.location.href='professor.html';
+            }else{r.textContent='Email ou senha incorretos.';r.style.display='block'}
         }else{
             const{data:a}=await sb.from('alunos').select('*').eq('email',e).eq('senha',s).eq('ativo',true);
-            if(a&&a.length>0){localStorage.setItem('mentorcr_user_id',a[0].id);localStorage.setItem('mentorcr_user_nome',a[0].nome);localStorage.setItem('mentorcr_user_tipo','aluno');window.location.href='aluno.html'}
-            else{r.textContent='Email ou senha incorretos.';r.style.display='block'}
+            if(a&&a.length>0){
+                criarSessao('aluno',a[0].id,a[0].nome);
+                window.location.href='aluno.html';
+            }else{r.textContent='Email ou senha incorretos.';r.style.display='block'}
         }
     }catch(ex){r.textContent='Erro de conexao.';r.style.display='block'}
     hideLoading()
