@@ -21,22 +21,70 @@
 <div class="loading" id="loading"><div class="spinner"></div></div>
 
 <nav class="sidebar">
-    <div class="sidebar-logo"><svg viewBox="0 0 30 30"><rect x="2" y="2" width="26" height="26" rx="7" fill="#3182ce"/><text x="15" y="20" text-anchor="middle" fill="#fff" font-size="12" font-weight="600">CR</text></svg><span>MentorCR</span></div>
-    <div class="sidebar-nav" id="sidebarNav">
-        <button class="active" data-section="turmas"><span class="nav-icon">T</span>Minhas Turmas</button>
-        <button data-section="encontros"><span class="nav-icon">A</span>Encontros</button>
-        <button data-section="revisoes"><span class="nav-icon">R</span>Revisoes</button>
-        <button data-section="alunos"><span class="nav-icon">E</span>Meus Alunos</button>
-        <button data-section="biblioteca"><span class="nav-icon">B</span>Biblioteca</button>
-        <button data-section="perfil"><span class="nav-icon">@</span>Perfil</button>
+    <div class="sidebar-logo">
+        <svg viewBox="0 0 30 30"><rect x="2" y="2" width="26" height="26" rx="7" fill="#3b82f6"/><text x="15" y="20" text-anchor="middle" fill="#fff" font-size="12" font-weight="600">CR</text></svg>
+        <span>MentorCR</span>
     </div>
-    <div class="sidebar-footer"><button onclick="logout()">Sair</button></div>
+    <div class="sidebar-user">
+        <div class="sidebar-avatar" id="sidebarAvatar">P</div>
+        <div class="sidebar-user-info">
+            <div class="sidebar-user-name" id="sidebarNome">Professor</div>
+            <div class="sidebar-user-role">Docente</div>
+        </div>
+    </div>
+    <div class="sidebar-nav" id="sidebarNav">
+        <button class="active" data-section="turmas">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/></svg>
+            Minhas Turmas
+        </button>
+        <button data-section="encontros">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            Encontros
+        </button>
+        <button data-section="revisoes">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+            Revisoes
+        </button>
+        <button data-section="alunos">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M16 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/></svg>
+            Meus Alunos
+        </button>
+        <button data-section="biblioteca">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>
+            Biblioteca
+        </button>
+        <button data-section="perfil">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+            Perfil
+        </button>
+    </div>
+    <div class="sidebar-footer">
+        <button onclick="logout()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+            Sair
+        </button>
+    </div>
 </nav>
 
 <main class="main">
-    <header class="header"><h1>Professor</h1><div class="user-info"><span id="nomeHeader">Professor</span></div></header>
+    <header class="header">
+        <div class="header-left">
+            <h1>Professor</h1>
+            <p>Gerencie suas turmas, encontros e correcoes</p>
+        </div>
+        <div class="header-right">
+            <div class="header-search">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                <input type="text" placeholder="Buscar...">
+            </div>
+            <div class="header-notify">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
+                <span class="dot"></span>
+            </div>
+        </div>
+    </header>
     <div class="content">
-        <div id="section-turmas"><h2>Minhas Turmas</h2><div class="cards-grid" id="cardsTurmas"></div></div>
+        <div id="section-turmas"><h2>Minhas Turmas</h2><div class="stats-grid" id="cardsTurmas"></div></div>
         <div id="section-encontros" class="hidden"><h2>Encontros</h2><button class="btn btn-primary" onclick="openModal('modalEncontro')" style="margin-bottom:12px">+ Novo Encontro</button><div class="table-container"><table><thead><tr><th>Turma</th><th>Data</th><th>Horario</th><th>Meet</th><th>Material</th><th></th></tr></thead><tbody id="tabelaEncontros"></tbody></table></div></div>
         <div id="section-revisoes" class="hidden"><h2>Trabalhos para Revisao</h2><div class="table-container"><table><thead><tr><th>Aluno</th><th>Turma</th><th>Trabalho</th><th>Arquivo</th><th>Envio</th><th>Status</th><th>Barema</th><th>Devolutiva</th><th></th></tr></thead><tbody id="tabelaRevisoes"></tbody></table></div></div>
         <div id="section-alunos" class="hidden"><h2>Meus Alunos</h2><div class="table-container"><table><thead><tr><th>Nome</th><th>Email</th><th>Turma</th><th>Trabalhos</th></tr></thead><tbody id="tabelaAlunosProf"></tbody></table></div></div>
@@ -46,28 +94,39 @@
 </main>
 
 <div id="modalEncontro" class="modal"><div class="modal-content"><div class="modal-header"><h3>Agendar Encontro</h3><button class="modal-close" onclick="closeModal('modalEncontro')">&times;</button></div><form id="formEncontro"><div class="form-group"><label>Turma</label><select id="encontroTurma" required><option value="">Selecione</option></select></div><div class="form-row"><div class="form-group"><label>Data</label><input type="date" id="encontroData" required></div><div class="form-group"><label>Horario</label><input type="time" id="encontroHora" required></div></div><div class="form-group"><label>Link Google Meet</label><input type="url" id="encontroMeet" required></div><div class="form-group"><label>Link Material</label><input type="url" id="encontroMaterial" required></div><button type="submit" class="btn btn-primary" style="width:100%">Agendar Encontro</button></form></div></div>
-<div id="modalBarema" class="modal"><div class="modal-content"><div class="modal-header"><h3>Barema e Devolutiva</h3><button class="modal-close" onclick="closeModal('modalBarema')">&times;</button></div><form id="formBarema"><input type="hidden" id="baremaTrabalhoId"><h4 style="font-family:'Georgia',serif;font-size:14px;font-weight:600;color:#1a365d;margin-bottom:10px">Barema de Correcao</h4><div class="form-row"><div class="form-group"><label>Clareza na Argumentacao (0-10)</label><input type="number" id="bClareza" min="0" max="10" required></div><div class="form-group"><label>Fundamentacao Teorica (0-10)</label><input type="number" id="bFund" min="0" max="10" required></div></div><div class="form-row"><div class="form-group"><label>Estrutura do Texto (0-10)</label><input type="number" id="bEst" min="0" max="10" required></div><div class="form-group"><label>Originalidade (0-10)</label><input type="number" id="bOrig" min="0" max="10" required></div></div><p style="color:var(--primary);font-size:13px;font-weight:600;margin-bottom:10px">Nota Total: <strong id="bTotal">0</strong>/40</p><h4 style="font-family:'Georgia',serif;font-size:14px;font-weight:600;color:#1a365d;margin-bottom:10px">Devolutiva</h4><div class="form-group"><label>Comentarios</label><textarea id="bComentarios" required></textarea></div><div class="form-group"><label>Arquivo Corrigido (opcional)</label><input type="file" id="bArquivo"></div><button type="submit" class="btn btn-primary" style="width:100%">Enviar Devolutiva</button></form></div></div>
+<div id="modalBarema" class="modal"><div class="modal-content"><div class="modal-header"><h3>Barema e Devolutiva</h3><button class="modal-close" onclick="closeModal('modalBarema')">&times;</button></div><form id="formBarema"><input type="hidden" id="baremaTrabalhoId"><h4 style="font-size:14px;font-weight:600;color:var(--text);margin-bottom:10px">Barema de Correcao</h4><div class="form-row"><div class="form-group"><label>Clareza na Argumentacao (0-10)</label><input type="number" id="bClareza" min="0" max="10" required></div><div class="form-group"><label>Fundamentacao Teorica (0-10)</label><input type="number" id="bFund" min="0" max="10" required></div></div><div class="form-row"><div class="form-group"><label>Estrutura do Texto (0-10)</label><input type="number" id="bEst" min="0" max="10" required></div><div class="form-group"><label>Originalidade (0-10)</label><input type="number" id="bOrig" min="0" max="10" required></div></div><p style="color:var(--primary);font-size:13px;font-weight:600;margin-bottom:10px">Nota Total: <strong id="bTotal">0</strong>/40</p><h4 style="font-size:14px;font-weight:600;color:var(--text);margin-bottom:10px">Devolutiva</h4><div class="form-group"><label>Comentarios</label><textarea id="bComentarios" required></textarea></div><div class="form-group"><label>Arquivo Corrigido (opcional)</label><input type="file" id="bArquivo"></div><button type="submit" class="btn btn-primary" style="width:100%">Enviar Devolutiva</button></form></div></div>
 
 <script src="supabase.js"></script>
 <script>
 const userId=localStorage.getItem('mentorcr_user_id'),userNome=localStorage.getItem('mentorcr_user_nome');
-currentUserId=userId;$('nomeHeader').textContent=userNome||'Professor';
+currentUserId=userId;$('sidebarNome').textContent=userNome||'Professor';$('sidebarAvatar').textContent=(userNome||'P').charAt(0).toUpperCase();
 
 document.querySelectorAll('#sidebarNav button').forEach(btn=>{btn.addEventListener('click',function(){document.querySelectorAll('#sidebarNav button').forEach(b=>b.classList.remove('active'));this.classList.add('active');const s=this.dataset.section;document.querySelectorAll('[id^="section-"]').forEach(x=>x.classList.add('hidden'));const t=$('section-'+s);if(t)t.classList.remove('hidden');const a={turmas:carregarTurmas,encontros:carregarEncontros,revisoes:carregarRevisoes,alunos:carregarAlunos,biblioteca:carregarBiblioteca,perfil:carregarPerfil};if(a[s])a[s]()})});
-async function carregarTurmas(){const{data}=await sb.from('turmas').select('*').eq('ativo',true).eq('professor_id',currentUserId);$('cardsTurmas').innerHTML=(!data||data.length===0)?'<div class="empty-state" style="grid-column:1/-1">Nenhuma turma atribuida</div>':data.map(t=>`<div class="card card-purple"><div class="card-icon">T</div><div class="card-label">${t.nome}</div><div class="card-value" style="font-size:15px;font-weight:400">${t.descricao}</div><div style="font-size:10px;color:var(--text-light);margin-top:6px">Carga: ${t.carga} | Valor: R$ ${Number(t.valor).toFixed(2)}</div></div>`).join('')}
+
+async function carregarTurmas(){const{data}=await sb.from('turmas').select('*').eq('ativo',true).eq('professor_id',currentUserId);$('cardsTurmas').innerHTML=(!data||data.length===0)?'<div class="empty-state" style="grid-column:1/-1">Nenhuma turma atribuida</div>':data.map(t=>`<div class="stat-card stat-purple" style="cursor:default;flex-direction:column;align-items:flex-start"><div class="stat-icon" style="margin-bottom:8px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22" height="22"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/></svg></div><div class="stat-label">${t.nome}</div><div class="stat-value" style="font-size:14px;font-weight:400">${t.descricao}</div><div style="font-size:10px;color:var(--text-light);margin-top:4px">Carga: ${t.carga} | R$ ${Number(t.valor).toFixed(2)}</div></div>`).join('')}
+
 async function carregarSelectTurmas(){const{data}=await sb.from('turmas').select('*').eq('ativo',true).eq('professor_id',currentUserId);const s=$('encontroTurma');s.innerHTML='<option value="">Selecione</option>';if(!data||data.length===0)s.innerHTML+='<option disabled>Nenhuma turma disponivel</option>';else data.forEach(t=>s.innerHTML+=`<option value="${t.id}">${t.nome}</option>`)}
+
 async function salvarEncontro(e){e.preventDefault();const tid=$('encontroTurma').value,d=$('encontroData').value,h=$('encontroHora').value,m=$('encontroMeet').value,mt=$('encontroMaterial').value;if(!tid||!d||!h||!m||!mt){alert('Preencha todos os campos.');return}showLoading();await sb.from('encontros').insert({id:uid(),turma_id:tid,data:d,hora:h,link_meet:m,link_material:mt});hideLoading();closeModal('modalEncontro');$('formEncontro').reset();carregarEncontros();toast('Encontro agendado com sucesso!')}
+
 async function carregarEncontros(){const{data:tu}=await sb.from('turmas').select('id,nome').eq('professor_id',currentUserId);if(!tu||tu.length===0){$('tabelaEncontros').innerHTML='<tr><td colspan="6" class="empty-state">Nenhum encontro agendado</td></tr>';return}const ids=tu.map(t=>t.id);const{data:en}=await sb.from('encontros').select('*').in('turma_id',ids).order('data',{ascending:true});$('tabelaEncontros').innerHTML=(!en||en.length===0)?'<tr><td colspan="6" class="empty-state">Nenhum encontro agendado</td></tr>':en.map(e=>{const t=tu.find(x=>x.id==e.turma_id);return`<tr><td>${t?t.nome:'-'}</td><td>${e.data}</td><td>${e.hora}</td><td><a href="${e.link_meet}" target="_blank">Acessar Meet</a></td><td><a href="${e.link_material}" target="_blank">Acessar Material</a></td><td><button class="btn btn-danger btn-xs" onclick="removerEncontro('${e.id}')">X</button></td></tr>`}).join('')}
 async function removerEncontro(id){showLoading();await sb.from('encontros').delete().eq('id',id);hideLoading();carregarEncontros()}
+
 async function carregarRevisoes(){const{data:tu}=await sb.from('turmas').select('id,nome').eq('professor_id',currentUserId);if(!tu||tu.length===0){$('tabelaRevisoes').innerHTML='<tr><td colspan="9" class="empty-state">Nenhum trabalho enviado</td></tr>';return}const ids=tu.map(t=>t.id);const{data:tr}=await sb.from('trabalhos').select('*').in('turma_id',ids).order('created_at',{ascending:false});if(!tr||tr.length===0){$('tabelaRevisoes').innerHTML='<tr><td colspan="9" class="empty-state">Nenhum trabalho enviado</td></tr>';return}const{data:al}=await sb.from('alunos').select('id,nome');const ma={};if(al)al.forEach(a=>ma[a.id]=a.nome);$('tabelaRevisoes').innerHTML=tr.map(t=>{const btn=t.status!=='devolvido'?`<button class="btn btn-outline btn-xs" onclick="abrirBarema('${t.id}')">Avaliar</button>`:'Concluido';const nt=tu.find(x=>x.id==t.turma_id);let b='-';if(t.barema)b=`${(t.barema.clareza||0)+(t.barema.fundamentacao||0)+(t.barema.estrutura||0)+(t.barema.originalidade||0)}/40`;const dl=t.arquivo_original?`<a href="${t.arquivo_original}" download="${t.nome_arquivo_original||'trabalho'}">Baixar PDF</a>`:'-';return`<tr><td>${ma[t.aluno_id]||'-'}</td><td>${nt?nt.nome:'-'}</td><td>${t.titulo}</td><td>${dl}</td><td>${t.data_envio}</td><td>${t.status==='devolvido'?'<span class="badge badge-success">Devolvido</span>':'<span class="badge badge-warning">Aguardando</span>'}</td><td>${b}</td><td style="max-width:100px;overflow:hidden;text-overflow:ellipsis">${t.devolutiva||'-'}</td><td>${btn}</td></tr>`}).join('')}
+
 function abrirBarema(id){$('baremaTrabalhoId').value=id;openModal('modalBarema');['bClareza','bFund','bEst','bOrig'].forEach(c=>{$(c).oninput=()=>{$('bTotal').textContent=['bClareza','bFund','bEst','bOrig'].reduce((s,x)=>s+(parseInt($(x).value)||0),0)}})}
+
 async function salvarBarema(e){e.preventDefault();const tid=$('baremaTrabalhoId').value;const ba={clareza:+$('bClareza').value,fundamentacao:+$('bFund').value,estrutura:+$('bEst').value,originalidade:+$('bOrig').value};const update={barema:ba,devolutiva:$('bComentarios').value,status:'devolvido',data_devolucao:new Date().toISOString().split('T')[0]};const arq=$('bArquivo');if(arq.files[0]){const reader=new FileReader();reader.onload=async function(ev){update.arquivo_corrigido=ev.target.result;update.nome_arquivo_corrigido=arq.files[0].name;showLoading();await sb.from('trabalhos').update(update).eq('id',tid);hideLoading();finalizarBarema()};reader.readAsDataURL(arq.files[0])}else{showLoading();await sb.from('trabalhos').update(update).eq('id',tid);hideLoading();finalizarBarema()}}
 function finalizarBarema(){closeModal('modalBarema');$('formBarema').reset();$('bTotal').textContent='0';carregarRevisoes();toast('Devolutiva enviada com sucesso!')}
+
 async function carregarAlunos(){const{data:tu}=await sb.from('turmas').select('id,nome').eq('professor_id',currentUserId);if(!tu||tu.length===0){$('tabelaAlunosProf').innerHTML='<tr><td colspan="4" class="empty-state">Nenhum aluno matriculado</td></tr>';return}const ids=tu.map(t=>t.id);const{data:al}=await sb.from('alunos').select('*').in('turma_id',ids).eq('ativo',true);if(!al||al.length===0){$('tabelaAlunosProf').innerHTML='<tr><td colspan="4" class="empty-state">Nenhum aluno matriculado</td></tr>';return}const{data:tr}=await sb.from('trabalhos').select('aluno_id').in('turma_id',ids);const cont={};if(tr)tr.forEach(t=>cont[t.aluno_id]=(cont[t.aluno_id]||0)+1);$('tabelaAlunosProf').innerHTML=al.map(a=>{const t=tu.find(x=>x.id==a.turma_id);return`<tr><td>${a.nome}</td><td>${a.email}</td><td>${t?t.nome:'-'}</td><td>${cont[a.id]||0}</td></tr>`}).join('')}
+
 async function carregarBiblioteca(){const{data}=await sb.from('biblioteca').select('*').order('created_at',{ascending:false});$('gridBiblioteca').innerHTML=(!data||data.length===0)?'<div class="empty-state">Nenhum material disponivel</div>':data.map(b=>`<div class="bib-item"><h4>${b.titulo}</h4><p>${b.descricao}</p><a href="${b.link}" target="_blank">Acessar Material</a></div>`).join('')}
-async function carregarPerfil(){const{data}=await sb.from('professores').select('*').eq('id',currentUserId).single();if(data){$('profNomePerfil').value=data.nome;$('profEmailPerfil').value=data.email;$('profEspecialidadePerfil').value=data.especialidade}const{data:ft}=await sb.from('fotos_perfil').select('foto_base64').eq('user_key','prof_'+currentUserId).single();const el=$('profAvatar');el.innerHTML=ft?`<img src="${ft.foto_base64}" style="width:100%;height:100%;object-fit:cover">`:'P'}
+
+async function carregarPerfil(){const{data}=await sb.from('professores').select('*').eq('id',currentUserId).single();if(data){$('profNomePerfil').value=data.nome;$('profEmailPerfil').value=data.email;$('profEspecialidadePerfil').value=data.especialidade}const{data:ft}=await sb.from('fotos_perfil').select('foto_base64').eq('user_key','prof_'+currentUserId).single();const el=$('profAvatar');const sidebarEl=$('sidebarAvatar');el.innerHTML=ft?`<img src="${ft.foto_base64}" style="width:100%;height:100%;object-fit:cover">`:(userNome||'P').charAt(0).toUpperCase();sidebarEl.innerHTML=ft?`<img src="${ft.foto_base64}" style="width:100%;height:100%;object-fit:cover">`:(userNome||'P').charAt(0).toUpperCase()}
 async function atualizarFoto(){const f=$('profPhoto').files[0];if(!f)return;const r=new FileReader();r.onload=async e=>{showLoading();await sb.from('fotos_perfil').upsert({id:uid(),user_key:'prof_'+currentUserId,foto_base64:e.target.result},{onConflict:'user_key'});hideLoading();carregarPerfil();toast('Foto atualizada!')};r.readAsDataURL(f)}
-async function salvarPerfil(){const d={nome:$('profNomePerfil').value,email:$('profEmailPerfil').value,especialidade:$('profEspecialidadePerfil').value};const s=$('profSenhaPerfil').value;if(s)d.senha=s;showLoading();await sb.from('professores').update(d).eq('id',currentUserId);hideLoading();$('nomeHeader').textContent=d.nome;localStorage.setItem('mentorcr_user_nome',d.nome);toast('Perfil atualizado!')}
+async function salvarPerfil(){const d={nome:$('profNomePerfil').value,email:$('profEmailPerfil').value,especialidade:$('profEspecialidadePerfil').value};const s=$('profSenhaPerfil').value;if(s)d.senha=s;showLoading();await sb.from('professores').update(d).eq('id',currentUserId);hideLoading();$('sidebarNome').textContent=d.nome;localStorage.setItem('mentorcr_user_nome',d.nome);toast('Perfil atualizado!')}
+
 const oOM=openModal;openModal=function(id){oOM(id);if(id==='modalEncontro')carregarSelectTurmas()};
 $('formEncontro').addEventListener('submit',salvarEncontro);$('formBarema').addEventListener('submit',salvarBarema);
 carregarTurmas();
