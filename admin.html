@@ -1,9 +1,8 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MentorCR - Admin Dashboard</title>
+    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MentorCR - Admin</title>
     <script>
         (function() {
             const d = localStorage.getItem('mentorcr_session');
@@ -16,765 +15,171 @@
         })();
     </script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 <div class="loading" id="loading"><div class="spinner"></div></div>
 
+<!-- ============ SIDEBAR ============ -->
 <nav class="sidebar">
     <div class="sidebar-logo">
-        <svg viewBox="0 0 40 40" width="40" height="40">
-            <rect x="4" y="4" width="32" height="32" rx="10" fill="#4361ee"/>
-            <text x="20" y="27" text-anchor="middle" fill="#fff" font-size="16" font-weight="700">CR</text>
-        </svg>
+        <svg viewBox="0 0 30 30"><rect x="2" y="2" width="26" height="26" rx="7" fill="#3b82f6"/><text x="15" y="20" text-anchor="middle" fill="#fff" font-size="12" font-weight="600">CR</text></svg>
         <span>MentorCR</span>
+    </div>
+    <div class="sidebar-user">
+        <div class="sidebar-avatar" id="sidebarAvatar">A</div>
+        <div class="sidebar-user-info">
+            <div class="sidebar-user-name">Administrador</div>
+            <div class="sidebar-user-role">Admin</div>
+        </div>
     </div>
     <div class="sidebar-nav" id="sidebarNav">
         <button class="active" data-section="dashboard">
-            <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-                <path d="M3 9l9-6 9 6v10a2 2 0 0 1-2 2h-5a2 2 0 0 1-2-2v-4a2 2 0 0 0-4 0v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V9z"/>
-                <polyline points="3 9 12 3 21 9"/>
-            </svg>
-            <span>Dashboard</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+            Painel
         </button>
         <button data-section="professores">
-            <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-                <path d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h.01M3 15h1m5-8h1m9 7h1M5 8h1m3-3h1m2 12h1"/>
-                <circle cx="12" cy="8" r="4"/>
-                <path d="M5 20v-2a7 7 0 0 1 14 0v2"/>
-            </svg>
-            <span>Professores</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+            Professores
         </button>
         <button data-section="alunos">
-            <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-                <path d="M12 6v4m0 0v4m0-4h4m-4 0H8m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0z"/>
-            </svg>
-            <span>Alunos</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M16 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/></svg>
+            Alunos
         </button>
         <button data-section="turmas">
-            <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-                <path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
-            </svg>
-            <span>Turmas</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/></svg>
+            Turmas
         </button>
         <button data-section="financeiro">
-            <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-                <path d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z"/>
-            </svg>
-            <span>Financeiro</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+            Financeiro
         </button>
         <button data-section="biblioteca">
-            <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-                <path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
-            </svg>
-            <span>Biblioteca</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>
+            Biblioteca
         </button>
         <button data-section="backup">
-            <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-                <path d="M4 16v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2M7 10l5 5 5-5M12 15V3"/>
-            </svg>
-            <span>Backup</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            Backup
         </button>
         <button data-section="perfil">
-            <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-                <path d="M16 7a4 4 0 1 1-8 0 4 4 0 0 1 8 0zM12 14a7 7 0 0 0-7 7h14a7 7 0 0 0-7-7z"/>
-            </svg>
-            <span>Perfil</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+            Perfil
         </button>
     </div>
     <div class="sidebar-footer">
         <button onclick="logout()">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                <path d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 0 1-3 3H6a3 3 0 0 1-3-3V7a3 3 0 0 1 3-3h4a3 3 0 0 1 3 3v1"/>
-            </svg>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
             Sair
         </button>
     </div>
 </nav>
 
+<!-- ============ MAIN ============ -->
 <main class="main">
     <header class="header">
-        <h1>Dashboard</h1>
-        <div class="user-info">
-            <div class="user-details">
-                <div class="user-name">Administrador</div>
-                <div class="user-role">Admin</div>
+        <div class="header-left">
+            <h1>Administracao</h1>
+            <p>Gerencie professores, alunos, turmas e financas</p>
+        </div>
+        <div class="header-right">
+            <div class="header-search">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                <input type="text" placeholder="Buscar...">
             </div>
-            <div class="user-avatar" id="adminAvatarHeader">A</div>
+            <div class="header-notify" id="btnNotificacoes">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
+                <span class="dot"></span>
+            </div>
         </div>
     </header>
-    
     <div class="content">
-        <!-- Dashboard Section -->
+        <!-- ============ DASHBOARD ============ -->
         <div id="section-dashboard">
-            <div class="cards-grid">
-                <div class="card card-primary">
-                    <div class="card-header">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                            <path d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h.01M3 15h1m5-8h1m9 7h1M5 8h1m3-3h1m2 12h1"/>
-                            <circle cx="12" cy="8" r="4"/>
-                            <path d="M5 20v-2a7 7 0 0 1 14 0v2"/>
-                        </svg>
-                    </div>
-                    <div class="card-value" id="totalProfessores">0</div>
-                    <div class="card-label">Professores</div>
-                    <div class="card-change">+12% este mês</div>
+            <div class="stats-grid">
+                <div class="stat-card stat-blue">
+                    <div class="stat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg></div>
+                    <div class="stat-info"><div class="stat-label">Professores</div><div class="stat-value" id="totalProfessores">0</div><div class="stat-change up">Cadastrados no sistema</div></div>
                 </div>
-                <div class="card card-success">
-                    <div class="card-header">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                            <path d="M12 6v4m0 0v4m0-4h4m-4 0H8m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0z"/>
-                        </svg>
-                    </div>
-                    <div class="card-value" id="totalAlunos">0</div>
-                    <div class="card-label">Alunos</div>
-                    <div class="card-change">+8% este mês</div>
+                <div class="stat-card stat-green">
+                    <div class="stat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg></div>
+                    <div class="stat-info"><div class="stat-label">Alunos</div><div class="stat-value" id="totalAlunos">0</div><div class="stat-change up">Matriculados ativos</div></div>
                 </div>
-                <div class="card card-warning">
-                    <div class="card-header">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                            <path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
-                        </svg>
-                    </div>
-                    <div class="card-value" id="totalTurmas">0</div>
-                    <div class="card-label">Turmas</div>
-                    <div class="card-change">+3 este mês</div>
+                <div class="stat-card stat-purple">
+                    <div class="stat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/></svg></div>
+                    <div class="stat-info"><div class="stat-label">Turmas</div><div class="stat-value" id="totalTurmas">0</div><div class="stat-change up">Em andamento</div></div>
                 </div>
-                <div class="card card-info">
-                    <div class="card-header">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                            <path d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z"/>
-                        </svg>
-                    </div>
-                    <div class="card-value" id="totalPendentes">0</div>
-                    <div class="card-label">Pagamentos Pendentes</div>
-                    <div class="card-change">R$ 0,00</div>
+                <div class="stat-card stat-gold">
+                    <div class="stat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg></div>
+                    <div class="stat-info"><div class="stat-label">Pendentes</div><div class="stat-value" id="totalPendentes">0</div><div class="stat-change down">Pagamentos em atraso</div></div>
                 </div>
+            </div>
+            <div class="charts-grid" style="margin-top:16px">
+                <div class="chart-card"><h3>Visao Geral de Atividades</h3><div class="chart-bars"><div class="chart-bar-item"><div class="chart-bar" style="height:140px"></div><div class="chart-bar-label">Prof.</div></div><div class="chart-bar-item"><div class="chart-bar yellow" style="height:100px"></div><div class="chart-bar-label">Alunos</div></div><div class="chart-bar-item"><div class="chart-bar green" style="height:120px"></div><div class="chart-bar-label">Turmas</div></div><div class="chart-bar-item"><div class="chart-bar purple" style="height:80px"></div><div class="chart-bar-label">Trab.</div></div><div class="chart-bar-item"><div class="chart-bar" style="height:160px"></div><div class="chart-bar-label">Encont.</div></div></div></div>
+                <div class="chart-card"><h3>Distribuicao</h3><div class="chart-donut"><div class="chart-donut-circle"></div><div class="chart-donut-legend"><div class="chart-donut-item"><span class="chart-donut-dot blue"></span>Professores</div><div class="chart-donut-item"><span class="chart-donut-dot yellow"></span>Alunos</div><div class="chart-donut-item"><span class="chart-donut-dot green"></span>Turmas</div></div></div></div>
             </div>
         </div>
 
-        <!-- Professores Section -->
-        <div id="section-professores" class="hidden">
-            <h2>Professores</h2>
-            <button class="btn btn-primary" onclick="openModal('modalProfessor')" style="margin-bottom:20px">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                    <path d="M12 4v16m8-8H4"/>
-                </svg>
-                Novo Professor
-            </button>
-            <div class="table-container">
-                <table>
-                    <thead>
-                        <tr><th>Nome</th><th>Email</th><th>Especialidade</th><th>Ações</th></tr>
-                    </thead>
-                    <tbody id="tabelaProfessores"></tbody>
-                </table>
-            </div>
-        </div>
+        <!-- ============ PROFESSORES ============ -->
+        <div id="section-professores" class="hidden"><h2>Professores</h2><button class="btn btn-primary" onclick="openModal('modalProfessor')" style="margin-bottom:12px">+ Novo Professor</button><div class="table-container"><table><thead><tr><th>Nome</th><th>Email</th><th>Especialidade</th><th></th></tr></thead><tbody id="tabelaProfessores"></tbody></table></div></div>
 
-        <!-- Alunos Section -->
-        <div id="section-alunos" class="hidden">
-            <h2>Alunos</h2>
-            <button class="btn btn-primary" onclick="openModal('modalAluno')" style="margin-bottom:20px">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                    <path d="M12 4v16m8-8H4"/>
-                </svg>
-                Novo Aluno
-            </button>
-            <div class="table-container">
-                <table>
-                    <thead>
-                        <tr><th>Nome</th><th>Email</th><th>Turma</th><th>Financeiro</th><th>Ações</th></tr>
-                    </thead>
-                    <tbody id="tabelaAlunos"></tbody>
-                </table>
-            </div>
-        </div>
+        <!-- ============ ALUNOS ============ -->
+        <div id="section-alunos" class="hidden"><h2>Alunos</h2><button class="btn btn-primary" onclick="openModal('modalAluno')" style="margin-bottom:12px">+ Novo Aluno</button><div class="table-container"><table><thead><tr><th>Nome</th><th>Email</th><th>Turma</th><th>Financeiro</th><th></th></tr></thead><tbody id="tabelaAlunos"></tbody></table></div></div>
 
-        <!-- Turmas Section -->
-        <div id="section-turmas" class="hidden">
-            <h2>Turmas</h2>
-            <button class="btn btn-primary" onclick="openModal('modalTurma')" style="margin-bottom:20px">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                    <path d="M12 4v16m8-8H4"/>
-                </svg>
-                Nova Turma
-            </button>
-            <div class="table-container">
-                <table>
-                    <thead>
-                        <tr><th>Turma</th><th>Professor</th><th>Alunos</th><th>Valor</th><th>Plano</th><th>Ações</th></tr>
-                    </thead>
-                    <tbody id="tabelaTurmas"></tbody>
-                </table>
-            </div>
-        </div>
+        <!-- ============ TURMAS ============ -->
+        <div id="section-turmas" class="hidden"><h2>Turmas</h2><button class="btn btn-primary" onclick="openModal('modalTurma')" style="margin-bottom:12px">+ Nova Turma</button><div class="table-container"><table><thead><tr><th>Turma</th><th>Professor</th><th>Alunos</th><th>Valor</th><th>Plano</th><th></th></tr></thead><tbody id="tabelaTurmas"></tbody></table></div></div>
 
-        <!-- Financeiro Section -->
-        <div id="section-financeiro" class="hidden">
-            <h2>Financeiro</h2>
-            <div style="display:grid; grid-template-columns:1fr 1fr; gap:24px">
-                <div>
-                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px">
-                        <h3 style="font-size:16px; font-weight:600">Planos</h3>
-                        <button class="btn btn-primary btn-sm" onclick="openModal('modalPlano')">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="width:14px;height:14px">
-                                <path d="M12 4v16m8-8H4"/>
-                            </svg>
-                            Novo
-                        </button>
-                    </div>
-                    <div class="table-container">
-                        <table>
-                            <thead><tr><th>Plano</th><th>Frequência</th><th>Valor</th><th>Ações</th></tr></thead>
-                            <tbody id="tabelaPlanos"></tbody>
-                        </table>
-                    </div>
-                </div>
-                <div>
-                    <h3 style="font-size:16px; font-weight:600; margin-bottom:16px">Pagamentos</h3>
-                    <div class="table-container">
-                        <table>
-                            <thead><tr><th>Aluno</th><th>Plano</th><th>Valor</th><th>Vencimento</th><th>Status</th><th>Ações</th></tr></thead>
-                            <tbody id="tabelaFinanceiro"></tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <!-- ============ FINANCEIRO ============ -->
+        <div id="section-financeiro" class="hidden"><h2>Financeiro</h2><div style="display:grid;grid-template-columns:1fr 1fr;gap:16px"><div><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px"><h3 style="font-size:15px;font-weight:600;color:var(--text);margin:0">Planos</h3><button class="btn btn-primary" onclick="openModal('modalPlano')">+ Novo</button></div><div class="table-container"><table><thead><tr><th>Plano</th><th>Frequencia</th><th>Valor</th><th></th></tr></thead><tbody id="tabelaPlanos"></tbody></table></div></div><div><h3 style="font-size:15px;font-weight:600;color:var(--text);margin-bottom:10px">Pagamentos</h3><div class="table-container"><table><thead><tr><th>Aluno</th><th>Plano</th><th>Valor</th><th>Vencimento</th><th>Status</th><th></th></tr></thead><tbody id="tabelaFinanceiro"></tbody></table></div></div></div></div>
 
-        <!-- Biblioteca Section -->
-        <div id="section-biblioteca" class="hidden">
-            <h2>Biblioteca</h2>
-            <button class="btn btn-primary" onclick="openModal('modalBiblioteca')" style="margin-bottom:20px">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                    <path d="M12 4v16m8-8H4"/>
-                </svg>
-                Adicionar Material
-            </button>
-            <div class="biblioteca-grid" id="gridBiblioteca"></div>
-        </div>
+        <!-- ============ BIBLIOTECA ============ -->
+        <div id="section-biblioteca" class="hidden"><h2>Biblioteca</h2><button class="btn btn-primary" onclick="openModal('modalBiblioteca')" style="margin-bottom:12px">+ Adicionar Material</button><div class="biblioteca-grid" id="gridBiblioteca"></div></div>
 
-        <!-- Backup Section -->
-        <div id="section-backup" class="hidden">
-            <h2>Backup</h2>
-            <div style="display:flex; gap:12px; margin-bottom:24px">
-                <button class="btn btn-primary" onclick="exportarBackup()">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="width:16px;height:16px">
-                        <path d="M4 16v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2M7 10l5 5 5-5M12 15V3"/>
-                    </svg>
-                    Exportar Dados
-                </button>
-                <button class="btn btn-outline" onclick="document.getElementById('inputRestore').click()">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="width:16px;height:16px">
-                        <path d="M4 16v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2M7 10l5-5 5 5M12 5v10"/>
-                    </svg>
-                    Restaurar Backup
-                </button>
-                <input type="file" id="inputRestore" accept=".json" style="display:none" onchange="restaurarBackup(event)">
-            </div>
-            <div class="danger-zone">
-                <h4>Apagar Tudo</h4>
-                <p>Remove todos os dados permanentemente do sistema. Esta ação não pode ser desfeita.</p>
-                <button class="btn btn-danger" onclick="apagarTudo()">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="width:16px;height:16px">
-                        <path d="M19 7l-.867 12.142A2 2 0 0 1 16.138 21H7.862a2 2 0 0 1-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v3M4 7h16"/>
-                    </svg>
-                    Apagar Todos os Dados
-                </button>
-            </div>
-        </div>
+        <!-- ============ BACKUP ============ -->
+        <div id="section-backup" class="hidden"><h2>Backup</h2><div style="display:flex;gap:12px;margin-bottom:16px"><button class="btn btn-primary" onclick="exportarBackup()">Exportar Dados</button><button class="btn btn-outline" onclick="document.getElementById('inputRestore').click()">Restaurar Backup</button><input type="file" id="inputRestore" accept=".json" style="display:none" onchange="restaurarBackup(event)"></div><div class="danger-zone"><h4>Apagar Tudo</h4><p>Remove todos os dados permanentemente do sistema.</p><button class="btn btn-danger btn-sm" onclick="apagarTudo()">Apagar Todos os Dados</button></div></div>
 
-        <!-- Perfil Section -->
-        <div id="section-perfil" class="hidden">
-            <h2>Perfil</h2>
-            <div class="profile-section">
-                <div>
-                    <div class="profile-avatar" id="adminAvatar">A</div>
-                    <input type="file" id="adminPhoto" accept="image/*" style="display:none" onchange="atualizarFoto()">
-                    <button class="btn btn-outline btn-sm" onclick="document.getElementById('adminPhoto').click()" style="margin-top:12px">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="width:14px;height:14px">
-                            <path d="M3 9a2 2 0 0 1 2-2h.93a2 2 0 0 0 1.664-.89l.812-1.22A2 2 0 0 1 10.07 4h3.86a2 2 0 0 1 1.664.89l.812 1.22A2 2 0 0 0 18.07 7H19a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V9z"/>
-                            <circle cx="12" cy="13" r="3"/>
-                        </svg>
-                        Alterar Foto
-                    </button>
-                </div>
-                <div class="profile-info">
-                    <div class="form-group">
-                        <label>Nova Senha</label>
-                        <input type="password" id="adminSenha" placeholder="Digite a nova senha">
-                    </div>
-                    <button class="btn btn-primary" onclick="salvarPerfil()">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="width:16px;height:16px">
-                            <path d="M5 13l4 4L19 7"/>
-                        </svg>
-                        Salvar Alterações
-                    </button>
-                </div>
-            </div>
-        </div>
+        <!-- ============ PERFIL ============ -->
+        <div id="section-perfil" class="hidden"><h2>Perfil</h2><div class="profile-section"><div><div class="profile-avatar" id="adminAvatar">A</div><input type="file" id="adminPhoto" accept="image/*" style="display:none" onchange="atualizarFoto()"><button class="btn btn-outline btn-sm" onclick="document.getElementById('adminPhoto').click()" style="margin-top:8px">Alterar Foto</button></div><div class="profile-info"><div class="form-group"><label>Nova Senha</label><input type="password" id="adminSenha" placeholder="Manter senha atual"></div><button class="btn btn-primary" onclick="salvarPerfil()">Salvar Alteracoes</button></div></div></div>
     </div>
 </main>
 
-<!-- Modals -->
-<div id="modalProfessor" class="modal"><div class="modal-content"><div class="modal-header"><h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M16 7a4 4 0 1 1-8 0 4 4 0 0 1 8 0zM12 14a7 7 0 0 0-7 7h14a7 7 0 0 0-7-7z"/></svg>Novo Professor</h3><button class="modal-close" onclick="closeModal('modalProfessor')">&times;</button></div><form id="formProfessor"><div class="form-group"><label>Nome Completo</label><input type="text" id="profNome" required></div><div class="form-group"><label>Email</label><input type="email" id="profEmail" required></div><div class="form-group"><label>Especialidade</label><input type="text" id="profEspecialidade" required></div><div class="form-group"><label>Senha</label><input type="password" id="profSenha" required></div><button type="submit" class="btn btn-primary" style="width:100%">Salvar Professor</button></form></div></div>
-
-<div id="modalAluno" class="modal"><div class="modal-content"><div class="modal-header"><h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 6v4m0 0v4m0-4h4m-4 0H8m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0z"/></svg>Novo Aluno</h3><button class="modal-close" onclick="closeModal('modalAluno')">&times;</button></div><form id="formAluno"><div class="form-group"><label>Nome Completo</label><input type="text" id="alunoNome" required></div><div class="form-group"><label>Email</label><input type="email" id="alunoEmail" required></div><div class="form-group"><label>Senha</label><input type="password" id="alunoSenha" required></div><div class="form-group"><label>Turma</label><select id="alunoTurma"><option value="">Selecione uma turma</option></select></div><button type="submit" class="btn btn-primary" style="width:100%">Salvar Aluno</button></form></div></div>
-
-<div id="modalTurma" class="modal"><div class="modal-content"><div class="modal-header"><h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>Nova Turma</h3><button class="modal-close" onclick="closeModal('modalTurma')">&times;</button></div><form id="formTurma"><div class="form-group"><label>Nome da Turma</label><input type="text" id="turmaNome" required></div><div class="form-group"><label>Descrição</label><textarea id="turmaDescricao" required></textarea></div><div class="form-row"><div class="form-group"><label>Carga Horária</label><input type="text" id="turmaCarga" required></div><div class="form-group"><label>Valor R$</label><input type="number" id="turmaValor" required step="0.01"></div></div><div class="form-group"><label>Professor Responsável</label><select id="turmaProfessor" required><option value="">Selecione</option></select></div><div class="form-group"><label>Plano de Pagamento</label><select id="turmaPlano"><option value="">Selecione</option></select></div><button type="submit" class="btn btn-primary" style="width:100%">Criar Turma</button></form></div></div>
-
-<div id="modalPlano" class="modal"><div class="modal-content"><div class="modal-header"><h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z"/></svg>Novo Plano</h3><button class="modal-close" onclick="closeModal('modalPlano')">&times;</button></div><form id="formPlano"><div class="form-group"><label>Nome do Plano</label><input type="text" id="planoNome" required></div><div class="form-group"><label>Descrição</label><input type="text" id="planoDescricao" required></div><div class="form-row"><div class="form-group"><label>Valor R$</label><input type="number" id="planoValor" required step="0.01"></div><div class="form-group"><label>Frequência</label><select id="planoFrequencia"><option value="mensal">Mensal</option><option value="trimestral">Trimestral</option><option value="semestral">Semestral</option><option value="anual">Anual</option></select></div></div><button type="submit" class="btn btn-primary" style="width:100%">Salvar Plano</button></form></div></div>
-
-<div id="modalBiblioteca" class="modal"><div class="modal-content"><div class="modal-header"><h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>Adicionar Material</h3><button class="modal-close" onclick="closeModal('modalBiblioteca')">&times;</button></div><form id="formBiblioteca"><div class="form-group"><label>Título</label><input type="text" id="bibTitulo" required></div><div class="form-group"><label>Descrição</label><input type="text" id="bibDescricao" required></div><div class="form-group"><label>Link do Material</label><input type="url" id="bibLink" required></div><button type="submit" class="btn btn-primary" style="width:100%">Adicionar</button></form></div></div>
+<!-- ============ MODAIS ============ -->
+<div id="modalProfessor" class="modal"><div class="modal-content"><div class="modal-header"><h3>Novo Professor</h3><button class="modal-close" onclick="closeModal('modalProfessor')">&times;</button></div><form id="formProfessor"><div class="form-group"><label>Nome Completo</label><input type="text" id="profNome" required></div><div class="form-group"><label>Email</label><input type="email" id="profEmail" required></div><div class="form-group"><label>Especialidade</label><input type="text" id="profEspecialidade" required></div><div class="form-group"><label>Senha</label><input type="password" id="profSenha" required></div><button type="submit" class="btn btn-primary" style="width:100%">Salvar Professor</button></form></div></div>
+<div id="modalAluno" class="modal"><div class="modal-content"><div class="modal-header"><h3>Novo Aluno</h3><button class="modal-close" onclick="closeModal('modalAluno')">&times;</button></div><form id="formAluno"><div class="form-group"><label>Nome Completo</label><input type="text" id="alunoNome" required></div><div class="form-group"><label>Email</label><input type="email" id="alunoEmail" required></div><div class="form-group"><label>Senha</label><input type="password" id="alunoSenha" required></div><div class="form-group"><label>Turma</label><select id="alunoTurma"><option value="">Selecione uma turma</option></select></div><button type="submit" class="btn btn-primary" style="width:100%">Salvar Aluno</button></form></div></div>
+<div id="modalTurma" class="modal"><div class="modal-content"><div class="modal-header"><h3>Nova Turma</h3><button class="modal-close" onclick="closeModal('modalTurma')">&times;</button></div><form id="formTurma"><div class="form-group"><label>Nome da Turma</label><input type="text" id="turmaNome" required></div><div class="form-group"><label>Descricao</label><textarea id="turmaDescricao" required></textarea></div><div class="form-row"><div class="form-group"><label>Carga Horaria</label><input type="text" id="turmaCarga" required></div><div class="form-group"><label>Valor R$</label><input type="number" id="turmaValor" required step="0.01"></div></div><div class="form-group"><label>Professor Responsavel</label><select id="turmaProfessor" required><option value="">Selecione</option></select></div><div class="form-group"><label>Plano de Pagamento</label><select id="turmaPlano"><option value="">Selecione</option></select></div><button type="submit" class="btn btn-primary" style="width:100%">Criar Turma</button></form></div></div>
+<div id="modalPlano" class="modal"><div class="modal-content"><div class="modal-header"><h3>Novo Plano</h3><button class="modal-close" onclick="closeModal('modalPlano')">&times;</button></div><form id="formPlano"><div class="form-group"><label>Nome do Plano</label><input type="text" id="planoNome" required></div><div class="form-group"><label>Descricao</label><input type="text" id="planoDescricao" required></div><div class="form-row"><div class="form-group"><label>Valor R$</label><input type="number" id="planoValor" required step="0.01"></div><div class="form-group"><label>Frequencia</label><select id="planoFrequencia"><option value="mensal">Mensal</option><option value="trimestral">Trimestral</option><option value="semestral">Semestral</option><option value="anual">Anual</option></select></div></div><button type="submit" class="btn btn-primary" style="width:100%">Salvar Plano</button></form></div></div>
+<div id="modalBiblioteca" class="modal"><div class="modal-content"><div class="modal-header"><h3>Adicionar Material</h3><button class="modal-close" onclick="closeModal('modalBiblioteca')">&times;</button></div><form id="formBiblioteca"><div class="form-group"><label>Titulo</label><input type="text" id="bibTitulo" required></div><div class="form-group"><label>Descricao</label><input type="text" id="bibDescricao" required></div><div class="form-group"><label>Link do Material</label><input type="url" id="bibLink" required></div><button type="submit" class="btn btn-primary" style="width:100%">Adicionar</button></form></div></div>
 
 <script src="supabase.js"></script>
 <script>
-// Helper functions
-function $(id) { return document.getElementById(id); }
-function showLoading() { $('loading').classList.add('show'); }
-function hideLoading() { $('loading').classList.remove('show'); }
-function uid() { return Date.now().toString(36) + Math.random().toString(36).substr(2); }
-function toast(msg) { const t = document.createElement('div'); t.className = 'toast'; t.textContent = msg; document.body.appendChild(t); setTimeout(() => t.remove(), 3000); }
-function logout() { localStorage.removeItem('mentorcr_session'); window.location.href = 'index.html'; }
-function openModal(id) { $(id).classList.add('show'); }
-function closeModal(id) { $(id).classList.remove('show'); }
-
-// Navegação
-document.querySelectorAll('#sidebarNav button').forEach(btn => {
-    btn.addEventListener('click', function() {
-        document.querySelectorAll('#sidebarNav button').forEach(b => b.classList.remove('active'));
-        this.classList.add('active');
-        const s = this.dataset.section;
-        document.querySelectorAll('[id^="section-"]').forEach(x => x.classList.add('hidden'));
-        const t = $('section-' + s);
-        if (t) t.classList.remove('hidden');
-        const actions = {
-            dashboard: carregarDashboard,
-            professores: carregarTabelas,
-            alunos: carregarTabelas,
-            turmas: carregarTabelas,
-            financeiro: carregarFinanceiro,
-            biblioteca: carregarBiblioteca,
-            perfil: carregarPerfil
-        };
-        if (actions[s]) actions[s]();
-    });
-});
-
-async function carregarDashboard() {
-    const [p, a, t, g] = await Promise.all([
-        sb.from('professores').select('id', {count: 'exact', head: true}).eq('ativo', true),
-        sb.from('alunos').select('id', {count: 'exact', head: true}).eq('ativo', true),
-        sb.from('turmas').select('id', {count: 'exact', head: true}).eq('ativo', true),
-        sb.from('pagamentos').select('id', {count: 'exact', head: true}).eq('status', 'pendente')
-    ]);
-    $('totalProfessores').textContent = p.count || 0;
-    $('totalAlunos').textContent = a.count || 0;
-    $('totalTurmas').textContent = t.count || 0;
-    $('totalPendentes').textContent = g.count || 0;
-}
-
-async function carregarTabelas() {
-    showLoading();
-    const [pr, al, tu, pa, pl] = await Promise.all([
-        sb.from('professores').select('*').eq('ativo', true),
-        sb.from('alunos').select('*').eq('ativo', true),
-        sb.from('turmas').select('*').eq('ativo', true),
-        sb.from('pagamentos').select('*'),
-        sb.from('planos').select('*')
-    ]);
-    const professores = pr.data || [];
-    const alunos = al.data || [];
-    const turmas = tu.data || [];
-    const pagamentos = pa.data || [];
-    const planos = pl.data || [];
-    
-    const mp = {};
-    planos.forEach(p => mp[p.id] = p.nome);
-    
-    $('tabelaProfessores').innerHTML = professores.length === 0 ? '<tr><td colspan="4" class="empty-state">Nenhum professor cadastrado</td></tr>' : 
-        professores.map(p => `<tr><td>${p.nome}</td><td>${p.email}</td><td>${p.especialidade}</td><td><button class="btn btn-danger btn-xs" data-acao="desativarProfessor" data-id="${p.id}">Desativar</button></td></tr>`).join('');
-    
-    $('tabelaAlunos').innerHTML = alunos.length === 0 ? '<tr><td colspan="5" class="empty-state">Nenhum aluno cadastrado</td></tr>' :
-        alunos.map(a => {
-            const t = turmas.find(x => x.id == a.turma_id);
-            const pg = pagamentos.find(x => x.aluno_id == a.id);
-            const st = pg ? (pg.status === 'pago' ? '<span class="badge badge-success">Pago</span>' : '<span class="badge badge-warning">Pendente</span>') : '-';
-            return `<tr><td>${a.nome}</td><td>${a.email}</td><td>${t ? t.nome : '-'}</td><td>${st}</td><td><button class="btn btn-danger btn-xs" data-acao="desativarAluno" data-id="${a.id}">Desativar</button></td></tr>`;
-        }).join('');
-    
-    $('tabelaTurmas').innerHTML = turmas.length === 0 ? '<tr><td colspan="6" class="empty-state">Nenhuma turma criada</td></tr>' :
-        turmas.map(t => {
-            const p = professores.find(x => x.id == t.professor_id);
-            const qtd = alunos.filter(a => a.turma_id == t.id).length;
-            return `<tr><td>${t.nome}</td><td>${p ? p.nome : '-'}</td><td>${qtd}</td><td>R$ ${Number(t.valor).toFixed(2)}</td><td>${mp[t.plano_id] || '-'}</td><td><button class="btn btn-danger btn-xs" data-acao="desativarTurma" data-id="${t.id}">Desativar</button></td></tr>`;
-        }).join('');
-    
-    bindBotoes();
-    hideLoading();
-}
-
-async function carregarFinanceiro() {
-    showLoading();
-    const [pl, pa, al] = await Promise.all([
-        sb.from('planos').select('*').eq('ativo', true),
-        sb.from('pagamentos').select('*'),
-        sb.from('alunos').select('id,nome')
-    ]);
-    const planos = pl.data || [];
-    const pagamentos = pa.data || [];
-    const alunos = al.data || [];
-    const ma = {};
-    alunos.forEach(a => ma[a.id] = a.nome);
-    
-    $('tabelaPlanos').innerHTML = planos.length === 0 ? '<tr><td colspan="4" class="empty-state">Nenhum plano</td></tr>' :
-        planos.map(p => `<tr><td>${p.nome}</td><td>${p.frequencia}</td><td>R$ ${Number(p.valor).toFixed(2)}</td><td><button class="btn btn-danger btn-xs" data-acao="desativarPlano" data-id="${p.id}">Desativar</button></td></tr>`).join('');
-    
-    $('tabelaFinanceiro').innerHTML = pagamentos.length === 0 ? '<tr><td colspan="6" class="empty-state">Nenhum pagamento</td></tr>' :
-        pagamentos.map(p => {
-            const st = p.status === 'pago' ? '<span class="badge badge-success">Pago</span>' : '<span class="badge badge-warning">Pendente</span>';
-            const btn = p.status === 'pendente' ? `<button class="btn btn-success btn-xs" data-acao="confirmar" data-id="${p.id}">Confirmar</button>` : '';
-            return `<tr><td>${ma[p.aluno_id] || '-'}</td><td>${p.plano_id || '-'}</td><td>R$ ${Number(p.valor).toFixed(2)}</td><td>${p.vencimento}</td><td>${st}</td><td><div class="action-group">${btn}</div></td></tr>`;
-        }).join('');
-    
-    bindBotoes();
-    hideLoading();
-}
-
-function bindBotoes() {
-    document.querySelectorAll('[data-acao]').forEach(b => {
-        b.addEventListener('click', function() {
-            const a = this.dataset.acao;
-            const i = this.dataset.id;
-            if (a === 'desativarProfessor') desativarProfessor(i);
-            else if (a === 'desativarAluno') desativarAluno(i);
-            else if (a === 'desativarTurma') desativarTurma(i);
-            else if (a === 'desativarPlano') desativarPlano(i);
-            else if (a === 'confirmar') confirmarPagamento(i);
-            else if (a === 'removerMaterial') removerMaterial(i);
-        });
-    });
-}
-
-async function salvarProfessor(e) {
-    e.preventDefault();
-    const nome = $('profNome').value.trim();
-    const email = $('profEmail').value.trim();
-    const especialidade = $('profEspecialidade').value.trim();
-    const senha = $('profSenha').value.trim();
-    if (!nome || !email || !especialidade || !senha) {
-        alert('Preencha todos os campos.');
-        return;
-    }
-    showLoading();
-    await sb.from('professores').insert({id: uid(), nome, email, especialidade, senha, ativo: true});
-    hideLoading();
-    closeModal('modalProfessor');
-    $('formProfessor').reset();
-    carregarDashboard();
-    carregarTabelas();
-    toast('Professor cadastrado com sucesso!');
-}
-
-async function salvarAluno(e) {
-    e.preventDefault();
-    const nome = $('alunoNome').value.trim();
-    const email = $('alunoEmail').value.trim();
-    const senha = $('alunoSenha').value.trim();
-    const tid = $('alunoTurma').value;
-    if (!nome || !email || !senha) {
-        alert('Preencha todos os campos.');
-        return;
-    }
-    showLoading();
-    const aid = uid();
-    await sb.from('alunos').insert({id: aid, nome, email, senha, turma_id: tid || null, ativo: true});
-    if (tid) {
-        const {data: tu} = await sb.from('turmas').select('valor,plano_id').eq('id', tid).single();
-        if (tu) {
-            await sb.from('pagamentos').insert({id: uid(), aluno_id: aid, turma_id: tid, plano_id: tu.plano_id, valor: tu.valor, vencimento: new Date().toISOString().split('T')[0], status: 'pendente'});
-        }
-    }
-    hideLoading();
-    closeModal('modalAluno');
-    $('formAluno').reset();
-    carregarDashboard();
-    carregarTabelas();
-    toast('Aluno cadastrado com sucesso!');
-}
-
-async function salvarTurma(e) {
-    e.preventDefault();
-    const nome = $('turmaNome').value.trim();
-    const descricao = $('turmaDescricao').value.trim();
-    const carga = $('turmaCarga').value.trim();
-    const valor = parseFloat($('turmaValor').value);
-    const pid = $('turmaProfessor').value;
-    const plid = $('turmaPlano').value;
-    if (!nome || !descricao || !carga || !valor || !pid) {
-        alert('Preencha todos os campos.');
-        return;
-    }
-    showLoading();
-    await sb.from('turmas').insert({id: uid(), nome, descricao, carga, valor, professor_id: pid, plano_id: plid || null, ativo: true});
-    hideLoading();
-    closeModal('modalTurma');
-    $('formTurma').reset();
-    carregarDashboard();
-    carregarTabelas();
-    toast('Turma criada com sucesso!');
-}
-
-async function salvarPlano(e) {
-    e.preventDefault();
-    const nome = $('planoNome').value.trim();
-    const descricao = $('planoDescricao').value.trim();
-    const valor = parseFloat($('planoValor').value);
-    const frequencia = $('planoFrequencia').value;
-    if (!nome || !descricao || !valor || !frequencia) {
-        alert('Preencha todos os campos.');
-        return;
-    }
-    showLoading();
-    await sb.from('planos').insert({id: uid(), nome, descricao, valor, frequencia, ativo: true});
-    hideLoading();
-    closeModal('modalPlano');
-    $('formPlano').reset();
-    carregarFinanceiro();
-    toast('Plano criado com sucesso!');
-}
-
-async function salvarMaterial(e) {
-    e.preventDefault();
-    const titulo = $('bibTitulo').value.trim();
-    const descricao = $('bibDescricao').value.trim();
-    const link = $('bibLink').value.trim();
-    if (!titulo || !descricao || !link) {
-        alert('Preencha todos os campos.');
-        return;
-    }
-    showLoading();
-    await sb.from('biblioteca').insert({id: uid(), titulo, descricao, link});
-    hideLoading();
-    closeModal('modalBiblioteca');
-    $('formBiblioteca').reset();
-    carregarBiblioteca();
-    toast('Material adicionado!');
-}
-
-async function carregarBiblioteca() {
-    const {data} = await sb.from('biblioteca').select('*').order('created_at', {ascending: false});
-    $('gridBiblioteca').innerHTML = (!data || data.length === 0) ? '<div class="empty-state">Nenhum material disponível</div>' : 
-        data.map(b => `<div class="bib-item"><h4>${b.titulo}</h4><p>${b.descricao}</p><a href="${b.link}" target="_blank"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="width:14px;height:14px"><path d="M10 6H6a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>Acessar Material</a><button class="btn btn-danger btn-xs" data-acao="removerMaterial" data-id="${b.id}" style="margin-top:12px">Remover</button></div>`).join('');
-    bindBotoes();
-}
-
-async function removerMaterial(id) {
-    if (!confirm('Remover material?')) return;
-    showLoading();
-    await sb.from('biblioteca').delete().eq('id', id);
-    hideLoading();
-    carregarBiblioteca();
-    toast('Material removido.');
-}
-
-async function desativarProfessor(id) {
-    if (!confirm('Desativar professor?')) return;
-    showLoading();
-    await sb.from('professores').update({ativo: false}).eq('id', id);
-    hideLoading();
-    carregarDashboard();
-    carregarTabelas();
-    toast('Professor desativado.');
-}
-
-async function desativarAluno(id) {
-    if (!confirm('Desativar aluno?')) return;
-    showLoading();
-    await sb.from('alunos').update({ativo: false}).eq('id', id);
-    hideLoading();
-    carregarDashboard();
-    carregarTabelas();
-    toast('Aluno desativado.');
-}
-
-async function desativarTurma(id) {
-    if (!confirm('Desativar turma?')) return;
-    showLoading();
-    await sb.from('turmas').update({ativo: false}).eq('id', id);
-    hideLoading();
-    carregarDashboard();
-    carregarTabelas();
-    toast('Turma desativada.');
-}
-
-async function desativarPlano(id) {
-    if (!confirm('Desativar plano?')) return;
-    showLoading();
-    await sb.from('planos').update({ativo: false}).eq('id', id);
-    hideLoading();
-    carregarFinanceiro();
-    toast('Plano desativado.');
-}
-
-async function confirmarPagamento(id) {
-    showLoading();
-    await sb.from('pagamentos').update({status: 'pago'}).eq('id', id);
-    hideLoading();
-    carregarDashboard();
-    carregarFinanceiro();
-    toast('Pagamento confirmado!');
-}
-
-async function carregarSelectProfessores() {
-    const {data} = await sb.from('professores').select('*').eq('ativo', true);
-    const s = $('turmaProfessor');
-    s.innerHTML = '<option value="">Selecione</option>';
-    if (data) data.forEach(p => s.innerHTML += `<option value="${p.id}">${p.nome}</option>`);
-}
-
-async function carregarSelectTurmas() {
-    const {data} = await sb.from('turmas').select('*').eq('ativo', true);
-    const s = $('alunoTurma');
-    s.innerHTML = '<option value="">Selecione</option>';
-    if (data) data.forEach(t => s.innerHTML += `<option value="${t.id}">${t.nome}</option>`);
-}
-
-async function carregarSelectPlanos() {
-    const {data} = await sb.from('planos').select('*').eq('ativo', true);
-    const s = $('turmaPlano');
-    s.innerHTML = '<option value="">Selecione</option>';
-    if (data) data.forEach(p => s.innerHTML += `<option value="${p.id}">${p.nome} - R$ ${Number(p.valor).toFixed(2)}</option>`);
-}
-
-const originalOpenModal = openModal;
-window.openModal = function(id) {
-    originalOpenModal(id);
-    if (id === 'modalTurma') {
-        carregarSelectProfessores();
-        carregarSelectPlanos();
-    }
-    if (id === 'modalAluno') carregarSelectTurmas();
-};
-
-async function carregarPerfil() {
-    const {data} = await sb.from('fotos_perfil').select('foto_base64').eq('user_key', 'admin').single();
-    const el = $('adminAvatar');
-    const elHeader = $('adminAvatarHeader');
-    const content = data ? `<img src="${data.foto_base64}" style="width:100%;height:100%;object-fit:cover">` : 'A';
-    if (el) el.innerHTML = content;
-    if (elHeader) elHeader.innerHTML = content;
-}
-
-async function atualizarFoto() {
-    const f = $('adminPhoto').files[0];
-    if (!f) return;
-    const reader = new FileReader();
-    reader.onload = async e => {
-        showLoading();
-        await sb.from('fotos_perfil').upsert({id: uid(), user_key: 'admin', foto_base64: e.target.result}, {onConflict: 'user_key'});
-        hideLoading();
-        carregarPerfil();
-        toast('Foto atualizada!');
-    };
-    reader.readAsDataURL(f);
-}
-
-async function salvarPerfil() {
-    const senha = $('adminSenha').value.trim();
-    if (!senha) {
-        toast('Digite uma nova senha.');
-        return;
-    }
-    showLoading();
-    await sb.from('configuracoes').upsert({chave: 'admin_senha', valor: senha}, {onConflict: 'chave'});
-    hideLoading();
-    $('adminSenha').value = '';
-    toast('Senha alterada com sucesso!');
-}
-
-async function exportarBackup() {
-    showLoading();
-    const tabs = ['configuracoes', 'planos', 'professores', 'turmas', 'alunos', 'encontros', 'trabalhos', 'pagamentos', 'biblioteca', 'fotos_perfil'];
-    const bk = {};
-    for (const t of tabs) {
-        const {data} = await sb.from(t).select('*');
-        bk[t] = data || [];
-    }
-    const blob = new Blob([JSON.stringify(bk, null, 2)], {type: 'application/json'});
-    const a = document.createElement('a');
-    a.href = URL.createObjectURL(blob);
-    a.download = `mentorcr_backup_${new Date().toISOString().slice(0, 10)}.json`;
-    a.click();
-    hideLoading();
-    toast('Backup exportado!');
-}
-
-function restaurarBackup(event) {
-    const f = event.target.files[0];
-    if (!f) return;
-    if (!confirm('Restaurar backup? Todos os dados atuais serão SUBSTITUÍDOS.')) {
-        event.target.value = '';
-        return;
-    }
-    const reader = new FileReader();
-    reader.onload = async function(e) {
-        showLoading();
-        try {
-            const d = JSON.parse(e.target.result);
-            const ordem = ['configuracoes', 'planos', 'fotos_perfil', 'biblioteca', 'pagamentos', 'trabalhos', 'encontros', 'alunos', 'turmas', 'professores'];
-            for (const t of ordem) {
-                try {
-                    await sb.from(t).delete().neq('id', '0');
-                } catch(ex) {}
-                if (d[t]) {
-                    for (const i of d[t]) {
-                        try {
-                            await sb.from(t).insert(i);
-                        } catch(ex) {}
-                    }
-                }
-            }
-            hideLoading();
-            carregarDashboard();
-            carregarTabelas();
-            toast('Backup restaurado com sucesso!');
-        } catch(ex) {
-            hideLoading();
-            alert('Erro ao restaurar backup.');
-        }
-    };
-    reader.readAsText(f);
-    event.target.value = '';
-}
-
-async function apagarTudo() {
-    if (!confirm('ATENÇÃO! Esta ação apagará TODOS os dados do sistema permanentemente. Deseja continuar?')) return;
-    if (!confirm('CONFIRMAÇÃO FINAL: Todos os professores, alunos, turmas, encontros, trabalhos, pagamentos e biblioteca serão apagados. Continuar?')) return;
-    showLoading();
-    const ordem = ['fotos_perfil', 'biblioteca', 'pagamentos', 'trabalhos', 'encontros', 'alunos', 'turmas', 'professores', 'planos'];
-    for (const t of ordem) {
-        try {
-            await sb.from(t).delete().neq('id', '0');
-        } catch(ex) {}
-    }
-    await sb.from('configuracoes').upsert({chave: 'admin_senha', valor: 'admin123'}, {onConflict: 'chave'});
-    hideLoading();
-    carregarDashboard();
-    carregarTabelas();
-    toast('Todos os dados foram apagados!');
-}
-
-// Event listeners
-$('formProfessor').addEventListener('submit', salvarProfessor);
-$('formAluno').addEventListener('submit', salvarAluno);
-$('formTurma').addEventListener('submit', salvarTurma);
-$('formPlano').addEventListener('submit', salvarPlano);
-$('formBiblioteca').addEventListener('submit', salvarMaterial);
-
-// Initial load
+document.querySelectorAll('#sidebarNav button').forEach(btn=>{btn.addEventListener('click',function(){document.querySelectorAll('#sidebarNav button').forEach(b=>b.classList.remove('active'));this.classList.add('active');const s=this.dataset.section;document.querySelectorAll('[id^="section-"]').forEach(x=>x.classList.add('hidden'));const t=$('section-'+s);if(t)t.classList.remove('hidden');const a={dashboard:carregarDashboard,professores:carregarTabelas,alunos:carregarTabelas,turmas:carregarTabelas,financeiro:carregarFinanceiro,biblioteca:carregarBiblioteca,perfil:carregarPerfil};if(a[s])a[s]()})});
+async function carregarDashboard(){const[p,a,t,g]=await Promise.all([sb.from('professores').select('id',{count:'exact',head:true}).eq('ativo',true),sb.from('alunos').select('id',{count:'exact',head:true}).eq('ativo',true),sb.from('turmas').select('id',{count:'exact',head:true}).eq('ativo',true),sb.from('pagamentos').select('id',{count:'exact',head:true}).eq('status','pendente')]);['totalProfessores','totalAlunos','totalTurmas','totalPendentes'].forEach((id,i)=>$(id).textContent=[p.count,a.count,t.count,g.count][i]||0)}
+async function carregarTabelas(){showLoading();const[pr,al,tu,pa,pl]=await Promise.all([sb.from('professores').select('*').eq('ativo',true),sb.from('alunos').select('*').eq('ativo',true),sb.from('turmas').select('*').eq('ativo',true),sb.from('pagamentos').select('*'),sb.from('planos').select('*')]);const professores=pr.data||[],alunos=al.data||[],turmas=tu.data||[],pagamentos=pa.data||[],planos=pl.data||[];const mp={};planos.forEach(p=>mp[p.id]=p.nome);$('tabelaProfessores').innerHTML=professores.length===0?'<tr><td colspan="4" class="empty-state">Nenhum professor cadastrado</td></tr>':professores.map(p=>`<tr><td>${p.nome}</td><td>${p.email}</td><td>${p.especialidade}</td><td><button class="btn btn-danger btn-xs" data-acao="desativarProfessor" data-id="${p.id}">Desativar</button></td></tr>`).join('');$('tabelaAlunos').innerHTML=alunos.length===0?'<tr><td colspan="5" class="empty-state">Nenhum aluno cadastrado</td></tr>':alunos.map(a=>{const t=turmas.find(x=>x.id==a.turma_id);const pg=pagamentos.find(x=>x.aluno_id==a.id);const st=pg?(pg.status==='pago'?'<span class="badge badge-success">Pago</span>':'<span class="badge badge-warning">Pendente</span>'):'-';return`<tr><td>${a.nome}</td><td>${a.email}</td><td>${t?t.nome:'-'}</td><td>${st}</td><td><button class="btn btn-danger btn-xs" data-acao="desativarAluno" data-id="${a.id}">Desativar</button></td></tr>`}).join('');$('tabelaTurmas').innerHTML=turmas.length===0?'<tr><td colspan="6" class="empty-state">Nenhuma turma criada</td></tr>':turmas.map(t=>{const p=professores.find(x=>x.id==t.professor_id);const qtd=alunos.filter(a=>a.turma_id==t.id).length;return`<tr><td>${t.nome}</td><td>${p?p.nome:'-'}</td><td>${qtd}</td><td>R$ ${Number(t.valor).toFixed(2)}</td><td>${mp[t.plano_id]||'-'}</td><td><button class="btn btn-danger btn-xs" data-acao="desativarTurma" data-id="${t.id}">Desativar</button></td></tr>`}).join('');bindBotoes();hideLoading()}
+async function carregarFinanceiro(){showLoading();const[pl,pa,al]=await Promise.all([sb.from('planos').select('*').eq('ativo',true),sb.from('pagamentos').select('*'),sb.from('alunos').select('id,nome')]);const planos=pl.data||[],pagamentos=pa.data||[],alunos=al.data||[];const ma={};alunos.forEach(a=>ma[a.id]=a.nome);$('tabelaPlanos').innerHTML=planos.length===0?'<tr><td colspan="4" class="empty-state">Nenhum plano</td></tr>':planos.map(p=>`<tr><td>${p.nome}</td><td>${p.frequencia}</td><td>R$ ${Number(p.valor).toFixed(2)}</td><td><button class="btn btn-danger btn-xs" data-acao="desativarPlano" data-id="${p.id}">Desativar</button></td></tr>`).join('');$('tabelaFinanceiro').innerHTML=pagamentos.length===0?'<tr><td colspan="6" class="empty-state">Nenhum pagamento</td></tr>':pagamentos.map(p=>{const st=p.status==='pago'?'<span class="badge badge-success">Pago</span>':'<span class="badge badge-warning">Pendente</span>';const btn=p.status==='pendente'?`<button class="btn btn-success btn-xs" data-acao="confirmar" data-id="${p.id}">Confirmar</button>`:'';return`<tr><td>${ma[p.aluno_id]||'-'}</td><td>${p.plano_id||'-'}</td><td>R$ ${Number(p.valor).toFixed(2)}</td><td>${p.vencimento}</td><td>${st}</td><td><div class="action-group">${btn}</div></td></tr>`}).join('');bindBotoes();hideLoading()}
+function bindBotoes(){document.querySelectorAll('[data-acao]').forEach(b=>{b.addEventListener('click',function(){const a=this.dataset.acao,i=this.dataset.id;if(a==='desativarProfessor')desativarProfessor(i);else if(a==='desativarAluno')desativarAluno(i);else if(a==='desativarTurma')desativarTurma(i);else if(a==='desativarPlano')desativarPlano(i);else if(a==='confirmar')confirmarPagamento(i);else if(a==='removerMaterial')removerMaterial(i)})})}
+async function salvarProfessor(e){e.preventDefault();const n=$('profNome').value.trim(),em=$('profEmail').value.trim(),es=$('profEspecialidade').value.trim(),se=$('profSenha').value.trim();if(!n||!em||!es||!se){alert('Preencha todos os campos.');return}showLoading();await sb.from('professores').insert({id:uid(),nome:n,email:em,especialidade:es,senha:se,ativo:true});hideLoading();closeModal('modalProfessor');$('formProfessor').reset();carregarDashboard();carregarTabelas();toast('Professor cadastrado com sucesso!')}
+async function salvarAluno(e){e.preventDefault();const n=$('alunoNome').value.trim(),em=$('alunoEmail').value.trim(),se=$('alunoSenha').value.trim(),tid=$('alunoTurma').value;if(!n||!em||!se){alert('Preencha todos os campos.');return}showLoading();const aid=uid();await sb.from('alunos').insert({id:aid,nome:n,email:em,senha:se,turma_id:tid||null,ativo:true});if(tid){const{data:tu}=await sb.from('turmas').select('valor,plano_id').eq('id',tid).single();if(tu)await sb.from('pagamentos').insert({id:uid(),aluno_id:aid,turma_id:tid,plano_id:tu.plano_id,valor:tu.valor,vencimento:new Date().toISOString().split('T')[0],status:'pendente'})}hideLoading();closeModal('modalAluno');$('formAluno').reset();carregarDashboard();carregarTabelas();toast('Aluno cadastrado com sucesso!')}
+async function salvarTurma(e){e.preventDefault();const n=$('turmaNome').value.trim(),d=$('turmaDescricao').value.trim(),c=$('turmaCarga').value.trim(),v=parseFloat($('turmaValor').value),pid=$('turmaProfessor').value,plid=$('turmaPlano').value;if(!n||!d||!c||!v||!pid){alert('Preencha todos os campos.');return}showLoading();await sb.from('turmas').insert({id:uid(),nome:n,descricao:d,carga:c,valor:v,professor_id:pid,plano_id:plid||null,ativo:true});hideLoading();closeModal('modalTurma');$('formTurma').reset();carregarDashboard();carregarTabelas();toast('Turma criada com sucesso!')}
+async function salvarPlano(e){e.preventDefault();const n=$('planoNome').value.trim(),d=$('planoDescricao').value.trim(),v=parseFloat($('planoValor').value),f=$('planoFrequencia').value;if(!n||!d||!v||!f){alert('Preencha todos os campos.');return}showLoading();await sb.from('planos').insert({id:uid(),nome:n,descricao:d,valor:v,frequencia:f,ativo:true});hideLoading();closeModal('modalPlano');$('formPlano').reset();carregarFinanceiro();toast('Plano criado com sucesso!')}
+async function salvarMaterial(e){e.preventDefault();const t=$('bibTitulo').value.trim(),d=$('bibDescricao').value.trim(),l=$('bibLink').value.trim();if(!t||!d||!l){alert('Preencha todos os campos.');return}showLoading();await sb.from('biblioteca').insert({id:uid(),titulo:t,descricao:d,link:l});hideLoading();closeModal('modalBiblioteca');$('formBiblioteca').reset();carregarBiblioteca();toast('Material adicionado!')}
+async function carregarBiblioteca(){const{data}=await sb.from('biblioteca').select('*').order('created_at',{ascending:false});$('gridBiblioteca').innerHTML=(!data||data.length===0)?'<div class="empty-state">Nenhum material disponivel</div>':data.map(b=>`<div class="bib-item"><h4>${b.titulo}</h4><p>${b.descricao}</p><a href="${b.link}" target="_blank">Acessar Material</a><button class="btn btn-danger btn-xs" data-acao="removerMaterial" data-id="${b.id}" style="margin-top:8px;display:block">Remover</button></div>`).join('');bindBotoes()}
+async function removerMaterial(id){if(!confirm('Remover material?'))return;showLoading();await sb.from('biblioteca').delete().eq('id',id);hideLoading();carregarBiblioteca();toast('Material removido.')}
+async function desativarProfessor(id){if(!confirm('Desativar professor?'))return;showLoading();await sb.from('professores').update({ativo:false}).eq('id',id);hideLoading();carregarDashboard();carregarTabelas()}
+async function desativarAluno(id){if(!confirm('Desativar aluno?'))return;showLoading();await sb.from('alunos').update({ativo:false}).eq('id',id);hideLoading();carregarDashboard();carregarTabelas()}
+async function desativarTurma(id){if(!confirm('Desativar turma?'))return;showLoading();await sb.from('turmas').update({ativo:false}).eq('id',id);hideLoading();carregarDashboard();carregarTabelas()}
+async function desativarPlano(id){if(!confirm('Desativar plano?'))return;showLoading();await sb.from('planos').update({ativo:false}).eq('id',id);hideLoading();carregarFinanceiro()}
+async function confirmarPagamento(id){showLoading();await sb.from('pagamentos').update({status:'pago'}).eq('id',id);hideLoading();carregarDashboard();carregarFinanceiro();toast('Pagamento confirmado!')}
+async function carregarSelectProfessores(){const{data}=await sb.from('professores').select('*').eq('ativo',true);const s=$('turmaProfessor');s.innerHTML='<option value="">Selecione</option>';if(data)data.forEach(p=>s.innerHTML+=`<option value="${p.id}">${p.nome}</option>`)}
+async function carregarSelectTurmas(){const{data}=await sb.from('turmas').select('*').eq('ativo',true);const s=$('alunoTurma');s.innerHTML='<option value="">Selecione</option>';if(data)data.forEach(t=>s.innerHTML+=`<option value="${t.id}">${t.nome}</option>`)}
+async function carregarSelectPlanos(){const{data}=await sb.from('planos').select('*').eq('ativo',true);const s=$('turmaPlano');s.innerHTML='<option value="">Selecione</option>';if(data)data.forEach(p=>s.innerHTML+=`<option value="${p.id}">${p.nome} - R$ ${Number(p.valor).toFixed(2)}</option>`)}
+const oOM=openModal;openModal=function(id){oOM(id);if(id==='modalTurma'){carregarSelectProfessores();carregarSelectPlanos()}if(id==='modalAluno')carregarSelectTurmas()};
+async function carregarPerfil(){const{data}=await sb.from('fotos_perfil').select('foto_base64').eq('user_key','admin').single();const el=$('adminAvatar');const sidebarEl=$('sidebarAvatar');el.innerHTML=data?`<img src="${data.foto_base64}" style="width:100%;height:100%;object-fit:cover">`:'A';sidebarEl.innerHTML=data?`<img src="${data.foto_base64}" style="width:100%;height:100%;object-fit:cover">`:'A'}
+async function atualizarFoto(){const f=$('adminPhoto').files[0];if(!f)return;const r=new FileReader();r.onload=async e=>{showLoading();await sb.from('fotos_perfil').upsert({id:uid(),user_key:'admin',foto_base64:e.target.result},{onConflict:'user_key'});hideLoading();carregarPerfil();toast('Foto atualizada!')};r.readAsDataURL(f)}
+async function salvarPerfil(){const s=$('adminSenha').value.trim();if(!s){toast('Digite uma nova senha.');return}showLoading();await sb.from('configuracoes').upsert({chave:'admin_senha',valor:s},{onConflict:'chave'});hideLoading();$('adminSenha').value='';toast('Senha alterada com sucesso!')}
+async function exportarBackup(){showLoading();const tabs=['configuracoes','planos','professores','turmas','alunos','encontros','trabalhos','pagamentos','biblioteca','fotos_perfil'];const bk={};for(const t of tabs){const{data}=await sb.from(t).select('*');bk[t]=data||[]}const blob=new Blob([JSON.stringify(bk,null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`mentorcr_backup_${new Date().toISOString().slice(0,10)}.json`;a.click();hideLoading();toast('Backup exportado!')}
+function restaurarBackup(event){const f=event.target.files[0];if(!f)return;if(!confirm('Restaurar backup? Todos os dados atuais serao SUBSTITUIDOS.')){event.target.value='';return}const r=new FileReader();r.onload=async function(e){showLoading();try{const d=JSON.parse(e.target.result);const ordem=['configuracoes','planos','fotos_perfil','biblioteca','pagamentos','trabalhos','encontros','alunos','turmas','professores'];for(const t of ordem){try{await sb.from(t).delete().neq('id','0')}catch(ex){}if(d[t])for(const i of d[t])try{await sb.from(t).insert(i)}catch(ex){}}hideLoading();carregarDashboard();carregarTabelas();toast('Backup restaurado com sucesso!')}catch(ex){hideLoading();alert('Erro ao restaurar backup.')}};r.readAsText(f);event.target.value=''}
+async function apagarTudo(){if(!confirm('ATENCAO! Esta acao apagara TODOS os dados do sistema permanentemente. Deseja continuar?'))return;if(!confirm('CONFIRMACAO FINAL: Todos os professores, alunos, turmas, encontros, trabalhos, pagamentos e biblioteca serao apagados. Continuar?'))return;showLoading();const ordem=['fotos_perfil','biblioteca','pagamentos','trabalhos','encontros','alunos','turmas','professores','planos'];for(const t of ordem){try{await sb.from(t).delete().neq('id','0')}catch(ex){}}await sb.from('configuracoes').upsert({chave:'admin_senha',valor:'admin123'},{onConflict:'chave'});hideLoading();carregarDashboard();carregarTabelas();toast('Todos os dados foram apagados!')}
+$('formProfessor').addEventListener('submit',salvarProfessor);$('formAluno').addEventListener('submit',salvarAluno);$('formTurma').addEventListener('submit',salvarTurma);$('formPlano').addEventListener('submit',salvarPlano);$('formBiblioteca').addEventListener('submit',salvarMaterial);
 carregarDashboard();
 </script>
 </body>
