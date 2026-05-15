@@ -1,96 +1,54 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>MentorCR - Login</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script>
-        // Verificação IMEDIATA - antes de carregar a página
-        (function() {
-            const sessionData = localStorage.getItem('mentorcr_session');
-            if (sessionData) {
-                try {
-                    const session = JSON.parse(sessionData);
-                    const SESSION_DURATION = 2 * 60 * 60 * 1000;
-                    if (Date.now() - session.timestamp <= SESSION_DURATION) {
-                        if (session.tipo === 'admin') window.location.href = 'admin.html';
-                        else if (session.tipo === 'professor') window.location.href = 'professor.html';
-                        else if (session.tipo === 'aluno') window.location.href = 'aluno.html';
-                    }
-                } catch(e) {}
-            }
-        })();
-    </script>
     <style>
-        :root{--bg:#f7fafc;--primary:#3182ce;--primary-dark:#2b6cb0;--gold:#b8860b;--text:#2d3748;--text-light:#718096;--border:#e2e8f0;--danger:#e53e3e}
+        :root{--bg:#f5f6fa;--primary:#3b82f6;--primary-dark:#2563eb;--text:#1a1f36;--text-light:#6b7280;--border:#e5e8eb;--danger:#ef4444;--radius:12px;--radius-sm:8px}
         *{margin:0;padding:0;box-sizing:border-box}
-        body{font-family:'Inter','Segoe UI',system-ui,sans-serif;background:linear-gradient(180deg,#f7fafc 0%,#edf2f7 100%);color:var(--text);min-height:100vh;display:flex;align-items:center;justify-content:center}
-        .loading{display:none;position:fixed;inset:0;background:rgba(255,255,255,.7);backdrop-filter:blur(2px);z-index:9999;justify-content:center;align-items:center}
+        body{font-family:'Inter','Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:16px}
+        .loading{display:none;position:fixed;inset:0;background:rgba(255,255,255,.7);backdrop-filter:blur(4px);z-index:9999;justify-content:center;align-items:center}
         .loading.show{display:flex}
-        .spinner{width:38px;height:38px;border:3px solid #e2e8f0;border-top-color:var(--primary);border-radius:50%;animation:spin .7s linear infinite}
+        .spinner{width:36px;height:36px;border:3px solid #e5e8eb;border-top-color:var(--primary);border-radius:50%;animation:spin .6s linear infinite}
         @keyframes spin{to{transform:rotate(360deg)}}
-        .login-wrapper{width:100%;max-width:420px;padding:20px}
-        .login-card{background:#fff;border-radius:12px;padding:38px 32px;box-shadow:0 6px 24px rgba(0,0,0,.06);border:1px solid var(--border);text-align:center;border-top:4px solid var(--primary)}
-        .login-card svg{width:56px;height:56px;margin-bottom:14px}
-        .login-card h1{font-family:'Georgia',serif;font-size:24px;font-weight:600;color:#1a365d;margin-bottom:4px;letter-spacing:-.3px}
-        .login-card .subtitle{font-size:11px;color:var(--text-light);margin-bottom:26px;font-style:italic}
-        .form-group{margin-bottom:13px;text-align:left}
-        .form-group label{display:block;font-size:10px;font-weight:500;color:var(--text-light);margin-bottom:4px;text-transform:uppercase;letter-spacing:.4px}
-        .form-group select,.form-group input{width:100%;padding:10px 14px;background:#f7fafc;border:1px solid var(--border);border-radius:8px;font-size:13px;color:var(--text);font-family:inherit;transition:all .15s}
-        .form-group select:focus,.form-group input:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 3px rgba(49,130,206,.06);background:#fff}
-        .form-group select option{background:#fff;color:var(--text)}
-        .btn-login{width:100%;padding:13px;background:var(--primary);color:#fff;border:none;border-radius:8px;font-size:14px;font-weight:500;cursor:pointer;margin-top:8px;font-family:inherit;transition:all .15s;box-shadow:0 3px 8px rgba(49,130,206,.2)}
-        .btn-login:hover{background:var(--primary-dark);box-shadow:0 5px 14px rgba(49,130,206,.25)}
-        .login-error{color:var(--danger);font-size:11px;text-align:center;margin-top:12px;display:none}
+        .login-card{background:#fff;border-radius:var(--radius);padding:32px 24px;width:100%;max-width:380px;box-shadow:0 8px 30px rgba(0,0,0,.08);border:1px solid var(--border);text-align:center}
+        .login-card svg{width:48px;height:48px;margin-bottom:12px}
+        .login-card h1{font-size:20px;font-weight:600;color:var(--text);margin-bottom:4px}
+        .login-card p{font-size:11px;color:var(--text-light);margin-bottom:20px}
+        .form-group{margin-bottom:10px;text-align:left}
+        .form-group label{display:block;font-size:10px;font-weight:500;color:var(--text-light);margin-bottom:3px;text-transform:uppercase;letter-spacing:.3px}
+        .form-group select,.form-group input{width:100%;padding:10px 14px;background:#f9fafb;border:1px solid var(--border);border-radius:var(--radius-sm);font-size:13px;color:var(--text);font-family:inherit}
+        .form-group select:focus,.form-group input:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 3px rgba(59,130,246,.06)}
+        .btn-login{width:100%;padding:12px;background:var(--primary);color:#fff;border:none;border-radius:var(--radius-sm);font-size:14px;font-weight:500;cursor:pointer;font-family:inherit;transition:all .15s}
+        .btn-login:hover{background:var(--primary-dark)}
+        .login-error{color:var(--danger);font-size:10px;margin-top:8px;display:none}
         .footer{position:fixed;bottom:0;left:0;right:0;padding:10px;text-align:center;font-size:9px;color:var(--text-light);background:#fff;border-top:1px solid var(--border)}
         .footer span{color:var(--primary);font-weight:500}
     </style>
 </head>
 <body>
 <div class="loading" id="loading"><div class="spinner"></div></div>
-<div class="login-wrapper">
-    <div class="login-card">
-        <svg viewBox="0 0 52 52"><defs><linearGradient id="lg"><stop offset="0%" stop-color="#1a365d"/><stop offset="100%" stop-color="#3182ce"/></linearGradient></defs><rect x="3" y="3" width="46" height="46" rx="10" fill="url(#lg)"/><text x="26" y="33" text-anchor="middle" fill="#fff" font-size="18" font-weight="600">CR</text></svg>
-        <h1>MentorCR</h1>
-        <p class="subtitle">Mentoria em Ciencias da Religiao</p>
-        <div class="form-group"><label>Tipo de Acesso</label><select id="loginTipo"><option value="admin">Administrador</option><option value="professor">Professor</option><option value="aluno">Aluno</option></select></div>
-        <div class="form-group"><label>Email</label><input type="email" id="loginEmail" placeholder="email@exemplo.com"></div>
-        <div class="form-group"><label>Senha</label><input type="password" id="loginSenha" placeholder="********"></div>
-        <button class="btn-login" id="btnLogin">Entrar</button>
-        <p class="login-error" id="loginError"></p>
-    </div>
+<div class="login-card">
+    <svg viewBox="0 0 52 52"><defs><linearGradient id="lg"><stop offset="0%" stop-color="#3b82f6"/><stop offset="100%" stop-color="#6366f1"/></linearGradient></defs><rect x="3" y="3" width="46" height="46" rx="10" fill="url(#lg)"/><text x="26" y="33" text-anchor="middle" fill="#fff" font-size="18" font-weight="600">CR</text></svg>
+    <h1>MentorCR</h1><p>Mentoria em Ciencias da Religiao</p>
+    <div class="form-group"><label>Tipo de Acesso</label><select id="loginTipo"><option value="admin">Administrador</option><option value="professor">Professor</option><option value="aluno">Aluno</option></select></div>
+    <div class="form-group"><label>Email</label><input type="email" id="loginEmail" placeholder="email@exemplo.com"></div>
+    <div class="form-group"><label>Senha</label><input type="password" id="loginSenha" placeholder="********"></div>
+    <button class="btn-login" id="btnLogin">Entrar</button>
+    <p class="login-error" id="loginError"></p>
 </div>
-<div class="footer">Criado por <span>Matheus Pacifico Evangelista</span> | <a href="https://wa.me/5579996458399" style="color:#38a169;text-decoration:none">(79) 99645-8399</a></div>
-<script src="supabase.js"></script>
+<div class="footer">Criado por <span>Matheus Pacifico Evangelista</span> | <a href="https://wa.me/5579996458399" style="color:#10b981;text-decoration:none">(79) 99645-8399</a></div>
 <script>
-$('btnLogin').addEventListener('click',async()=>{
-    const t=$('loginTipo').value,e=$('loginEmail').value.trim(),s=$('loginSenha').value.trim(),r=$('loginError');
-    r.style.display='none';
-    if(!e||!s){r.textContent='Preencha todos os campos.';r.style.display='block';return}
-    showLoading();
-    try{
-        if(t==='admin'){
-            const{data:c}=await sb.from('configuracoes').select('valor').eq('chave','admin_senha').single();
-            if(e===ADMIN_EMAIL&&s===(c?c.valor:'admin123')){
-                criarSessao('admin','admin','Administrador');
-                window.location.href='admin.html';
-            }else{r.textContent='Email ou senha incorretos.';r.style.display='block'}
-        }else if(t==='professor'){
-            const{data:p}=await sb.from('professores').select('*').eq('email',e).eq('senha',s).eq('ativo',true);
-            if(p&&p.length>0){
-                criarSessao('professor',p[0].id,p[0].nome);
-                window.location.href='professor.html';
-            }else{r.textContent='Email ou senha incorretos.';r.style.display='block'}
-        }else{
-            const{data:a}=await sb.from('alunos').select('*').eq('email',e).eq('senha',s).eq('ativo',true);
-            if(a&&a.length>0){
-                criarSessao('aluno',a[0].id,a[0].nome);
-                window.location.href='aluno.html';
-            }else{r.textContent='Email ou senha incorretos.';r.style.display='block'}
-        }
-    }catch(ex){r.textContent='Erro de conexao.';r.style.display='block'}
-    hideLoading()
-});
+const SUPABASE_URL='https://sejnrydyaoawzthnprvq.supabase.co';
+const SUPABASE_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNlam5yeWR5YW9hd3p0aG5wcnZxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgzNTQyNjYsImV4cCI6MjA5MzkzMDI2Nn0.2GXQUF8drgT8HKLLp4YHT6vi0iBUjVdjw1t-ft1xsRA';
+const sb=supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+const ADMIN_EMAIL='admin@mentorcr.com';
+const $=id=>document.getElementById(id);
+const showLoading=()=>$('loading').classList.add('show');
+const hideLoading=()=>$('loading').classList.remove('show');
+function criarSessao(tipo,id,nome){const s={tipo,id,nome,timestamp:Date.now()};localStorage.setItem('mentorcr_session',JSON.stringify(s));localStorage.setItem('mentorcr_user_id',id);localStorage.setItem('mentorcr_user_nome',nome);localStorage.setItem('mentorcr_user_tipo',tipo)}
+$('btnLogin').addEventListener('click',async()=>{const t=$('loginTipo').value,e=$('loginEmail').value.trim(),s=$('loginSenha').value.trim(),r=$('loginError');r.style.display='none';if(!e||!s){r.textContent='Preencha todos os campos.';r.style.display='block';return}showLoading();try{if(t==='admin'){const{data:c}=await sb.from('configuracoes').select('valor').eq('chave','admin_senha').single();if(e===ADMIN_EMAIL&&s===(c?c.valor:'admin123')){criarSessao('admin','admin','Administrador');window.location.href='admin.html'}else{r.textContent='Email ou senha incorretos.';r.style.display='block'}}else if(t==='professor'){const{data:p}=await sb.from('professores').select('*').eq('email',e).eq('senha',s).eq('ativo',true);if(p&&p.length>0){criarSessao('professor',p[0].id,p[0].nome);window.location.href='professor.html'}else{r.textContent='Email ou senha incorretos.';r.style.display='block'}}else{const{data:a}=await sb.from('alunos').select('*').eq('email',e).eq('senha',s).eq('ativo',true);if(a&&a.length>0){criarSessao('aluno',a[0].id,a[0].nome);window.location.href='aluno.html'}else{r.textContent='Email ou senha incorretos.';r.style.display='block'}}}catch(ex){r.textContent='Erro de conexao.';r.style.display='block'}hideLoading()});
 </script>
 </body>
 </html>
