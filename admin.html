@@ -1,25 +1,251 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>MentorCR - Admin</title>
-    <script>
-        (function() {
-            const d = localStorage.getItem('mentorcr_session');
-            if (!d) { window.location.href = 'index.html'; return; }
-            try {
-                const s = JSON.parse(d);
-                if (Date.now() - s.timestamp > 7200000) { localStorage.removeItem('mentorcr_session'); window.location.href = 'index.html'; return; }
-                if (s.tipo !== 'admin') { window.location.href = 'index.html'; return; }
-            } catch(e) { window.location.href = 'index.html'; }
-        })();
-    </script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <link rel="stylesheet" href="style.css">
+    <style>
+        :root {
+            --sidebar-bg: #0f1a2e;
+            --sidebar-hover: #1a2942;
+            --sidebar-active: #1e3a5f;
+            --bg: #f5f6fa;
+            --card-bg: #ffffff;
+            --text: #1a1f36;
+            --text-light: #6b7280;
+            --text-white: #e2e8f0;
+            --primary: #3b82f6;
+            --primary-light: #eff6ff;
+            --success: #10b981;
+            --success-light: #ecfdf5;
+            --warning: #f59e0b;
+            --warning-light: #fffbeb;
+            --danger: #ef4444;
+            --gold: #b8860b;
+            --border: #e5e7eb;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,.04);
+            --shadow: 0 4px 6px rgba(0,0,0,.04), 0 2px 4px rgba(0,0,0,.03);
+            --shadow-lg: 0 10px 25px rgba(0,0,0,.06);
+            --radius: 12px;
+            --radius-sm: 8px;
+            --transition: all .2s ease;
+        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body {
+            font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: var(--bg); color: var(--text);
+            font-size: 14px; line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+            -webkit-tap-highlight-color: transparent;
+            user-select: none;
+        }
+        .loading { display:none; position:fixed; inset:0; background:rgba(255,255,255,.7); backdrop-filter:blur(4px); z-index:9999; justify-content:center; align-items:center; }
+        .loading.show { display:flex; }
+        .spinner { width:40px; height:40px; border:3px solid #e5e7eb; border-top-color:var(--primary); border-radius:50%; animation:spin .6s linear infinite; }
+        @keyframes spin { to{transform:rotate(360deg)} }
+
+        .mobile-header { display:none; background:var(--sidebar-bg); padding:12px 16px; align-items:center; justify-content:space-between; position:sticky; top:0; z-index:300; }
+        .mobile-header .brand { display:flex; align-items:center; gap:8px; }
+        .mobile-header .brand svg { width:28px; height:28px; }
+        .mobile-header .brand span { font-size:15px; font-weight:600; color:#fff; }
+        .mobile-header .menu-btn { background:transparent; border:none; color:#fff; font-size:22px; cursor:pointer; padding:4px 8px; }
+
+        .sidebar {
+            width:250px; background:var(--sidebar-bg); display:flex; flex-direction:column; flex-shrink:0;
+            height:100vh; padding:24px 0; background:linear-gradient(180deg, #0f1a2e 0%, #141f35 100%);
+            position:fixed; top:0; left:0; z-index:200; transition:transform .3s ease;
+        }
+        .sidebar-logo { display:flex; align-items:center; gap:10px; padding:0 20px 20px; border-bottom:1px solid rgba(255,255,255,.06); margin-bottom:20px; }
+        .sidebar-logo svg { width:34px; height:34px; }
+        .sidebar-logo span { font-size:16px; font-weight:600; color:#fff; letter-spacing:-.2px; }
+        .sidebar-user { display:flex; align-items:center; gap:12px; padding:0 20px 16px; margin-bottom:8px; }
+        .sidebar-avatar { width:42px; height:42px; border-radius:50%; background:linear-gradient(135deg, #3b82f6, #6366f1); display:flex; align-items:center; justify-content:center; font-size:16px; font-weight:600; color:#fff; overflow:hidden; flex-shrink:0; }
+        .sidebar-avatar img { width:100%; height:100%; object-fit:cover; }
+        .sidebar-user-info { flex:1; }
+        .sidebar-user-name { font-size:13px; font-weight:500; color:#fff; }
+        .sidebar-user-role { font-size:10px; color:#94a3b8; margin-top:1px; }
+        .sidebar-nav { flex:1; overflow-y:auto; padding:0 12px; }
+        .sidebar-nav button {
+            width:100%; display:flex; align-items:center; gap:12px; padding:10px 14px;
+            background:transparent; border:none; color:#94a3b8; font-size:12px; cursor:pointer;
+            font-weight:400; border-radius:var(--radius-sm); transition:var(--transition);
+            font-family:inherit; text-align:left; margin-bottom:3px;
+        }
+        .sidebar-nav button:hover { background:var(--sidebar-hover); color:#cbd5e1; }
+        .sidebar-nav button.active { background:var(--sidebar-active); color:#fff; font-weight:500; }
+        .sidebar-nav button svg { width:18px; height:18px; flex-shrink:0; }
+        .sidebar-footer { padding:14px 16px; border-top:1px solid rgba(255,255,255,.06); }
+        .sidebar-footer button { width:100%; padding:8px; background:transparent; border:1px solid rgba(255,255,255,.1); color:#94a3b8; border-radius:var(--radius-sm); cursor:pointer; font-size:11px; transition:var(--transition); font-family:inherit; display:flex; align-items:center; justify-content:center; gap:6px; }
+        .sidebar-footer button:hover { background:rgba(239,68,68,.1); border-color:var(--danger); color:var(--danger); }
+        .sidebar-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,.5); z-index:199; }
+
+        .main { margin-left:250px; display:flex; flex-direction:column; min-height:100vh; }
+        .header { background:#fff; padding:16px 28px; display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid var(--border); flex-shrink:0; position:sticky; top:0; z-index:100; }
+        .header-left h1 { font-size:18px; font-weight:600; color:var(--text); letter-spacing:-.3px; }
+        .header-left p { font-size:11px; color:var(--text-light); margin-top:2px; }
+        .header-right { display:flex; align-items:center; gap:16px; }
+        .header-search { display:flex; align-items:center; gap:8px; background:#f5f6fa; padding:8px 14px; border-radius:20px; border:1px solid var(--border); }
+        .header-search input { border:none; background:transparent; outline:none; font-size:12px; color:var(--text); width:160px; font-family:inherit; }
+        .header-search svg { width:14px; height:14px; color:var(--text-light); }
+        .header-notify { width:36px; height:36px; border-radius:50%; background:#f5f6fa; display:flex; align-items:center; justify-content:center; cursor:pointer; position:relative; border:1px solid var(--border); }
+        .header-notify .dot { position:absolute; top:6px; right:6px; width:8px; height:8px; background:var(--danger); border-radius:50%; border:2px solid #fff; }
+
+        .content { padding:24px 28px; display:flex; flex-direction:column; gap:20px; }
+        .content h2 { font-size:18px; font-weight:600; color:var(--text); letter-spacing:-.2px; }
+
+        .stats-grid { display:grid; grid-template-columns:repeat(4, 1fr); gap:16px; }
+        .stat-card { background:var(--card-bg); border-radius:var(--radius); padding:20px 22px; box-shadow:var(--shadow); border:1px solid var(--border); display:flex; align-items:center; gap:16px; transition:var(--transition); }
+        .stat-card:hover { box-shadow:var(--shadow-lg); transform:translateY(-1px); }
+        .stat-icon { width:48px; height:48px; border-radius:12px; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+        .stat-icon svg { width:22px; height:22px; }
+        .stat-info { flex:1; }
+        .stat-label { font-size:11px; color:var(--text-light); font-weight:500; text-transform:uppercase; letter-spacing:.5px; margin-bottom:4px; }
+        .stat-value { font-size:24px; font-weight:700; color:var(--text); letter-spacing:-.5px; }
+        .stat-change { font-size:10px; margin-top:4px; font-weight:500; }
+        .stat-change.up { color:var(--success); }
+        .stat-change.down { color:var(--danger); }
+        .stat-blue .stat-icon { background:var(--primary-light); color:var(--primary); }
+        .stat-green .stat-icon { background:var(--success-light); color:var(--success); }
+        .stat-gold .stat-icon { background:var(--warning-light); color:var(--gold); }
+        .stat-purple .stat-icon { background:#eef2ff; color:#6366f1; }
+
+        .charts-grid { display:grid; grid-template-columns:2fr 1fr; gap:16px; }
+        .chart-card { background:var(--card-bg); border-radius:var(--radius); padding:20px 22px; box-shadow:var(--shadow); border:1px solid var(--border); }
+        .chart-card h3 { font-size:14px; font-weight:600; color:var(--text); margin-bottom:16px; }
+        .chart-bars { display:flex; align-items:flex-end; gap:12px; height:180px; padding-top:8px; }
+        .chart-bar-item { flex:1; display:flex; flex-direction:column; align-items:center; gap:6px; }
+        .chart-bar { width:100%; border-radius:6px 6px 0 0; transition:var(--transition); background:linear-gradient(180deg, #3b82f6, #60a5fa); }
+        .chart-bar.yellow { background:linear-gradient(180deg, #f59e0b, #fbbf24); }
+        .chart-bar.green { background:linear-gradient(180deg, #10b981, #34d399); }
+        .chart-bar.purple { background:linear-gradient(180deg, #6366f1, #818cf8); }
+        .chart-bar-label { font-size:10px; color:var(--text-light); font-weight:500; }
+        .chart-donut { display:flex; align-items:center; justify-content:center; gap:20px; }
+        .chart-donut-circle { width:140px; height:140px; border-radius:50%; background:conic-gradient(#3b82f6 0deg 180deg, #f59e0b 180deg 270deg, #10b981 270deg 360deg); position:relative; }
+        .chart-donut-circle::after { content:''; position:absolute; inset:28px; background:#fff; border-radius:50%; }
+        .chart-donut-legend { display:flex; flex-direction:column; gap:10px; }
+        .chart-donut-item { display:flex; align-items:center; gap:8px; font-size:11px; color:var(--text); }
+        .chart-donut-dot { width:10px; height:10px; border-radius:50%; flex-shrink:0; }
+        .chart-donut-dot.blue { background:#3b82f6; }
+        .chart-donut-dot.yellow { background:#f59e0b; }
+        .chart-donut-dot.green { background:#10b981; }
+
+        .table-container { background:var(--card-bg); border-radius:var(--radius); box-shadow:var(--shadow); border:1px solid var(--border); overflow-x:auto; }
+        table { width:100%; border-collapse:collapse; min-width:600px; }
+        thead { background:#f9fafb; }
+        th { padding:12px 18px; text-align:left; font-size:10px; font-weight:600; color:var(--text-light); text-transform:uppercase; letter-spacing:.5px; border-bottom:1px solid var(--border); }
+        td { padding:11px 18px; font-size:12px; border-bottom:1px solid var(--border); color:var(--text); }
+        tr:last-child td { border-bottom:none; }
+        tr:hover td { background:#f9fafb; }
+
+        .btn { padding:8px 16px; border:none; border-radius:var(--radius-sm); cursor:pointer; font-size:11px; font-weight:500; letter-spacing:.2px; transition:var(--transition); font-family:inherit; display:inline-flex; align-items:center; gap:6px; }
+        .btn-primary { background:var(--primary); color:#fff; box-shadow:0 2px 4px rgba(59,130,246,.2); }
+        .btn-primary:hover { background:#2563eb; }
+        .btn-outline { background:transparent; border:1px solid var(--border); color:var(--text); }
+        .btn-outline:hover { background:#f9fafb; }
+        .btn-sm { padding:5px 12px; font-size:10px; }
+        .btn-danger { background:transparent; border:1px solid #fecaca; color:var(--danger); }
+        .btn-danger:hover { background:#fef2f2; }
+        .btn-success { background:var(--success); color:#fff; }
+        .btn-xs { padding:3px 8px; font-size:9px; border-radius:6px; }
+
+        .badge { padding:2px 10px; border-radius:12px; font-size:9px; font-weight:500; }
+        .badge-success { background:var(--success-light); color:var(--success); }
+        .badge-warning { background:var(--warning-light); color:var(--warning); }
+        .action-group { display:flex; gap:5px; }
+        .empty-state { text-align:center; padding:40px; color:var(--text-light); font-size:12px; }
+
+        .modal { display:none; position:fixed; inset:0; background:rgba(0,0,0,.3); backdrop-filter:blur(2px); z-index:1000; align-items:center; justify-content:center; padding:16px; }
+        .modal.show { display:flex; }
+        .modal-content { background:#fff; border-radius:var(--radius); padding:24px; width:100%; max-width:460px; max-height:85vh; overflow-y:auto; box-shadow:0 20px 60px rgba(0,0,0,.12); }
+        .modal-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; }
+        .modal-header h3 { font-size:16px; font-weight:600; color:var(--text); }
+        .modal-close { width:28px; height:28px; border-radius:8px; border:1px solid var(--border); background:transparent; color:var(--text-light); cursor:pointer; font-size:14px; display:flex; align-items:center; justify-content:center; transition:var(--transition); }
+        .modal-close:hover { background:#f5f6fa; }
+
+        .form-group { margin-bottom:12px; }
+        .form-group label { display:block; font-size:10px; font-weight:500; color:var(--text-light); margin-bottom:4px; letter-spacing:.3px; }
+        .form-group input, .form-group select, .form-group textarea { width:100%; padding:9px 13px; background:#f9fafb; border:1px solid var(--border); border-radius:var(--radius-sm); color:var(--text); font-size:12px; font-family:inherit; transition:var(--transition); }
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus { outline:none; border-color:var(--primary); box-shadow:0 0 0 3px rgba(59,130,246,.06); background:#fff; }
+        .form-group textarea { resize:vertical; min-height:60px; }
+        .form-row { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+
+        .biblioteca-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(250px, 1fr)); gap:14px; }
+        .bib-item { background:var(--card-bg); border:1px solid var(--border); border-radius:var(--radius); padding:18px 20px; box-shadow:var(--shadow-sm); transition:var(--transition); }
+        .bib-item.bib-livro { border-left:3px solid #6366f1; }
+        .bib-item.bib-artigo { border-left:3px solid var(--gold); }
+        .bib-item:hover { box-shadow:var(--shadow); }
+        .bib-item h4 { font-size:13px; font-weight:600; color:var(--text); margin-bottom:4px; }
+        .bib-item p { font-size:10px; color:var(--text-light); margin-bottom:8px; }
+        .bib-item a { color:var(--primary); font-size:11px; text-decoration:none; font-weight:500; }
+        .bib-tipo-badge { display:inline-block; padding:2px 8px; border-radius:4px; font-size:8px; font-weight:600; text-transform:uppercase; letter-spacing:.3px; margin-bottom:6px; }
+        .bib-tipo-badge.livro { background:#eef2ff; color:#6366f1; }
+        .bib-tipo-badge.artigo { background:var(--warning-light); color:var(--gold); }
+
+        .profile-section { display:flex; gap:24px; flex-wrap:wrap; }
+        .profile-avatar { width:72px; height:72px; border-radius:50%; background:linear-gradient(135deg, #0f1a2e, #3b82f6); color:#fff; display:flex; align-items:center; justify-content:center; font-size:22px; font-weight:600; overflow:hidden; box-shadow:0 4px 12px rgba(15,26,46,.2); }
+        .profile-avatar img { width:100%; height:100%; object-fit:cover; }
+        .profile-info { flex:1; min-width:220px; }
+        .danger-zone { border:1px solid #fecaca; background:#fef2f2; padding:14px 18px; border-radius:var(--radius); }
+        .danger-zone h4 { color:var(--danger); font-size:12px; margin-bottom:4px; }
+        .danger-zone p { font-size:10px; color:var(--text-light); margin-bottom:10px; }
+
+        .toast { position:fixed; bottom:30px; right:20px; background:#1a1f36; color:#fff; padding:12px 20px; border-radius:var(--radius-sm); font-weight:500; font-size:11px; z-index:2000; box-shadow:0 8px 24px rgba(0,0,0,.15); animation:slideIn .25s ease, slideOut .25s ease 2s forwards; }
+        @keyframes slideIn { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
+        @keyframes slideOut { from{opacity:1} to{opacity:0;transform:translateY(12px)} }
+
+        a { color:var(--primary); text-decoration:none; font-weight:500; }
+        .hidden { display:none; }
+        ::-webkit-scrollbar { width:4px; height:4px; }
+        ::-webkit-scrollbar-track { background:transparent; }
+        ::-webkit-scrollbar-thumb { background:#d1d5db; border-radius:10px; }
+        ::-webkit-scrollbar-thumb:hover { background:#9ca3af; }
+
+        @media (max-width:1024px) {
+            .stats-grid { grid-template-columns:repeat(2, 1fr); }
+            .charts-grid { grid-template-columns:1fr; }
+            .header-search input { width:100px; }
+        }
+        @media (max-width:768px) {
+            .mobile-header { display:flex; }
+            .sidebar { transform:translateX(-100%); width:260px; z-index:250; }
+            .sidebar.open { transform:translateX(0); }
+            .sidebar-overlay.show { display:block; }
+            .main { margin-left:0; }
+            .header { display:none; }
+            .content { padding:14px 12px; gap:14px; }
+            .stats-grid { grid-template-columns:1fr; gap:10px; }
+            .stat-card { padding:14px 16px; }
+            .stat-icon { width:40px; height:40px; }
+            .stat-value { font-size:20px; }
+            .charts-grid { grid-template-columns:1fr; }
+            .chart-bars { height:140px; }
+            .chart-donut { flex-direction:column; }
+            .chart-donut-circle { width:120px; height:120px; }
+            .biblioteca-grid { grid-template-columns:1fr; }
+            .form-row { grid-template-columns:1fr; }
+            .modal-content { margin:8px; padding:18px; }
+            table { min-width:100%; }
+            th, td { padding:8px 10px; font-size:10px; }
+            .btn { padding:6px 12px; font-size:10px; }
+            .header-search { display:none; }
+        }
+    </style>
 </head>
 <body>
 <div class="loading" id="loading"><div class="spinner"></div></div>
 
+<!-- MOBILE HEADER -->
+<header class="mobile-header">
+    <div class="brand">
+        <svg viewBox="0 0 30 30"><rect x="2" y="2" width="26" height="26" rx="7" fill="#3b82f6"/><text x="15" y="20" text-anchor="middle" fill="#fff" font-size="12" font-weight="600">CR</text></svg>
+        <span>MentorCR</span>
+    </div>
+    <button class="menu-btn" onclick="toggleSidebar()">☰</button>
+</header>
+<div class="sidebar-overlay" onclick="closeSidebar()"></div>
+
+<!-- SIDEBAR -->
 <nav class="sidebar">
     <div class="sidebar-logo"><svg viewBox="0 0 30 30"><rect x="2" y="2" width="26" height="26" rx="7" fill="#3b82f6"/><text x="15" y="20" text-anchor="middle" fill="#fff" font-size="12" font-weight="600">CR</text></svg><span>MentorCR</span></div>
     <div class="sidebar-user"><div class="sidebar-avatar" id="sidebarAvatar">A</div><div class="sidebar-user-info"><div class="sidebar-user-name">Administrador</div><div class="sidebar-user-role">Admin</div></div></div>
@@ -36,6 +262,7 @@
     <div class="sidebar-footer"><button onclick="logout()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>Sair</button></div>
 </nav>
 
+<!-- MAIN -->
 <main class="main">
     <header class="header"><div class="header-left"><h1>Administracao</h1><p>Gerencie professores, alunos, turmas e financas</p></div><div class="header-right"><div class="header-search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><input type="text" placeholder="Buscar..."></div><div class="header-notify"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg><span class="dot"></span></div></div></header>
     <div class="content">
@@ -53,76 +280,97 @@
     </div>
 </main>
 
+<!-- MODAIS -->
 <div id="modalProfessor" class="modal"><div class="modal-content"><div class="modal-header"><h3>Novo Professor</h3><button class="modal-close" onclick="closeModal('modalProfessor')">&times;</button></div><form id="formProfessor"><div class="form-group"><label>Nome Completo</label><input type="text" id="profNome" required></div><div class="form-group"><label>Email</label><input type="email" id="profEmail" required></div><div class="form-group"><label>Especialidade</label><input type="text" id="profEspecialidade" required></div><div class="form-group"><label>Senha</label><input type="password" id="profSenha" required></div><button type="submit" class="btn btn-primary" style="width:100%">Salvar Professor</button></form></div></div>
 <div id="modalAluno" class="modal"><div class="modal-content"><div class="modal-header"><h3>Novo Aluno</h3><button class="modal-close" onclick="closeModal('modalAluno')">&times;</button></div><form id="formAluno"><div class="form-group"><label>Nome Completo</label><input type="text" id="alunoNome" required></div><div class="form-group"><label>Email</label><input type="email" id="alunoEmail" required></div><div class="form-group"><label>Senha</label><input type="password" id="alunoSenha" required></div><div class="form-group"><label>Turma</label><select id="alunoTurma"><option value="">Selecione uma turma</option></select></div><button type="submit" class="btn btn-primary" style="width:100%">Salvar Aluno</button></form></div></div>
 <div id="modalTurma" class="modal"><div class="modal-content"><div class="modal-header"><h3>Nova Turma</h3><button class="modal-close" onclick="closeModal('modalTurma')">&times;</button></div><form id="formTurma"><div class="form-group"><label>Nome da Turma</label><input type="text" id="turmaNome" required></div><div class="form-group"><label>Descricao</label><textarea id="turmaDescricao" required></textarea></div><div class="form-row"><div class="form-group"><label>Carga Horaria</label><input type="text" id="turmaCarga" required></div><div class="form-group"><label>Valor R$</label><input type="number" id="turmaValor" required step="0.01"></div></div><div class="form-group"><label>Professor Responsavel</label><select id="turmaProfessor" required><option value="">Selecione</option></select></div><div class="form-group"><label>Plano de Pagamento</label><select id="turmaPlano"><option value="">Selecione</option></select></div><button type="submit" class="btn btn-primary" style="width:100%">Criar Turma</button></form></div></div>
 <div id="modalPlano" class="modal"><div class="modal-content"><div class="modal-header"><h3>Novo Plano</h3><button class="modal-close" onclick="closeModal('modalPlano')">&times;</button></div><form id="formPlano"><div class="form-group"><label>Nome do Plano</label><input type="text" id="planoNome" required></div><div class="form-group"><label>Descricao</label><input type="text" id="planoDescricao" required></div><div class="form-row"><div class="form-group"><label>Valor R$</label><input type="number" id="planoValor" required step="0.01"></div><div class="form-group"><label>Frequencia</label><select id="planoFrequencia"><option value="mensal">Mensal</option><option value="trimestral">Trimestral</option><option value="semestral">Semestral</option><option value="anual">Anual</option></select></div></div><button type="submit" class="btn btn-primary" style="width:100%">Salvar Plano</button></form></div></div>
-
-<!-- MODAL BIBLIOTECA (Nome, Descrição, Link, Tipo) -->
 <div id="modalBiblioteca" class="modal"><div class="modal-content"><div class="modal-header"><h3 id="bibModalTitle">Adicionar Material</h3><button class="modal-close" onclick="closeModal('modalBiblioteca')">&times;</button></div><form id="formBiblioteca"><input type="hidden" id="bibId"><div class="form-group"><label>Tipo de Material</label><select id="bibTipo" required><option value="">Selecione o tipo</option><option value="artigo">Artigo</option><option value="livro">Livro</option></select></div><div class="form-group"><label>Nome</label><input type="text" id="bibNome" required></div><div class="form-group"><label>Descricao</label><input type="text" id="bibDescricao" required></div><div class="form-group"><label>Link do Material</label><input type="url" id="bibLink" required></div><button type="submit" class="btn btn-primary" style="width:100%">Salvar</button></form></div></div>
 
-<script src="supabase.js"></script>
 <script>
-document.querySelectorAll('#sidebarNav button').forEach(btn=>{btn.addEventListener('click',function(){document.querySelectorAll('#sidebarNav button').forEach(b=>b.classList.remove('active'));this.classList.add('active');const s=this.dataset.section;document.querySelectorAll('[id^="section-"]').forEach(x=>x.classList.add('hidden'));const t=$('section-'+s);if(t)t.classList.remove('hidden');const a={dashboard:carregarDashboard,professores:carregarTabelas,alunos:carregarTabelas,turmas:carregarTabelas,financeiro:carregarFinanceiro,biblioteca:carregarBiblioteca,perfil:carregarPerfil};if(a[s])a[s]()})});
+// ==================== SUPABASE ====================
+const SUPABASE_URL='https://sejnrydyaoawzthnprvq.supabase.co';
+const SUPABASE_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNlam5yeWR5YW9hd3p0aG5wcnZxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgzNTQyNjYsImV4cCI6MjA5MzkzMDI2Nn0.2GXQUF8drgT8HKLLp4YHT6vi0iBUjVdjw1t-ft1xsRA';
+const sb=supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+const ADMIN_EMAIL='admin@mentorcr.com';
+let currentUser=null,currentUserId=null;
+const SESSION_DURATION=2*60*60*1000;
+
+// ==================== SESSÃO ====================
+(function(){const d=localStorage.getItem('mentorcr_session');if(!d){window.location.href='index.html';return}try{const s=JSON.parse(d);if(Date.now()-s.timestamp>SESSION_DURATION){localStorage.clear();window.location.href='index.html';return}if(s.tipo!=='admin'){window.location.href='index.html';return}}catch(e){window.location.href='index.html'}})();
+
+// ==================== UTILS ====================
+const $=id=>document.getElementById(id);
+const showLoading=()=>$('loading').classList.add('show');
+const hideLoading=()=>$('loading').classList.remove('show');
+function toast(msg){const old=document.querySelector('.toast');if(old)old.remove();const t=document.createElement('div');t.className='toast';t.textContent=msg;document.body.appendChild(t);setTimeout(()=>t.remove(),2100)}
+function uid(){return Date.now().toString(36)+Math.random().toString(36).substr(2,9)}
+function openModal(id){$(id).classList.add('show')}
+function closeModal(id){$(id).classList.remove('show')}
+window.onclick=function(e){if(e.target.classList.contains('modal'))e.target.classList.remove('show')}
+function logout(){localStorage.clear();window.location.href='index.html'}
+function toggleSidebar(){document.querySelector('.sidebar').classList.toggle('open');document.querySelector('.sidebar-overlay').classList.toggle('show')}
+function closeSidebar(){document.querySelector('.sidebar').classList.remove('open');document.querySelector('.sidebar-overlay').classList.remove('show')}
+
+// Keep alive
+setInterval(()=>{sb.from('configuracoes').select('valor').eq('chave','admin_senha').single().then(()=>{}).catch(()=>{})},240000);
+
+// ==================== NAVEGAÇÃO ====================
+document.querySelectorAll('#sidebarNav button').forEach(btn=>{btn.addEventListener('click',function(){document.querySelectorAll('#sidebarNav button').forEach(b=>b.classList.remove('active'));this.classList.add('active');const s=this.dataset.section;document.querySelectorAll('[id^="section-"]').forEach(x=>x.classList.add('hidden'));const t=$('section-'+s);if(t)t.classList.remove('hidden');if(window.innerWidth<=768)closeSidebar();const a={dashboard:carregarDashboard,professores:carregarTabelas,alunos:carregarTabelas,turmas:carregarTabelas,financeiro:carregarFinanceiro,biblioteca:carregarBiblioteca,perfil:carregarPerfil};if(a[s])a[s]()})});
+
+// ==================== DASHBOARD ====================
 async function carregarDashboard(){const[p,a,t,g]=await Promise.all([sb.from('professores').select('id',{count:'exact',head:true}).eq('ativo',true),sb.from('alunos').select('id',{count:'exact',head:true}).eq('ativo',true),sb.from('turmas').select('id',{count:'exact',head:true}).eq('ativo',true),sb.from('pagamentos').select('id',{count:'exact',head:true}).eq('status','pendente')]);['totalProfessores','totalAlunos','totalTurmas','totalPendentes'].forEach((id,i)=>$(id).textContent=[p.count,a.count,t.count,g.count][i]||0)}
+
+// ==================== TABELAS ====================
 async function carregarTabelas(){showLoading();const[pr,al,tu,pa,pl]=await Promise.all([sb.from('professores').select('*').eq('ativo',true),sb.from('alunos').select('*').eq('ativo',true),sb.from('turmas').select('*').eq('ativo',true),sb.from('pagamentos').select('*'),sb.from('planos').select('*')]);const professores=pr.data||[],alunos=al.data||[],turmas=tu.data||[],pagamentos=pa.data||[],planos=pl.data||[];const mp={};planos.forEach(p=>mp[p.id]=p.nome);$('tabelaProfessores').innerHTML=professores.length===0?'<tr><td colspan="4" class="empty-state">Nenhum professor</td></tr>':professores.map(p=>`<tr><td>${p.nome}</td><td>${p.email}</td><td>${p.especialidade}</td><td><button class="btn btn-danger btn-xs" data-acao="desativarProfessor" data-id="${p.id}">Desativar</button></td></tr>`).join('');$('tabelaAlunos').innerHTML=alunos.length===0?'<tr><td colspan="5" class="empty-state">Nenhum aluno</td></tr>':alunos.map(a=>{const t=turmas.find(x=>x.id==a.turma_id);const pg=pagamentos.find(x=>x.aluno_id==a.id);const st=pg?(pg.status==='pago'?'<span class="badge badge-success">Pago</span>':'<span class="badge badge-warning">Pendente</span>'):'-';return`<tr><td>${a.nome}</td><td>${a.email}</td><td>${t?t.nome:'-'}</td><td>${st}</td><td><button class="btn btn-danger btn-xs" data-acao="desativarAluno" data-id="${a.id}">Desativar</button></td></tr>`}).join('');$('tabelaTurmas').innerHTML=turmas.length===0?'<tr><td colspan="6" class="empty-state">Nenhuma turma</td></tr>':turmas.map(t=>{const p=professores.find(x=>x.id==t.professor_id);const qtd=alunos.filter(a=>a.turma_id==t.id).length;return`<tr><td>${t.nome}</td><td>${p?p.nome:'-'}</td><td>${qtd}</td><td>R$ ${Number(t.valor).toFixed(2)}</td><td>${mp[t.plano_id]||'-'}</td><td><button class="btn btn-danger btn-xs" data-acao="desativarTurma" data-id="${t.id}">Desativar</button></td></tr>`}).join('');bindBotoes();hideLoading()}
+
 async function carregarFinanceiro(){showLoading();const[pl,pa,al]=await Promise.all([sb.from('planos').select('*').eq('ativo',true),sb.from('pagamentos').select('*'),sb.from('alunos').select('id,nome')]);const planos=pl.data||[],pagamentos=pa.data||[],alunos=al.data||[];const ma={};alunos.forEach(a=>ma[a.id]=a.nome);$('tabelaPlanos').innerHTML=planos.length===0?'<tr><td colspan="4" class="empty-state">Nenhum plano</td></tr>':planos.map(p=>`<tr><td>${p.nome}</td><td>${p.frequencia}</td><td>R$ ${Number(p.valor).toFixed(2)}</td><td><button class="btn btn-danger btn-xs" data-acao="desativarPlano" data-id="${p.id}">Desativar</button></td></tr>`).join('');$('tabelaFinanceiro').innerHTML=pagamentos.length===0?'<tr><td colspan="6" class="empty-state">Nenhum pagamento</td></tr>':pagamentos.map(p=>{const st=p.status==='pago'?'<span class="badge badge-success">Pago</span>':'<span class="badge badge-warning">Pendente</span>';const btn=p.status==='pendente'?`<button class="btn btn-success btn-xs" data-acao="confirmar" data-id="${p.id}">Confirmar</button>`:'';return`<tr><td>${ma[p.aluno_id]||'-'}</td><td>${p.plano_id||'-'}</td><td>R$ ${Number(p.valor).toFixed(2)}</td><td>${p.vencimento}</td><td>${st}</td><td><div class="action-group">${btn}</div></td></tr>`}).join('');bindBotoes();hideLoading()}
+
 function bindBotoes(){document.querySelectorAll('[data-acao]').forEach(b=>{b.addEventListener('click',function(){const a=this.dataset.acao,i=this.dataset.id;if(a==='desativarProfessor')desativarProfessor(i);else if(a==='desativarAluno')desativarAluno(i);else if(a==='desativarTurma')desativarTurma(i);else if(a==='desativarPlano')desativarPlano(i);else if(a==='confirmar')confirmarPagamento(i);else if(a==='removerMaterial')removerMaterial(i);else if(a==='editarMaterial')editarMaterial(i)})})}
+
+// ==================== CRUD ====================
 async function salvarProfessor(e){e.preventDefault();const n=$('profNome').value.trim(),em=$('profEmail').value.trim(),es=$('profEspecialidade').value.trim(),se=$('profSenha').value.trim();if(!n||!em||!es||!se){alert('Preencha todos os campos.');return}showLoading();await sb.from('professores').insert({id:uid(),nome:n,email:em,especialidade:es,senha:se,ativo:true});hideLoading();closeModal('modalProfessor');$('formProfessor').reset();carregarDashboard();carregarTabelas();toast('Professor cadastrado!')}
 async function salvarAluno(e){e.preventDefault();const n=$('alunoNome').value.trim(),em=$('alunoEmail').value.trim(),se=$('alunoSenha').value.trim(),tid=$('alunoTurma').value;if(!n||!em||!se){alert('Preencha todos os campos.');return}showLoading();const aid=uid();await sb.from('alunos').insert({id:aid,nome:n,email:em,senha:se,turma_id:tid||null,ativo:true});if(tid){const{data:tu}=await sb.from('turmas').select('valor,plano_id').eq('id',tid).single();if(tu)await sb.from('pagamentos').insert({id:uid(),aluno_id:aid,turma_id:tid,plano_id:tu.plano_id,valor:tu.valor,vencimento:new Date().toISOString().split('T')[0],status:'pendente'})}hideLoading();closeModal('modalAluno');$('formAluno').reset();carregarDashboard();carregarTabelas();toast('Aluno cadastrado!')}
 async function salvarTurma(e){e.preventDefault();const n=$('turmaNome').value.trim(),d=$('turmaDescricao').value.trim(),c=$('turmaCarga').value.trim(),v=parseFloat($('turmaValor').value),pid=$('turmaProfessor').value,plid=$('turmaPlano').value;if(!n||!d||!c||!v||!pid){alert('Preencha todos os campos.');return}showLoading();await sb.from('turmas').insert({id:uid(),nome:n,descricao:d,carga:c,valor:v,professor_id:pid,plano_id:plid||null,ativo:true});hideLoading();closeModal('modalTurma');$('formTurma').reset();carregarDashboard();carregarTabelas();toast('Turma criada!')}
 async function salvarPlano(e){e.preventDefault();const n=$('planoNome').value.trim(),d=$('planoDescricao').value.trim(),v=parseFloat($('planoValor').value),f=$('planoFrequencia').value;if(!n||!d||!v||!f){alert('Preencha todos os campos.');return}showLoading();await sb.from('planos').insert({id:uid(),nome:n,descricao:d,valor:v,frequencia:f,ativo:true});hideLoading();closeModal('modalPlano');$('formPlano').reset();carregarFinanceiro();toast('Plano criado!')}
 
-// ==================== BIBLIOTECA (Nome, Descrição, Link, Tipo) ====================
-async function salvarMaterial(e){
-    e.preventDefault();
-    const id=$('bibId').value;
-    const tipo=$('bibTipo').value.trim(),nome=$('bibNome').value.trim(),desc=$('bibDescricao').value.trim(),link=$('bibLink').value.trim();
-    if(!tipo||!nome||!desc||!link){alert('Preencha todos os campos.');return}
-    const mat={tipo,titulo:nome,descricao:desc,link};
-    showLoading();
-    if(id){await sb.from('biblioteca').update(mat).eq('id',id)}else{mat.id=uid();await sb.from('biblioteca').insert(mat)}
-    hideLoading();closeModal('modalBiblioteca');resetFormBiblioteca();carregarBiblioteca();
-    toast(id?'Material atualizado!':'Material adicionado!');
-}
-
+// ==================== BIBLIOTECA ====================
+async function salvarMaterial(e){e.preventDefault();const id=$('bibId').value;const tipo=$('bibTipo').value.trim(),nome=$('bibNome').value.trim(),desc=$('bibDescricao').value.trim(),link=$('bibLink').value.trim();if(!tipo||!nome||!desc||!link){alert('Preencha todos os campos.');return}const mat={tipo,titulo:nome,descricao:desc,link};showLoading();if(id){await sb.from('biblioteca').update(mat).eq('id',id)}else{mat.id=uid();await sb.from('biblioteca').insert(mat)}hideLoading();closeModal('modalBiblioteca');resetFormBiblioteca();carregarBiblioteca();toast(id?'Material atualizado!':'Material adicionado!')}
 function resetFormBiblioteca(){$('formBiblioteca').reset();$('bibId').value='';$('bibModalTitle').textContent='Adicionar Material'}
-
-async function editarMaterial(id){
-    const{data}=await sb.from('biblioteca').select('*').eq('id',id).single();
-    if(!data)return;
-    $('bibId').value=data.id;$('bibTipo').value=data.tipo;$('bibNome').value=data.titulo;$('bibDescricao').value=data.descricao||'';$('bibLink').value=data.link;
-    $('bibModalTitle').textContent='Editar Material';
-    openModal('modalBiblioteca');
-}
-
-async function carregarBiblioteca(){
-    const{data}=await sb.from('biblioteca').select('*').order('created_at',{ascending:false});
-    if(!data||data.length===0){$('gridBiblioteca').innerHTML='<div class="empty-state" style="grid-column:1/-1">Nenhum material disponivel</div>';return}
-    const artigos=data.filter(b=>b.tipo==='artigo');const livros=data.filter(b=>b.tipo==='livro');let h='';
-    if(livros.length>0){h+='<div style="grid-column:1/-1;margin-top:8px"><h3 style="font-size:14px;font-weight:600;color:var(--text);display:flex;align-items:center;gap:8px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg> Livros</h3></div>';h+=livros.map(b=>`<div class="bib-item bib-livro"><div class="bib-tipo-badge livro">Livro</div><h4>${b.titulo}</h4><p>${b.descricao||''}</p><a href="${b.link}" target="_blank">Acessar Material</a><div style="margin-top:8px;display:flex;gap:6px"><button class="btn btn-outline btn-xs" data-acao="editarMaterial" data-id="${b.id}">Editar</button><button class="btn btn-danger btn-xs" data-acao="removerMaterial" data-id="${b.id}">Remover</button></div></div>`).join('')}
-    if(artigos.length>0){h+='<div style="grid-column:1/-1;margin-top:8px"><h3 style="font-size:14px;font-weight:600;color:var(--text);display:flex;align-items:center;gap:8px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg> Artigos</h3></div>';h+=artigos.map(b=>`<div class="bib-item bib-artigo"><div class="bib-tipo-badge artigo">Artigo</div><h4>${b.titulo}</h4><p>${b.descricao||''}</p><a href="${b.link}" target="_blank">Acessar Material</a><div style="margin-top:8px;display:flex;gap:6px"><button class="btn btn-outline btn-xs" data-acao="editarMaterial" data-id="${b.id}">Editar</button><button class="btn btn-danger btn-xs" data-acao="removerMaterial" data-id="${b.id}">Remover</button></div></div>`).join('')}
-    $('gridBiblioteca').innerHTML=h;bindBotoes();
-}
-
+async function editarMaterial(id){const{data}=await sb.from('biblioteca').select('*').eq('id',id).single();if(!data)return;$('bibId').value=data.id;$('bibTipo').value=data.tipo;$('bibNome').value=data.titulo;$('bibDescricao').value=data.descricao||'';$('bibLink').value=data.link;$('bibModalTitle').textContent='Editar Material';openModal('modalBiblioteca')}
+async function carregarBiblioteca(){const{data}=await sb.from('biblioteca').select('*').order('created_at',{ascending:false});if(!data||data.length===0){$('gridBiblioteca').innerHTML='<div class="empty-state" style="grid-column:1/-1">Nenhum material disponivel</div>';return}const artigos=data.filter(b=>b.tipo==='artigo');const livros=data.filter(b=>b.tipo==='livro');let h='';if(livros.length>0){h+='<div style="grid-column:1/-1;margin-top:8px"><h3 style="font-size:14px;font-weight:600;color:var(--text);display:flex;align-items:center;gap:8px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg> Livros</h3></div>';h+=livros.map(b=>`<div class="bib-item bib-livro"><div class="bib-tipo-badge livro">Livro</div><h4>${b.titulo}</h4><p>${b.descricao||''}</p><a href="${b.link}" target="_blank">Acessar Material</a><div style="margin-top:8px;display:flex;gap:6px"><button class="btn btn-outline btn-xs" data-acao="editarMaterial" data-id="${b.id}">Editar</button><button class="btn btn-danger btn-xs" data-acao="removerMaterial" data-id="${b.id}">Remover</button></div></div>`).join('')}if(artigos.length>0){h+='<div style="grid-column:1/-1;margin-top:8px"><h3 style="font-size:14px;font-weight:600;color:var(--text);display:flex;align-items:center;gap:8px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg> Artigos</h3></div>';h+=artigos.map(b=>`<div class="bib-item bib-artigo"><div class="bib-tipo-badge artigo">Artigo</div><h4>${b.titulo}</h4><p>${b.descricao||''}</p><a href="${b.link}" target="_blank">Acessar Material</a><div style="margin-top:8px;display:flex;gap:6px"><button class="btn btn-outline btn-xs" data-acao="editarMaterial" data-id="${b.id}">Editar</button><button class="btn btn-danger btn-xs" data-acao="removerMaterial" data-id="${b.id}">Remover</button></div></div>`).join('')}$('gridBiblioteca').innerHTML=h;bindBotoes()}
 async function removerMaterial(id){if(!confirm('Remover material?'))return;showLoading();await sb.from('biblioteca').delete().eq('id',id);hideLoading();carregarBiblioteca();toast('Material removido.')}
 
+// ==================== DESATIVAR ====================
 async function desativarProfessor(id){if(!confirm('Desativar?'))return;showLoading();await sb.from('professores').update({ativo:false}).eq('id',id);hideLoading();carregarDashboard();carregarTabelas()}
 async function desativarAluno(id){if(!confirm('Desativar?'))return;showLoading();await sb.from('alunos').update({ativo:false}).eq('id',id);hideLoading();carregarDashboard();carregarTabelas()}
 async function desativarTurma(id){if(!confirm('Desativar?'))return;showLoading();await sb.from('turmas').update({ativo:false}).eq('id',id);hideLoading();carregarDashboard();carregarTabelas()}
 async function desativarPlano(id){if(!confirm('Desativar?'))return;showLoading();await sb.from('planos').update({ativo:false}).eq('id',id);hideLoading();carregarFinanceiro()}
 async function confirmarPagamento(id){showLoading();await sb.from('pagamentos').update({status:'pago'}).eq('id',id);hideLoading();carregarDashboard();carregarFinanceiro();toast('Pagamento confirmado!')}
+
+// ==================== SELECTS ====================
 async function carregarSelectProfessores(){const{data}=await sb.from('professores').select('*').eq('ativo',true);const s=$('turmaProfessor');s.innerHTML='<option value="">Selecione</option>';if(data)data.forEach(p=>s.innerHTML+=`<option value="${p.id}">${p.nome}</option>`)}
 async function carregarSelectTurmas(){const{data}=await sb.from('turmas').select('*').eq('ativo',true);const s=$('alunoTurma');s.innerHTML='<option value="">Selecione</option>';if(data)data.forEach(t=>s.innerHTML+=`<option value="${t.id}">${t.nome}</option>`)}
 async function carregarSelectPlanos(){const{data}=await sb.from('planos').select('*').eq('ativo',true);const s=$('turmaPlano');s.innerHTML='<option value="">Selecione</option>';if(data)data.forEach(p=>s.innerHTML+=`<option value="${p.id}">${p.nome} - R$ ${Number(p.valor).toFixed(2)}</option>`)}
+
 const oOM=openModal;openModal=function(id){oOM(id);if(id==='modalTurma'){carregarSelectProfessores();carregarSelectPlanos()}if(id==='modalAluno')carregarSelectTurmas();if(id==='modalBiblioteca'&&!$('bibId').value){resetFormBiblioteca()}};
+
+// ==================== PERFIL ====================
 async function carregarPerfil(){const{data}=await sb.from('fotos_perfil').select('foto_base64').eq('user_key','admin').single();const el=$('adminAvatar');const se=$('sidebarAvatar');el.innerHTML=data?`<img src="${data.foto_base64}" style="width:100%;height:100%;object-fit:cover">`:'A';se.innerHTML=data?`<img src="${data.foto_base64}" style="width:100%;height:100%;object-fit:cover">`:'A'}
 async function atualizarFoto(){const f=$('adminPhoto').files[0];if(!f)return;const r=new FileReader();r.onload=async e=>{showLoading();await sb.from('fotos_perfil').upsert({id:uid(),user_key:'admin',foto_base64:e.target.result},{onConflict:'user_key'});hideLoading();carregarPerfil();toast('Foto atualizada!')};r.readAsDataURL(f)}
 async function salvarPerfil(){const s=$('adminSenha').value.trim();if(!s){toast('Digite uma nova senha.');return}showLoading();await sb.from('configuracoes').upsert({chave:'admin_senha',valor:s},{onConflict:'chave'});hideLoading();$('adminSenha').value='';toast('Senha alterada!')}
+
+// ==================== BACKUP ====================
 async function exportarBackup(){showLoading();const tabs=['configuracoes','planos','professores','turmas','alunos','encontros','trabalhos','pagamentos','biblioteca','fotos_perfil'];const bk={};for(const t of tabs){const{data}=await sb.from(t).select('*');bk[t]=data||[]}const blob=new Blob([JSON.stringify(bk,null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`mentorcr_backup_${new Date().toISOString().slice(0,10)}.json`;a.click();hideLoading();toast('Backup exportado!')}
-function restaurarBackup(event){const f=event.target.files[0];if(!f)return;if(!confirm('Restaurar backup?')){event.target.value='';return}const r=new FileReader();r.onload=async function(e){showLoading();try{const d=JSON.parse(e.target.result);const ordem=['configuracoes','planos','fotos_perfil','biblioteca','pagamentos','trabalhos','encontros','alunos','turmas','professores'];for(const t of ordem){try{await sb.from(t).delete().neq('id','0')}catch(ex){}if(d[t])for(const i of d[t])try{await sb.from(t).insert(i)}catch(ex){}}hideLoading();carregarDashboard();carregarTabelas();toast('Backup restaurado!')}catch(ex){hideLoading();alert('Erro ao restaurar.')}};r.readAsText(f);event.target.value=''}
-async function apagarTudo(){if(!confirm('ATENCAO! Apagara TODOS os dados.'))return;if(!confirm('CONFIRMACAO FINAL'))return;showLoading();const ordem=['fotos_perfil','biblioteca','pagamentos','trabalhos','encontros','alunos','turmas','professores','planos'];for(const t of ordem){try{await sb.from(t).delete().neq('id','0')}catch(ex){}}await sb.from('configuracoes').upsert({chave:'admin_senha',valor:'admin123'},{onConflict:'chave'});hideLoading();carregarDashboard();carregarTabelas();toast('Todos os dados foram apagados!')}
-$('formProfessor').addEventListener('submit',salvarProfessor);$('formAluno').addEventListener('submit',salvarAluno);$('formTurma').addEventListener('submit',salvarTurma);$('formPlano').addEventListener('submit',salvarPlano);$('formBiblioteca').addEventListener('submit',salvarMaterial);
+function restaurarBackup(event){const f=event.target.files[0];if(!f)return;if(!confirm('Restaurar backup? Dados atuais serao SUBSTITUIDOS.')){event.target.value='';return}const r=new FileReader();r.onload=async function(e){showLoading();try{const d=JSON.parse(e.target.result);const ordem=['configuracoes','planos','fotos_perfil','biblioteca','pagamentos','trabalhos','encontros','alunos','turmas','professores'];for(const t of ordem){try{await sb.from(t).delete().neq('id','0')}catch(ex){}if(d[t])for(const i of d[t])try{await sb.from(t).insert(i)}catch(ex){}}hideLoading();carregarDashboard();carregarTabelas();toast('Backup restaurado!')}catch(ex){hideLoading();alert('Erro ao restaurar.')}};r.readAsText(f);event.target.value=''}
+async function apagarTudo(){if(!confirm('ATENCAO! Apagara TODOS os dados permanentemente.'))return;if(!confirm('CONFIRMACAO FINAL: Todos os dados serao perdidos.'))return;showLoading();const ordem=['fotos_perfil','biblioteca','pagamentos','trabalhos','encontros','alunos','turmas','professores','planos'];for(const t of ordem){try{await sb.from(t).delete().neq('id','0')}catch(ex){}}await sb.from('configuracoes').upsert({chave:'admin_senha',valor:'admin123'},{onConflict:'chave'});hideLoading();carregarDashboard();carregarTabelas();toast('Todos os dados foram apagados!')}
+
+// ==================== INIT ====================
+$('formProfessor').addEventListener('submit',salvarProfessor);
+$('formAluno').addEventListener('submit',salvarAluno);
+$('formTurma').addEventListener('submit',salvarTurma);
+$('formPlano').addEventListener('submit',salvarPlano);
+$('formBiblioteca').addEventListener('submit',salvarMaterial);
 carregarDashboard();
 </script>
 </body>
