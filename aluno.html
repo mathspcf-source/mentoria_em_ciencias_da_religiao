@@ -10,36 +10,39 @@
             --primary: #6c2bd9;
             --primary-dark: #4a1a8f;
             --primary-light: #8b5cf6;
-            --primary-bg: #2a0048;
-            --bg: #f0edf5;
+            --primary-bg: #1a0033;
+            --primary-gradient: linear-gradient(135deg, #6c2bd9, #8b5cf6);
+            --bg: #f4f0f9;
             --card-bg: #ffffff;
-            --card-shadow: 0 8px 32px rgba(42, 0, 72, 0.10);
             --text: #1a0a2e;
             --text-light: #5a4a6a;
-            --text-white: #ffffff;
             --text-muted: #8a7a9a;
+            --text-white: #ffffff;
             --success: #10b981;
             --success-light: #ecfdf5;
             --warning: #f59e0b;
             --warning-light: #fffbeb;
             --danger: #ef4444;
             --danger-light: #fef2f2;
-            --gold: #b8860b;
+            --info: #3b82f6;
+            --info-light: #eff6ff;
             --border: rgba(42, 0, 72, 0.08);
             --border-light: rgba(255, 255, 255, 0.10);
-            --radius: 16px;
-            --radius-sm: 10px;
-            --shadow-sm: 0 2px 8px rgba(42, 0, 72, 0.06);
+            --card-shadow: 0 8px 32px rgba(42, 0, 72, 0.08);
             --shadow: 0 4px 20px rgba(42, 0, 72, 0.08);
             --shadow-lg: 0 12px 48px rgba(42, 0, 72, 0.12);
+            --radius: 16px;
+            --radius-sm: 10px;
+            --radius-xs: 6px;
+            --radius-full: 9999px;
             --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             --sidebar-width: 270px;
         }
 
-        * { margin:0; padding:0; box-sizing:border-box; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-            font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+            font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
             background: var(--bg);
             color: var(--text);
             font-size: 14px;
@@ -56,7 +59,7 @@
             display: none;
             position: fixed;
             inset: 0;
-            background: rgba(42, 0, 72, 0.6);
+            background: rgba(26, 0, 51, 0.6);
             backdrop-filter: blur(8px);
             z-index: 9999;
             justify-content: center;
@@ -66,8 +69,8 @@
         .spinner {
             width: 48px;
             height: 48px;
-            border: 3px solid rgba(255,255,255,0.1);
-            border-top-color: #fff;
+            border: 3px solid rgba(255, 255, 255, 0.1);
+            border-top-color: #ffffff;
             border-radius: 50%;
             animation: spin 0.6s linear infinite;
         }
@@ -97,7 +100,7 @@
             letter-spacing: -0.3px;
         }
         .mobile-header .menu-btn {
-            background: rgba(255,255,255,0.08);
+            background: rgba(255, 255, 255, 0.08);
             border: 1px solid var(--border-light);
             color: #fff;
             font-size: 20px;
@@ -107,7 +110,7 @@
             transition: var(--transition);
         }
         .mobile-header .menu-btn:hover {
-            background: rgba(255,255,255,0.15);
+            background: rgba(255, 255, 255, 0.15);
         }
 
         .sidebar {
@@ -125,7 +128,6 @@
             transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             overflow: hidden;
         }
-
         .sidebar-brand {
             padding: 24px 24px 20px;
             border-bottom: 1px solid var(--border-light);
@@ -147,7 +149,6 @@
             display: block;
             margin-top: -2px;
         }
-
         .sidebar-user {
             display: flex;
             align-items: center;
@@ -159,7 +160,7 @@
             width: 44px;
             height: 44px;
             border-radius: 50%;
-            background: linear-gradient(135deg, var(--primary-light), var(--primary));
+            background: var(--primary-gradient);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -168,7 +169,7 @@
             color: #fff;
             overflow: hidden;
             flex-shrink: 0;
-            border: 2px solid rgba(255,255,255,0.15);
+            border: 2px solid rgba(255, 255, 255, 0.15);
         }
         .sidebar-avatar img {
             width: 100%;
@@ -188,7 +189,6 @@
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
-
         .sidebar-nav {
             flex: 1;
             overflow-y: auto;
@@ -210,7 +210,7 @@
             padding: 10px 14px;
             background: transparent;
             border: none;
-            color: rgba(255,255,255,0.6);
+            color: rgba(255, 255, 255, 0.6);
             font-size: 12px;
             cursor: pointer;
             font-weight: 500;
@@ -222,11 +222,11 @@
             position: relative;
         }
         .sidebar-nav button:hover {
-            background: rgba(255,255,255,0.06);
+            background: rgba(255, 255, 255, 0.06);
             color: #fff;
         }
         .sidebar-nav button.active {
-            background: rgba(255,255,255,0.10);
+            background: rgba(255, 255, 255, 0.10);
             color: #fff;
         }
         .sidebar-nav button.active::before {
@@ -247,13 +247,12 @@
         }
         .sidebar-nav button .badge-nav {
             margin-left: auto;
-            background: rgba(255,255,255,0.10);
+            background: rgba(255, 255, 255, 0.10);
             padding: 2px 10px;
-            border-radius: 12px;
+            border-radius: var(--radius-full);
             font-size: 9px;
             color: #fff;
         }
-
         .sidebar-footer {
             padding: 16px 20px;
             border-top: 1px solid var(--border-light);
@@ -261,9 +260,9 @@
         .sidebar-footer button {
             width: 100%;
             padding: 10px;
-            background: rgba(255,255,255,0.05);
+            background: rgba(255, 255, 255, 0.05);
             border: 1px solid var(--border-light);
-            color: rgba(255,255,255,0.6);
+            color: rgba(255, 255, 255, 0.6);
             border-radius: var(--radius-sm);
             cursor: pointer;
             font-size: 11px;
@@ -279,12 +278,11 @@
             border-color: var(--danger);
             color: var(--danger);
         }
-
         .sidebar-overlay {
             display: none;
             position: fixed;
             inset: 0;
-            background: rgba(0,0,0,0.5);
+            background: rgba(0, 0, 0, 0.5);
             z-index: 199;
             backdrop-filter: blur(4px);
         }
@@ -297,7 +295,7 @@
         }
 
         .top-header {
-            background: rgba(255,255,255,0.80);
+            background: rgba(255, 255, 255, 0.80);
             backdrop-filter: blur(16px);
             padding: 16px 32px;
             display: flex;
@@ -331,13 +329,13 @@
             gap: 8px;
             background: var(--bg);
             padding: 8px 16px;
-            border-radius: 100px;
+            border-radius: var(--radius-full);
             border: 1px solid var(--border);
             transition: var(--transition);
         }
         .top-header-right .search-box:focus-within {
             border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(108, 43, 217, 0.10);
+            box-shadow: 0 0 0 4px rgba(108, 43, 217, 0.08);
         }
         .top-header-right .search-box input {
             border: none;
@@ -440,7 +438,7 @@
             left: 0;
             right: 0;
             height: 3px;
-            background: linear-gradient(90deg, var(--primary), var(--primary-light));
+            background: var(--primary-gradient);
             opacity: 0;
             transition: var(--transition);
         }
@@ -498,7 +496,7 @@
             text-align: left;
             font-size: 10px;
             font-weight: 600;
-            color: var(--text-light);
+            color: var(--text-muted);
             text-transform: uppercase;
             letter-spacing: 0.6px;
             border-bottom: 1px solid var(--border);
@@ -550,12 +548,14 @@
         .btn-outline:hover {
             background: var(--bg);
             border-color: var(--primary);
+            color: var(--primary);
         }
         .btn-success {
             background: var(--success);
             color: #fff;
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.25);
         }
-        .btn-success:hover { background: #059669; }
+        .btn-success:hover { background: #059669; transform: translateY(-1px); }
         .btn-danger {
             background: transparent;
             border: 1px solid #fecaca;
@@ -566,15 +566,16 @@
             border-color: var(--danger);
         }
         .btn-sm { padding: 5px 14px; font-size: 10px; }
-        .btn-xs { padding: 3px 10px; font-size: 9px; border-radius: 6px; }
+        .btn-xs { padding: 3px 10px; font-size: 9px; border-radius: var(--radius-xs); }
 
         .badge {
             padding: 3px 12px;
-            border-radius: 20px;
+            border-radius: var(--radius-full);
             font-size: 9px;
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 0.3px;
+            display: inline-block;
         }
         .badge-success { background: var(--success-light); color: var(--success); }
         .badge-warning { background: var(--warning-light); color: var(--warning); }
@@ -597,7 +598,7 @@
             display: none;
             position: fixed;
             inset: 0;
-            background: rgba(42, 0, 72, 0.5);
+            background: rgba(26, 0, 51, 0.5);
             backdrop-filter: blur(8px);
             z-index: 1000;
             align-items: center;
@@ -637,7 +638,7 @@
             border-radius: 50%;
             border: 1px solid var(--border);
             background: transparent;
-            color: var(--text-light);
+            color: var(--text-muted);
             cursor: pointer;
             font-size: 16px;
             display: flex;
@@ -692,7 +693,7 @@
             border: 1px solid var(--border);
             border-radius: var(--radius);
             padding: 20px 22px;
-            box-shadow: var(--shadow-sm);
+            box-shadow: 0 2px 8px rgba(42, 0, 72, 0.05);
             transition: var(--transition);
         }
         .bib-item:hover {
@@ -700,7 +701,7 @@
             transform: translateY(-2px);
         }
         .bib-item.bib-livro { border-left: 4px solid var(--primary); }
-        .bib-item.bib-artigo { border-left: 4px solid var(--gold); }
+        .bib-item.bib-artigo { border-left: 4px solid var(--warning); }
         .bib-item h4 {
             font-size: 14px;
             font-weight: 600;
@@ -722,7 +723,7 @@
         .bib-tipo-badge {
             display: inline-block;
             padding: 2px 10px;
-            border-radius: 4px;
+            border-radius: var(--radius-xs);
             font-size: 8px;
             font-weight: 700;
             text-transform: uppercase;
@@ -730,7 +731,7 @@
             margin-bottom: 8px;
         }
         .bib-tipo-badge.livro { background: #f0edf5; color: var(--primary); }
-        .bib-tipo-badge.artigo { background: var(--warning-light); color: var(--gold); }
+        .bib-tipo-badge.artigo { background: var(--warning-light); color: var(--warning); }
 
         .profile-section {
             display: flex;
@@ -741,7 +742,7 @@
             width: 80px;
             height: 80px;
             border-radius: 50%;
-            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            background: var(--primary-gradient);
             color: #fff;
             display: flex;
             align-items: center;
@@ -770,19 +771,20 @@
             font-weight: 500;
             font-size: 12px;
             z-index: 2000;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.15);
-            animation: slideIn 0.3s ease, slideOut 0.3s ease 2.5s forwards;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+            animation: toastIn 0.3s ease, toastOut 0.3s ease 2.5s forwards;
         }
-        @keyframes slideIn {
+        @keyframes toastIn {
             from { opacity: 0; transform: translateY(16px); }
             to { opacity: 1; transform: translateY(0); }
         }
-        @keyframes slideOut {
+        @keyframes toastOut {
             from { opacity: 1; }
             to { opacity: 0; transform: translateY(16px); }
         }
 
         .hidden { display: none !important; }
+        .w-full { width: 100%; }
 
         @media (max-width: 992px) {
             .top-header-right .search-box input { width: 100px; }
@@ -810,18 +812,24 @@
             th, td { padding: 10px 14px; font-size: 11px; }
 
             .section-title { flex-direction: column; align-items: flex-start; gap: 8px; }
+
+            .profile-section { flex-direction: column; align-items: center; text-align: center; }
+            .profile-info { width: 100%; }
         }
 
         @media (max-width: 480px) {
             .content { padding: 12px; }
             .stat-card .stat-icon { width: 40px; height: 40px; }
             .stat-card .stat-icon svg { width: 18px; height: 18px; }
+            .btn { font-size: 11px; padding: 7px 14px; }
         }
     </style>
 </head>
 <body>
 
-<div class="loading" id="loading"><div class="spinner"></div></div>
+<div class="loading" id="loading">
+    <div class="spinner"></div>
+</div>
 
 <header class="mobile-header">
     <div class="brand">
@@ -943,7 +951,7 @@
                 <div>
                     <div class="profile-avatar" id="alunoAvatar">A</div>
                     <input type="file" id="alunoPhoto" accept="image/*" style="display:none" onchange="atualizarFoto()">
-                    <button class="btn btn-outline btn-sm" onclick="document.getElementById('alunoPhoto').click()" style="margin-top:10px">📷 Alterar Foto</button>
+                    <button class="btn btn-outline btn-sm" onclick="document.getElementById('alunoPhoto').click()" style="margin-top:10px">Alterar Foto</button>
                 </div>
                 <div class="profile-info">
                     <div class="form-group"><label>Nome</label><input type="text" id="alunoNomePerfil"></div>
@@ -958,321 +966,320 @@
 </main>
 
 <!-- MODAL ENVIO -->
-<div id="modalEnvio" class="modal"><div class="modal-content"><div class="modal-header"><h3>Enviar Trabalho</h3><button class="modal-close" onclick="closeModal('Envio')">&times;</button></div><form id="formEnvio"><div class="form-group"><label>Título do Trabalho</label><input type="text" id="trabTitulo" required placeholder="Digite o título do trabalho"></div><div class="form-group"><label>Arquivo (PDF, DOCX, etc)</label><input type="file" id="trabArquivo" required></div><button type="submit" class="btn btn-primary" style="width:100%">📤 Enviar para Revisão</button></form></div></div>
+<div id="modalEnvio" class="modal">
+    <div class="modal-content">
+        <div class="modal-header"><h3>Enviar Trabalho</h3><button class="modal-close" onclick="closeModal('Envio')">&times;</button></div>
+        <form id="formEnvio">
+            <div class="form-group"><label>Título do Trabalho</label><input type="text" id="trabTitulo" required placeholder="Digite o título do trabalho"></div>
+            <div class="form-group"><label>Arquivo (PDF, DOCX, etc)</label><input type="file" id="trabArquivo" required></div>
+            <button type="submit" class="btn btn-primary w-full">Enviar para Revisão</button>
+        </form>
+    </div>
+</div>
 
 <script>
-// ==================== SUPABASE ====================
-const SUPABASE_URL = 'https://sejnrydyaoawzthnprvq.supabase.co';
-const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNlam5yeWR5YW9hd3p0aG5wcnZxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgzNTQyNjYsImV4cCI6MjA5MzkzMDI2Nn0.2GXQUF8drgT8HKLLp4YHT6vi0iBUjVdjw1t-ft1xsRA';
-const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-const SESSION_DURATION = 2 * 60 * 60 * 1000;
+    const SUPABASE_URL = 'https://ggnjrzqzjdjhqnjaefom.supabase.co';
+    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdnbmpyenF6amRqaHFuamFlZm9tIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODU1NTM2NzcsImV4cCI6MjEwMTEyOTY3N30.rQ4vcgc_nx2m4-hz6J434kbjWd4Gcn_vsPZLyg7osHQ';
+    const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    const SESSION_DURATION = 2 * 60 * 60 * 1000;
 
-// ==================== SESSÃO ====================
-(function() {
-    const d = localStorage.getItem('mentorcr_session');
-    if (!d) { window.location.href = 'index.html'; return; }
-    try {
-        const s = JSON.parse(d);
-        if (Date.now() - s.timestamp > SESSION_DURATION) {
-            localStorage.clear();
-            window.location.href = 'index.html';
+    (function() {
+        const d = localStorage.getItem('mentorcr_session');
+        if (!d) { window.location.href = 'index.html'; return; }
+        try {
+            const s = JSON.parse(d);
+            if (Date.now() - s.timestamp > SESSION_DURATION) {
+                localStorage.clear();
+                window.location.href = 'index.html';
+                return;
+            }
+            if (s.tipo !== 'aluno') { window.location.href = 'index.html'; return; }
+        } catch(e) { window.location.href = 'index.html'; }
+    })();
+
+    let currentUserId = localStorage.getItem('mentorcr_user_id');
+    const userNome = localStorage.getItem('mentorcr_user_nome');
+    document.getElementById('sidebarNome').textContent = userNome || 'Aluno';
+    document.getElementById('sidebarAvatar').textContent = (userNome || 'A').charAt(0).toUpperCase();
+
+    const $ = id => document.getElementById(id);
+    const showLoading = () => $('loading').classList.add('show');
+    const hideLoading = () => $('loading').classList.remove('show');
+
+    function toast(msg) {
+        const old = document.querySelector('.toast');
+        if (old) old.remove();
+        const t = document.createElement('div');
+        t.className = 'toast';
+        t.textContent = msg;
+        document.body.appendChild(t);
+        setTimeout(() => t.remove(), 2500);
+    }
+
+    function uid() { return Date.now().toString(36) + Math.random().toString(36).substr(2, 9); }
+    function openModal(id) { $('modal' + id).classList.add('show'); }
+    function closeModal(id) { $('modal' + id).classList.remove('show'); }
+    window.onclick = function(e) { if (e.target.classList.contains('modal')) e.target.classList.remove('show'); };
+    function logout() { localStorage.clear(); window.location.href = 'index.html'; }
+    function toggleSidebar() {
+        document.querySelector('.sidebar').classList.toggle('open');
+        document.querySelector('.sidebar-overlay').classList.toggle('show');
+    }
+    function closeSidebar() {
+        document.querySelector('.sidebar').classList.remove('open');
+        document.querySelector('.sidebar-overlay').classList.remove('show');
+    }
+
+    setInterval(() => {
+        sb.from('configuracoes').select('valor').eq('chave', 'admin_senha').single().then(() => {}).catch(() => {});
+    }, 240000);
+
+    const sectionTitles = {
+        turma: { title: 'Minha Turma', subtitle: 'Acompanhe sua turma' },
+        encontros: { title: 'Encontros', subtitle: 'Agendamentos da turma' },
+        trabalhos: { title: 'Trabalhos', subtitle: 'Envios e devolutivas' },
+        financeiro: { title: 'Financeiro', subtitle: 'Pagamentos e status' },
+        biblioteca: { title: 'Biblioteca', subtitle: 'Materiais disponíveis' },
+        perfil: { title: 'Perfil', subtitle: 'Configurações da conta' }
+    };
+
+    document.querySelectorAll('#sidebarNav button').forEach(btn => {
+        btn.addEventListener('click', function() {
+            document.querySelectorAll('#sidebarNav button').forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+            const s = this.dataset.section;
+            document.querySelectorAll('.content-section').forEach(x => x.classList.remove('active'));
+            const el = document.getElementById('section-' + s);
+            if (el) el.classList.add('active');
+            if (window.innerWidth <= 768) closeSidebar();
+
+            const info = sectionTitles[s] || { title: s, subtitle: '' };
+            document.getElementById('pageTitle').textContent = info.title;
+            document.getElementById('pageSubtitle').textContent = info.subtitle;
+
+            const loaders = {
+                turma: carregarTurma,
+                encontros: carregarEncontros,
+                trabalhos: carregarTrabalhos,
+                financeiro: carregarFinanceiro,
+                biblioteca: carregarBiblioteca,
+                perfil: carregarPerfil
+            };
+            if (loaders[s]) loaders[s]();
+        });
+    });
+
+    async function carregarTurma() {
+        const { data: a } = await sb.from('alunos').select('turma_id').eq('id', currentUserId).single();
+        if (!a || !a.turma_id) {
+            document.getElementById('infoTurma').innerHTML = '<div class="empty-state" style="max-width:500px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/></svg><br>Você não está matriculado em nenhuma turma</div>';
             return;
         }
-        if (s.tipo !== 'aluno') { window.location.href = 'index.html'; return; }
-    } catch(e) { window.location.href = 'index.html'; }
-})();
+        const { data: t } = await sb.from('turmas').select('*').eq('id', a.turma_id).single();
+        if (!t) {
+            document.getElementById('infoTurma').innerHTML = '<div class="empty-state">Turma não encontrada</div>';
+            return;
+        }
+        const { data: p } = await sb.from('professores').select('nome').eq('id', t.professor_id).single();
+        document.getElementById('infoTurma').innerHTML = `
+            <div class="stat-card">
+                <div class="stat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/></svg></div>
+                <div class="stat-info">
+                    <div class="stat-label">${t.nome}</div>
+                    <div class="stat-value">${t.descricao}</div>
+                    <div class="stat-meta">Professor: ${p ? p.nome : '-'} · Carga: ${t.carga} · R$ ${Number(t.valor).toFixed(2)}</div>
+                </div>
+            </div>
+        `;
+    }
 
-let currentUserId = localStorage.getItem('mentorcr_user_id');
-const userNome = localStorage.getItem('mentorcr_user_nome');
-document.getElementById('sidebarNome').textContent = userNome || 'Aluno';
-document.getElementById('sidebarAvatar').textContent = (userNome || 'A').charAt(0).toUpperCase();
+    async function carregarEncontros() {
+        const { data: a } = await sb.from('alunos').select('turma_id').eq('id', currentUserId).single();
+        if (!a || !a.turma_id) {
+            document.getElementById('tabelaEncontros').innerHTML = '<tr><td colspan="4"><div class="empty-state">Não matriculado</div></td></tr>';
+            return;
+        }
+        const { data: e } = await sb.from('encontros').select('*').eq('turma_id', a.turma_id).order('data', { ascending: true });
+        document.getElementById('tabelaEncontros').innerHTML = (!e || e.length === 0) ?
+            '<tr><td colspan="4"><div class="empty-state">Nenhum encontro agendado</div></td></tr>' :
+            e.map(x => `<tr><td>${x.data}</td><td>${x.hora}</td><td><a href="${x.link_meet}" target="_blank">Meet</a></td><td><a href="${x.link_material}" target="_blank">Material</a></td></tr>`).join('');
+    }
 
-// ==================== UTILS ====================
-const $ = id => document.getElementById(id);
-const showLoading = () => $('loading').classList.add('show');
-const hideLoading = () => $('loading').classList.remove('show');
-function toast(msg) {
-    const old = document.querySelector('.toast');
-    if (old) old.remove();
-    const t = document.createElement('div');
-    t.className = 'toast';
-    t.textContent = msg;
-    document.body.appendChild(t);
-    setTimeout(() => t.remove(), 2500);
-}
-function uid() { return Date.now().toString(36) + Math.random().toString(36).substr(2, 9); }
-function openModal(id) { $('modal' + id).classList.add('show'); }
-function closeModal(id) { $('modal' + id).classList.remove('show'); }
-window.onclick = function(e) { if (e.target.classList.contains('modal')) e.target.classList.remove('show'); };
-function logout() { localStorage.clear(); window.location.href = 'index.html'; }
-function toggleSidebar() {
-    document.querySelector('.sidebar').classList.toggle('open');
-    document.querySelector('.sidebar-overlay').classList.toggle('show');
-}
-function closeSidebar() {
-    document.querySelector('.sidebar').classList.remove('open');
-    document.querySelector('.sidebar-overlay').classList.remove('show');
-}
+    async function carregarContadorSidebar() {
+        const { data: tr } = await sb.from('trabalhos').select('data_envio').eq('aluno_id', currentUserId);
+        const mes = new Date().getMonth();
+        const tm = tr ? tr.filter(t => new Date(t.data_envio).getMonth() === mes) : [];
+        document.getElementById('sideContador').textContent = `${tm.length}/2`;
+    }
 
-setInterval(() => {
-    sb.from('configuracoes').select('valor').eq('chave','admin_senha').single().then(()=>{}).catch(()=>{});
-}, 240000);
+    async function carregarTrabalhos() {
+        const { data: tr } = await sb.from('trabalhos').select('*').eq('aluno_id', currentUserId).order('created_at', { ascending: false });
+        const mes = new Date().getMonth();
+        const tm = tr ? tr.filter(t => new Date(t.data_envio).getMonth() === mes) : [];
+        document.getElementById('contador').textContent = `${tm.length}/2`;
+        document.getElementById('btnEnviar').disabled = tm.length >= 2;
+        document.getElementById('sideContador').textContent = `${tm.length}/2`;
 
-// ==================== NAVEGAÇÃO ====================
-const sectionTitles = {
-    turma: { title: 'Minha Turma', subtitle: 'Acompanhe sua turma' },
-    encontros: { title: 'Encontros', subtitle: 'Agendamentos da turma' },
-    trabalhos: { title: 'Trabalhos', subtitle: 'Envios e devolutivas' },
-    financeiro: { title: 'Financeiro', subtitle: 'Pagamentos e status' },
-    biblioteca: { title: 'Biblioteca', subtitle: 'Materiais disponíveis' },
-    perfil: { title: 'Perfil', subtitle: 'Configurações da conta' }
-};
+        if (!tr || tr.length === 0) {
+            document.getElementById('tabelaTrabalhos').innerHTML = '<tr><td colspan="6"><div class="empty-state">Nenhum trabalho enviado</div></td></tr>';
+            return;
+        }
+        document.getElementById('tabelaTrabalhos').innerHTML = tr.map(t => {
+            let b = '-';
+            if (t.barema) b = `${(t.barema.clareza||0) + (t.barema.fundamentacao||0) + (t.barema.estrutura||0) + (t.barema.originalidade||0)}/40`;
+            const st = t.status === 'devolvido' ? '<span class="badge badge-success">Devolvido</span>' : '<span class="badge badge-warning">Aguardando</span>';
+            const down = t.status === 'devolvido' && t.arquivo_corrigido ?
+                `<button class="btn btn-outline btn-xs" onclick="baixarArquivo('${t.id}')">Baixar</button>` :
+                '-';
+            return `<tr><td><strong>${t.titulo}</strong></td><td>${t.data_envio}</td><td>${st}</td><td>${b}</td><td style="max-width:130px;overflow:hidden;text-overflow:ellipsis">${t.devolutiva || '-'}</td><td>${down}</td></tr>`;
+        }).join('');
+    }
 
-document.querySelectorAll('#sidebarNav button').forEach(btn => {
-    btn.addEventListener('click', function() {
-        document.querySelectorAll('#sidebarNav button').forEach(b => b.classList.remove('active'));
-        this.classList.add('active');
-        const s = this.dataset.section;
-        document.querySelectorAll('.content-section').forEach(x => x.classList.remove('active'));
-        const el = document.getElementById('section-' + s);
-        if (el) el.classList.add('active');
-        if (window.innerWidth <= 768) closeSidebar();
+    async function baixarArquivo(tid) {
+        const { data: t } = await sb.from('trabalhos').select('*').eq('id', tid).single();
+        if (!t || !t.arquivo_corrigido) { alert('Arquivo não disponível.'); return; }
+        const a = document.createElement('a');
+        a.href = t.arquivo_corrigido;
+        a.download = t.nome_arquivo_corrigido || 'trabalho_corrigido';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+    }
 
-        const info = sectionTitles[s] || { title: s, subtitle: '' };
-        document.getElementById('pageTitle').textContent = info.title;
-        document.getElementById('pageSubtitle').textContent = info.subtitle;
+    async function enviarTrabalho(e) {
+        e.preventDefault();
+        const { data: tr } = await sb.from('trabalhos').select('data_envio').eq('aluno_id', currentUserId);
+        const mes = new Date().getMonth();
+        const tm = tr ? tr.filter(t => new Date(t.data_envio).getMonth() === mes) : [];
+        if (tm.length >= 2) { alert('Limite de 2 trabalhos por mês atingido!'); return; }
 
-        const loaders = {
-            turma: carregarTurma,
-            encontros: carregarEncontros,
-            trabalhos: carregarTrabalhos,
-            financeiro: carregarFinanceiro,
-            biblioteca: carregarBiblioteca,
-            perfil: carregarPerfil
+        const { data: a } = await sb.from('alunos').select('turma_id').eq('id', currentUserId).single();
+        const arq = document.getElementById('trabArquivo');
+        if (!arq.files[0]) { alert('Selecione um arquivo.'); return; }
+
+        const reader = new FileReader();
+        reader.onload = async function(ev) {
+            showLoading();
+            const { error } = await sb.from('trabalhos').insert({
+                id: uid(),
+                aluno_id: currentUserId,
+                turma_id: a ? a.turma_id : null,
+                titulo: document.getElementById('trabTitulo').value,
+                data_envio: new Date().toISOString().split('T')[0],
+                status: 'aguardando',
+                arquivo_original: ev.target.result,
+                nome_arquivo_original: arq.files[0].name
+            });
+            hideLoading();
+            if (error) { alert('Erro ao enviar: ' + error.message); return; }
+            closeModal('Envio');
+            document.getElementById('formEnvio').reset();
+            carregarTrabalhos();
+            carregarContadorSidebar();
+            toast('Trabalho enviado com sucesso!');
         };
-        if (loaders[s]) loaders[s]();
-    });
-});
-
-// ==================== TURMA ====================
-async function carregarTurma() {
-    const { data: a } = await sb.from('alunos').select('turma_id').eq('id', currentUserId).single();
-    if (!a || !a.turma_id) {
-        document.getElementById('infoTurma').innerHTML = '<div class="empty-state" style="max-width:500px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/></svg><br>Você não está matriculado em nenhuma turma</div>';
-        return;
+        reader.readAsDataURL(arq.files[0]);
     }
-    const { data: t } = await sb.from('turmas').select('*').eq('id', a.turma_id).single();
-    if (!t) {
-        document.getElementById('infoTurma').innerHTML = '<div class="empty-state">Turma não encontrada</div>';
-        return;
-    }
-    const { data: p } = await sb.from('professores').select('nome').eq('id', t.professor_id).single();
-    document.getElementById('infoTurma').innerHTML = `
-        <div class="stat-card">
-            <div class="stat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/></svg></div>
-            <div class="stat-info">
-                <div class="stat-label">${t.nome}</div>
-                <div class="stat-value">${t.descricao}</div>
-                <div class="stat-meta">👨‍🏫 Professor: ${p ? p.nome : '-'} · ⏱️ ${t.carga} · R$ ${Number(t.valor).toFixed(2)}</div>
-            </div>
-        </div>
-    `;
-}
 
-// ==================== ENCONTROS ====================
-async function carregarEncontros() {
-    const { data: a } = await sb.from('alunos').select('turma_id').eq('id', currentUserId).single();
-    if (!a || !a.turma_id) {
-        document.getElementById('tabelaEncontros').innerHTML = '<tr><td colspan="4"><div class="empty-state">Não matriculado</div></td></tr>';
-        return;
-    }
-    const { data: e } = await sb.from('encontros').select('*').eq('turma_id', a.turma_id).order('data', { ascending: true });
-    document.getElementById('tabelaEncontros').innerHTML = (!e || e.length === 0) ?
-        '<tr><td colspan="4"><div class="empty-state">Nenhum encontro agendado</div></td></tr>' :
-        e.map(x => `<tr><td>${x.data}</td><td>${x.hora}</td><td><a href="${x.link_meet}" target="_blank">🔗 Meet</a></td><td><a href="${x.link_material}" target="_blank">📄 Material</a></td></tr>`).join('');
-}
+    async function carregarFinanceiro() {
+        const { data: p } = await sb.from('pagamentos').select('*').eq('aluno_id', currentUserId);
+        if (!p || p.length === 0) {
+            document.getElementById('tabelaFinanceiro').innerHTML = '<tr><td colspan="4"><div class="empty-state">Nenhum registro financeiro</div></td></tr>';
+            return;
+        }
+        const { data: t } = await sb.from('turmas').select('id,nome');
+        const mt = {};
+        if (t) t.forEach(x => mt[x.id] = x.nome);
 
-// ==================== TRABALHOS ====================
-async function carregarContadorSidebar() {
-    const { data: tr } = await sb.from('trabalhos').select('data_envio').eq('aluno_id', currentUserId);
-    const mes = new Date().getMonth();
-    const tm = tr ? tr.filter(t => new Date(t.data_envio).getMonth() === mes) : [];
-    document.getElementById('sideContador').textContent = `${tm.length}/2`;
-}
-
-async function carregarTrabalhos() {
-    const { data: tr } = await sb.from('trabalhos').select('*').eq('aluno_id', currentUserId).order('created_at', { ascending: false });
-    const mes = new Date().getMonth();
-    const tm = tr ? tr.filter(t => new Date(t.data_envio).getMonth() === mes) : [];
-    document.getElementById('contador').textContent = `${tm.length}/2`;
-    document.getElementById('btnEnviar').disabled = tm.length >= 2;
-    document.getElementById('sideContador').textContent = `${tm.length}/2`;
-
-    if (!tr || tr.length === 0) {
-        document.getElementById('tabelaTrabalhos').innerHTML = '<tr><td colspan="6"><div class="empty-state">Nenhum trabalho enviado</div></td></tr>';
-        return;
-    }
-    document.getElementById('tabelaTrabalhos').innerHTML = tr.map(t => {
-        let b = '-';
-        if (t.barema) b = `${(t.barema.clareza||0) + (t.barema.fundamentacao||0) + (t.barema.estrutura||0) + (t.barema.originalidade||0)}/40`;
-        const st = t.status === 'devolvido' ? '<span class="badge badge-success">Devolvido</span>' : '<span class="badge badge-warning">Aguardando</span>';
-        const down = t.status === 'devolvido' && t.arquivo_corrigido ?
-            `<button class="btn btn-outline btn-xs" onclick="baixarArquivo('${t.id}')">📥 Baixar</button>` :
-            '-';
-        return `<tr><td><strong>${t.titulo}</strong></td><td>${t.data_envio}</td><td>${st}</td><td>${b}</td><td style="max-width:130px;overflow:hidden;text-overflow:ellipsis">${t.devolutiva || '-'}</td><td>${down}</td></tr>`;
-    }).join('');
-}
-
-async function baixarArquivo(tid) {
-    const { data: t } = await sb.from('trabalhos').select('*').eq('id', tid).single();
-    if (!t || !t.arquivo_corrigido) { alert('Arquivo não disponível.'); return; }
-    const a = document.createElement('a');
-    a.href = t.arquivo_corrigido;
-    a.download = t.nome_arquivo_corrigido || 'trabalho_corrigido';
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-}
-
-async function enviarTrabalho(e) {
-    e.preventDefault();
-    const { data: tr } = await sb.from('trabalhos').select('data_envio').eq('aluno_id', currentUserId);
-    const mes = new Date().getMonth();
-    const tm = tr ? tr.filter(t => new Date(t.data_envio).getMonth() === mes) : [];
-    if (tm.length >= 2) { alert('⚠️ Limite de 2 trabalhos por mês atingido!'); return; }
-
-    const { data: a } = await sb.from('alunos').select('turma_id').eq('id', currentUserId).single();
-    const arq = document.getElementById('trabArquivo');
-    if (!arq.files[0]) { alert('Selecione um arquivo.'); return; }
-
-    const reader = new FileReader();
-    reader.onload = async function(ev) {
-        showLoading();
-        const { error } = await sb.from('trabalhos').insert({
-            id: uid(),
-            aluno_id: currentUserId,
-            turma_id: a ? a.turma_id : null,
-            titulo: document.getElementById('trabTitulo').value,
-            data_envio: new Date().toISOString().split('T')[0],
-            status: 'aguardando',
-            arquivo_original: ev.target.result,
-            nome_arquivo_original: arq.files[0].name
-        });
-        hideLoading();
-        if (error) { alert('Erro ao enviar: ' + error.message); return; }
-        closeModal('Envio');
-        document.getElementById('formEnvio').reset();
-        carregarTrabalhos();
-        carregarContadorSidebar();
-        toast('✅ Trabalho enviado com sucesso!');
-    };
-    reader.readAsDataURL(arq.files[0]);
-}
-
-// ==================== FINANCEIRO ====================
-async function carregarFinanceiro() {
-    const { data: p } = await sb.from('pagamentos').select('*').eq('aluno_id', currentUserId);
-    if (!p || p.length === 0) {
-        document.getElementById('tabelaFinanceiro').innerHTML = '<tr><td colspan="4"><div class="empty-state">Nenhum registro financeiro</div></td></tr>';
-        return;
-    }
-    const { data: t } = await sb.from('turmas').select('id,nome');
-    const mt = {};
-    if (t) t.forEach(x => mt[x.id] = x.nome);
-
-    document.getElementById('tabelaFinanceiro').innerHTML = p.map(x => `
-        <tr>
-            <td>${mt[x.turma_id] || '-'}</td>
-            <td>R$ ${Number(x.valor).toFixed(2)}</td>
-            <td>${x.vencimento}</td>
-            <td>${x.status === 'pago' ? '<span class="badge badge-success">✅ Pago</span>' : '<span class="badge badge-warning">⏳ Pendente</span>'}</td>
-        </tr>
-    `).join('');
-}
-
-// ==================== BIBLIOTECA ====================
-async function carregarBiblioteca() {
-    const { data } = await sb.from('biblioteca').select('*').order('created_at', { ascending: false });
-    if (!data || data.length === 0) {
-        document.getElementById('gridBiblioteca').innerHTML = '<div class="empty-state" style="grid-column:1/-1"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg><br>Nenhum material disponível</div>';
-        return;
-    }
-    const artigos = data.filter(b => b.tipo === 'artigo');
-    const livros = data.filter(b => b.tipo === 'livro');
-    let h = '';
-    if (livros.length > 0) {
-        h += `<div style="grid-column:1/-1;margin-top:4px"><h3 style="font-size:15px;font-weight:600;display:flex;align-items:center;gap:8px">📚 Livros</h3></div>`;
-        h += livros.map(b => `
-            <div class="bib-item bib-livro">
-                <div class="bib-tipo-badge livro">Livro</div>
-                <h4>${b.titulo}</h4>
-                <p>${b.descricao || ''}</p>
-                <a href="${b.link}" target="_blank">🔗 Acessar Material</a>
-            </div>
+        document.getElementById('tabelaFinanceiro').innerHTML = p.map(x => `
+            <tr>
+                <td>${mt[x.turma_id] || '-'}</td>
+                <td>R$ ${Number(x.valor).toFixed(2)}</td>
+                <td>${x.vencimento}</td>
+                <td>${x.status === 'pago' ? '<span class="badge badge-success">Pago</span>' : '<span class="badge badge-warning">Pendente</span>'}</td>
+            </tr>
         `).join('');
     }
-    if (artigos.length > 0) {
-        h += `<div style="grid-column:1/-1;margin-top:8px"><h3 style="font-size:15px;font-weight:600;display:flex;align-items:center;gap:8px">📄 Artigos</h3></div>`;
-        h += artigos.map(b => `
-            <div class="bib-item bib-artigo">
-                <div class="bib-tipo-badge artigo">Artigo</div>
-                <h4>${b.titulo}</h4>
-                <p>${b.descricao || ''}</p>
-                <a href="${b.link}" target="_blank">🔗 Acessar Material</a>
-            </div>
-        `).join('');
-    }
-    document.getElementById('gridBiblioteca').innerHTML = h;
-}
 
-// ==================== PERFIL ====================
-async function carregarPerfil() {
-    const { data } = await sb.from('alunos').select('*').eq('id', currentUserId).single();
-    if (data) {
-        document.getElementById('alunoNomePerfil').value = data.nome;
-        document.getElementById('alunoEmailPerfil').value = data.email;
+    async function carregarBiblioteca() {
+        const { data } = await sb.from('biblioteca').select('*').order('created_at', { ascending: false });
+        if (!data || data.length === 0) {
+            document.getElementById('gridBiblioteca').innerHTML = '<div class="empty-state" style="grid-column:1/-1"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg><br>Nenhum material disponível</div>';
+            return;
+        }
+        const artigos = data.filter(b => b.tipo === 'artigo');
+        const livros = data.filter(b => b.tipo === 'livro');
+        let h = '';
+        if (livros.length > 0) {
+            h += `<div style="grid-column:1/-1;margin-top:4px"><h3 style="font-size:15px;font-weight:600;display:flex;align-items:center;gap:8px">Livros</h3></div>`;
+            h += livros.map(b => `
+                <div class="bib-item bib-livro">
+                    <div class="bib-tipo-badge livro">Livro</div>
+                    <h4>${b.titulo}</h4>
+                    <p>${b.descricao || ''}</p>
+                    <a href="${b.link}" target="_blank">Acessar Material</a>
+                </div>
+            `).join('');
+        }
+        if (artigos.length > 0) {
+            h += `<div style="grid-column:1/-1;margin-top:8px"><h3 style="font-size:15px;font-weight:600;display:flex;align-items:center;gap:8px">Artigos</h3></div>`;
+            h += artigos.map(b => `
+                <div class="bib-item bib-artigo">
+                    <div class="bib-tipo-badge artigo">Artigo</div>
+                    <h4>${b.titulo}</h4>
+                    <p>${b.descricao || ''}</p>
+                    <a href="${b.link}" target="_blank">Acessar Material</a>
+                </div>
+            `).join('');
+        }
+        document.getElementById('gridBiblioteca').innerHTML = h;
     }
-    const { data: ft } = await sb.from('fotos_perfil').select('foto_base64').eq('user_key', 'aluno_' + currentUserId).single();
-    const el = document.getElementById('alunoAvatar');
-    const se = document.getElementById('sidebarAvatar');
-    el.innerHTML = ft ? `<img src="${ft.foto_base64}" style="width:100%;height:100%;object-fit:cover">` : (userNome || 'A').charAt(0).toUpperCase();
-    se.innerHTML = ft ? `<img src="${ft.foto_base64}" style="width:100%;height:100%;object-fit:cover">` : (userNome || 'A').charAt(0).toUpperCase();
-}
 
-async function atualizarFoto() {
-    const f = document.getElementById('alunoPhoto').files[0];
-    if (!f) return;
-    const r = new FileReader();
-    r.onload = async e => {
+    async function carregarPerfil() {
+        const { data } = await sb.from('alunos').select('*').eq('id', currentUserId).single();
+        if (data) {
+            document.getElementById('alunoNomePerfil').value = data.nome;
+            document.getElementById('alunoEmailPerfil').value = data.email;
+        }
+        const { data: ft } = await sb.from('fotos_perfil').select('foto_base64').eq('user_key', 'aluno_' + currentUserId).single();
+        const el = document.getElementById('alunoAvatar');
+        const se = document.getElementById('sidebarAvatar');
+        el.innerHTML = ft ? `<img src="${ft.foto_base64}" style="width:100%;height:100%;object-fit:cover">` : (userNome || 'A').charAt(0).toUpperCase();
+        se.innerHTML = ft ? `<img src="${ft.foto_base64}" style="width:100%;height:100%;object-fit:cover">` : (userNome || 'A').charAt(0).toUpperCase();
+    }
+
+    async function atualizarFoto() {
+        const f = document.getElementById('alunoPhoto').files[0];
+        if (!f) return;
+        const r = new FileReader();
+        r.onload = async e => {
+            showLoading();
+            await sb.from('fotos_perfil').upsert({ id: uid(), user_key: 'aluno_' + currentUserId, foto_base64: e.target.result }, { onConflict: 'user_key' });
+            hideLoading();
+            carregarPerfil();
+            toast('Foto atualizada!');
+        };
+        r.readAsDataURL(f);
+    }
+
+    async function salvarPerfil() {
+        const d = {
+            nome: document.getElementById('alunoNomePerfil').value,
+            email: document.getElementById('alunoEmailPerfil').value
+        };
+        const s = document.getElementById('alunoSenhaPerfil').value;
+        if (s) d.senha = s;
         showLoading();
-        await sb.from('fotos_perfil').upsert({ id: uid(), user_key: 'aluno_' + currentUserId, foto_base64: e.target.result }, { onConflict: 'user_key' });
+        await sb.from('alunos').update(d).eq('id', currentUserId);
         hideLoading();
-        carregarPerfil();
-        toast('📷 Foto atualizada!');
-    };
-    r.readAsDataURL(f);
-}
+        document.getElementById('sidebarNome').textContent = d.nome;
+        localStorage.setItem('mentorcr_user_nome', d.nome);
+        toast('Perfil atualizado!');
+    }
 
-async function salvarPerfil() {
-    const d = {
-        nome: document.getElementById('alunoNomePerfil').value,
-        email: document.getElementById('alunoEmailPerfil').value
-    };
-    const s = document.getElementById('alunoSenhaPerfil').value;
-    if (s) d.senha = s;
-    showLoading();
-    await sb.from('alunos').update(d).eq('id', currentUserId);
-    hideLoading();
-    document.getElementById('sidebarNome').textContent = d.nome;
-    localStorage.setItem('mentorcr_user_nome', d.nome);
-    toast('✅ Perfil atualizado!');
-}
-
-// ==================== INIT ====================
-document.getElementById('formEnvio').addEventListener('submit', enviarTrabalho);
-
-carregarTurma();
-carregarContadorSidebar();
+    document.getElementById('formEnvio').addEventListener('submit', enviarTrabalho);
+    carregarTurma();
+    carregarContadorSidebar();
 </script>
 </body>
 </html>
