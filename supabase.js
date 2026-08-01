@@ -1,24 +1,19 @@
 // ============================================================
-//  SUPABASE CONFIGURAÇÃO
-//  Arquivo de configuração compartilhado entre todas as páginas
+//  SUPABASE - CONFIGURAÇÃO
+//  MentorCR - Ciências da Religião
 // ============================================================
 
-// ===== CONFIGURAÇÃO =====
-const SUPABASE_URL = 'https://sejnrydyaoawzthnprvq.supabase.co';
-const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNlam5yeWR5YW9hd3p0aG5wcnZxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgzNTQyNjYsImV4cCI6MjA5MzkzMDI2Nn0.2GXQUF8drgT8HKLLp4YHT6vi0iBUjVdjw1t-ft1xsRA';
+const SUPABASE_URL = 'https://ggnjrzqzjdjhqnjaefom.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdnbmpyenF6amRqaHFuamFlZm9tIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODU1NTM2NzcsImV4cCI6MjEwMTEyOTY3N30.rQ4vcgc_nx2m4-hz6J434kbjWd4Gcn_vsPZLyg7osHQ';
 
-// ===== CLIENTE SUPABASE =====
 const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-// ===== CONSTANTES =====
 const ADMIN_EMAIL = 'admin@mentorcr.com';
-const SESSION_DURATION = 2 * 60 * 60 * 1000; // 2 horas
+const SESSION_DURATION = 2 * 60 * 60 * 1000;
 
-// ===== VARIÁVEIS GLOBAIS =====
 let currentUser = null;
 let currentUserId = null;
 
-// ===== UTILITÁRIOS =====
 function uid() {
     return Date.now().toString(36) + Math.random().toString(36).substr(2, 9);
 }
@@ -59,14 +54,12 @@ function closeModal(id) {
     if (el) el.classList.remove('show');
 }
 
-// Fechar modal ao clicar fora
 window.onclick = function(e) {
     if (e.target.classList.contains('modal')) {
         e.target.classList.remove('show');
     }
 };
 
-// ===== GERENCIAMENTO DE SESSÃO =====
 function verificarSessao() {
     const sessionData = localStorage.getItem('mentorcr_session');
     if (!sessionData) return null;
@@ -116,7 +109,6 @@ function logout() {
     window.location.href = 'index.html';
 }
 
-// ===== VERIFICAÇÃO DE AUTENTICAÇÃO =====
 function verificarAutenticacao(tipoPermitido) {
     const session = verificarSessao();
 
@@ -133,13 +125,11 @@ function verificarAutenticacao(tipoPermitido) {
     currentUser = session;
     currentUserId = session.id;
 
-    // Atualizar nome na sidebar se existir
     const sidebarNome = document.getElementById('sidebarNome');
     if (sidebarNome) {
         sidebarNome.textContent = session.nome || (session.tipo === 'admin' ? 'Administrador' : session.tipo);
     }
 
-    // Atualizar avatar na sidebar
     const sidebarAvatar = document.getElementById('sidebarAvatar');
     if (sidebarAvatar && session.nome) {
         sidebarAvatar.textContent = session.nome.charAt(0).toUpperCase();
@@ -148,8 +138,6 @@ function verificarAutenticacao(tipoPermitido) {
     return true;
 }
 
-// ===== KEEP ALIVE =====
-// Mantém a sessão ativa com requisições periódicas
 setInterval(() => {
     sb.from('configuracoes')
         .select('valor')
@@ -158,29 +146,3 @@ setInterval(() => {
         .then(() => {})
         .catch(() => {});
 }, 240000);
-
-// ===== EXPORTAÇÃO =====
-// Para uso em outros arquivos (quando suportado)
-if (typeof module !== 'undefined' && module.exports) {
-    module.exports = {
-        sb,
-        SUPABASE_URL,
-        SUPABASE_KEY,
-        ADMIN_EMAIL,
-        SESSION_DURATION,
-        currentUser,
-        currentUserId,
-        uid,
-        $,
-        showLoading,
-        hideLoading,
-        toast,
-        openModal,
-        closeModal,
-        verificarSessao,
-        criarSessao,
-        destruirSessao,
-        logout,
-        verificarAutenticacao
-    };
-}
