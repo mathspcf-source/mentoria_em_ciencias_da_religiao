@@ -859,28 +859,28 @@
 
     <div class="sidebar-nav">
         <div class="nav-label">Navegação</div>
-        <button class="active" data-section="turma">
+        <button class="active" data-section="turma" onclick="navegarPara('turma')">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/></svg>
             Minha Turma
         </button>
-        <button data-section="encontros">
+        <button data-section="encontros" onclick="navegarPara('encontros')">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
             Encontros
         </button>
-        <button data-section="trabalhos">
+        <button data-section="trabalhos" onclick="navegarPara('trabalhos')">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
             Trabalhos
             <span class="badge-nav" id="sideContador">0/2</span>
         </button>
-        <button data-section="financeiro">
+        <button data-section="financeiro" onclick="navegarPara('financeiro')">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
             Financeiro
         </button>
-        <button data-section="biblioteca">
+        <button data-section="biblioteca" onclick="navegarPara('biblioteca')">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>
             Biblioteca
         </button>
-        <button data-section="perfil">
+        <button data-section="perfil" onclick="navegarPara('perfil')">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
             Perfil
         </button>
@@ -969,7 +969,7 @@
 <div id="modalEnvio" class="modal">
     <div class="modal-content">
         <div class="modal-header"><h3>Enviar Trabalho</h3><button class="modal-close" onclick="closeModal('Envio')">&times;</button></div>
-        <form id="formEnvio">
+        <form id="formEnvio" onsubmit="enviarTrabalho(event)">
             <div class="form-group"><label>Título do Trabalho</label><input type="text" id="trabTitulo" required placeholder="Digite o título do trabalho"></div>
             <div class="form-group"><label>Arquivo (PDF, DOCX, etc)</label><input type="file" id="trabArquivo" required></div>
             <button type="submit" class="btn btn-primary w-full">Enviar para Revisão</button>
@@ -978,106 +978,120 @@
 </div>
 
 <script>
-    const SUPABASE_URL = 'https://ggnjrzqzjdjhqnjaefom.supabase.co';
-    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdnbmpyenF6amRqaHFuamFlZm9tIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODU1NTM2NzcsImV4cCI6MjEwMTEyOTY3N30.rQ4vcgc_nx2m4-hz6J434kbjWd4Gcn_vsPZLyg7osHQ';
-    const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-    const SESSION_DURATION = 2 * 60 * 60 * 1000;
+// ============================================================
+//  SUPABASE CONFIG
+// ============================================================
+const SUPABASE_URL = 'https://ggnjrzqzjdjhqnjaefom.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdnbmpyenF6amRqaHFuamFlZm9tIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODU1NTM2NzcsImV4cCI6MjEwMTEyOTY3N30.rQ4vcgc_nx2m4-hz6J434kbjWd4Gcn_vsPZLyg7osHQ';
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+const SESSION_DURATION = 2 * 60 * 60 * 1000;
 
-    (function() {
-        const d = localStorage.getItem('mentorcr_session');
-        if (!d) { window.location.href = 'index.html'; return; }
-        try {
-            const s = JSON.parse(d);
-            if (Date.now() - s.timestamp > SESSION_DURATION) {
-                localStorage.clear();
-                window.location.href = 'index.html';
-                return;
-            }
-            if (s.tipo !== 'aluno') { window.location.href = 'index.html'; return; }
-        } catch(e) { window.location.href = 'index.html'; }
-    })();
+// ============================================================
+//  SESSÃO
+// ============================================================
+(function() {
+    const d = localStorage.getItem('mentorcr_session');
+    if (!d) { window.location.href = 'index.html'; return; }
+    try {
+        const s = JSON.parse(d);
+        if (Date.now() - s.timestamp > SESSION_DURATION) {
+            localStorage.clear();
+            window.location.href = 'index.html';
+            return;
+        }
+        if (s.tipo !== 'aluno') { window.location.href = 'index.html'; return; }
+    } catch(e) { window.location.href = 'index.html'; }
+})();
 
-    let currentUserId = localStorage.getItem('mentorcr_user_id');
-    const userNome = localStorage.getItem('mentorcr_user_nome');
-    document.getElementById('sidebarNome').textContent = userNome || 'Aluno';
-    document.getElementById('sidebarAvatar').textContent = (userNome || 'A').charAt(0).toUpperCase();
+let currentUserId = localStorage.getItem('mentorcr_user_id');
+const userNome = localStorage.getItem('mentorcr_user_nome');
+document.getElementById('sidebarNome').textContent = userNome || 'Aluno';
+document.getElementById('sidebarAvatar').textContent = (userNome || 'A').charAt(0).toUpperCase();
 
-    const $ = id => document.getElementById(id);
-    const showLoading = () => $('loading').classList.add('show');
-    const hideLoading = () => $('loading').classList.remove('show');
+// ============================================================
+//  UTILS
+// ============================================================
+const $ = id => document.getElementById(id);
+const showLoading = () => $('loading').classList.add('show');
+const hideLoading = () => $('loading').classList.remove('show');
 
-    function toast(msg) {
-        const old = document.querySelector('.toast');
-        if (old) old.remove();
-        const t = document.createElement('div');
-        t.className = 'toast';
-        t.textContent = msg;
-        document.body.appendChild(t);
-        setTimeout(() => t.remove(), 2500);
-    }
+function toast(msg) {
+    const old = document.querySelector('.toast');
+    if (old) old.remove();
+    const t = document.createElement('div');
+    t.className = 'toast';
+    t.textContent = msg;
+    document.body.appendChild(t);
+    setTimeout(() => t.remove(), 2500);
+}
 
-    function uid() { return Date.now().toString(36) + Math.random().toString(36).substr(2, 9); }
-    function openModal(id) { $('modal' + id).classList.add('show'); }
-    function closeModal(id) { $('modal' + id).classList.remove('show'); }
-    window.onclick = function(e) { if (e.target.classList.contains('modal')) e.target.classList.remove('show'); };
-    function logout() { localStorage.clear(); window.location.href = 'index.html'; }
-    function toggleSidebar() {
-        document.querySelector('.sidebar').classList.toggle('open');
-        document.querySelector('.sidebar-overlay').classList.toggle('show');
-    }
-    function closeSidebar() {
-        document.querySelector('.sidebar').classList.remove('open');
-        document.querySelector('.sidebar-overlay').classList.remove('show');
-    }
+function uid() { return Date.now().toString(36) + Math.random().toString(36).substr(2, 9); }
+function openModal(id) { $('modal' + id).classList.add('show'); }
+function closeModal(id) { $('modal' + id).classList.remove('show'); }
+window.onclick = function(e) { if (e.target.classList.contains('modal')) e.target.classList.remove('show'); };
 
-    setInterval(() => {
-        sb.from('configuracoes').select('valor').eq('chave', 'admin_senha').single().then(() => {}).catch(() => {});
-    }, 240000);
+function logout() { localStorage.clear(); window.location.href = 'index.html'; }
+function toggleSidebar() {
+    document.querySelector('.sidebar').classList.toggle('open');
+    document.querySelector('.sidebar-overlay').classList.toggle('show');
+}
+function closeSidebar() {
+    document.querySelector('.sidebar').classList.remove('open');
+    document.querySelector('.sidebar-overlay').classList.remove('show');
+}
 
-    const sectionTitles = {
-        turma: { title: 'Minha Turma', subtitle: 'Acompanhe sua turma' },
-        encontros: { title: 'Encontros', subtitle: 'Agendamentos da turma' },
-        trabalhos: { title: 'Trabalhos', subtitle: 'Envios e devolutivas' },
-        financeiro: { title: 'Financeiro', subtitle: 'Pagamentos e status' },
-        biblioteca: { title: 'Biblioteca', subtitle: 'Materiais disponíveis' },
-        perfil: { title: 'Perfil', subtitle: 'Configurações da conta' }
+// ============================================================
+//  NAVEGAÇÃO
+// ============================================================
+const sectionTitles = {
+    turma: { title: 'Minha Turma', subtitle: 'Acompanhe sua turma' },
+    encontros: { title: 'Encontros', subtitle: 'Agendamentos da turma' },
+    trabalhos: { title: 'Trabalhos', subtitle: 'Envios e devolutivas' },
+    financeiro: { title: 'Financeiro', subtitle: 'Pagamentos e status' },
+    biblioteca: { title: 'Biblioteca', subtitle: 'Materiais disponíveis' },
+    perfil: { title: 'Perfil', subtitle: 'Configurações da conta' }
+};
+
+function navegarPara(section) {
+    document.querySelectorAll('.sidebar-nav button').forEach(b => b.classList.remove('active'));
+    document.querySelector(`.sidebar-nav button[data-section="${section}"]`).classList.add('active');
+    
+    document.querySelectorAll('.content-section').forEach(x => x.classList.remove('active'));
+    const el = document.getElementById('section-' + section);
+    if (el) el.classList.add('active');
+    if (window.innerWidth <= 768) closeSidebar();
+
+    const info = sectionTitles[section] || { title: section, subtitle: '' };
+    document.getElementById('pageTitle').textContent = info.title;
+    document.getElementById('pageSubtitle').textContent = info.subtitle;
+
+    const loaders = {
+        turma: carregarTurma,
+        encontros: carregarEncontros,
+        trabalhos: carregarTrabalhos,
+        financeiro: carregarFinanceiro,
+        biblioteca: carregarBiblioteca,
+        perfil: carregarPerfil
     };
+    if (loaders[section]) loaders[section]();
+}
 
-    document.querySelectorAll('#sidebarNav button').forEach(btn => {
-        btn.addEventListener('click', function() {
-            document.querySelectorAll('#sidebarNav button').forEach(b => b.classList.remove('active'));
-            this.classList.add('active');
-            const s = this.dataset.section;
-            document.querySelectorAll('.content-section').forEach(x => x.classList.remove('active'));
-            const el = document.getElementById('section-' + s);
-            if (el) el.classList.add('active');
-            if (window.innerWidth <= 768) closeSidebar();
-
-            const info = sectionTitles[s] || { title: s, subtitle: '' };
-            document.getElementById('pageTitle').textContent = info.title;
-            document.getElementById('pageSubtitle').textContent = info.subtitle;
-
-            const loaders = {
-                turma: carregarTurma,
-                encontros: carregarEncontros,
-                trabalhos: carregarTrabalhos,
-                financeiro: carregarFinanceiro,
-                biblioteca: carregarBiblioteca,
-                perfil: carregarPerfil
-            };
-            if (loaders[s]) loaders[s]();
-        });
-    });
-
-    async function carregarTurma() {
+// ============================================================
+//  TURMA
+// ============================================================
+async function carregarTurma() {
+    try {
+        showLoading();
         const { data: a } = await sb.from('alunos').select('turma_id').eq('id', currentUserId).single();
         if (!a || !a.turma_id) {
             document.getElementById('infoTurma').innerHTML = '<div class="empty-state" style="max-width:500px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/></svg><br>Você não está matriculado em nenhuma turma</div>';
+            hideLoading();
             return;
         }
         const { data: t } = await sb.from('turmas').select('*').eq('id', a.turma_id).single();
         if (!t) {
             document.getElementById('infoTurma').innerHTML = '<div class="empty-state">Turma não encontrada</div>';
+            hideLoading();
             return;
         }
         const { data: p } = await sb.from('professores').select('nome').eq('id', t.professor_id).single();
@@ -1091,28 +1105,53 @@
                 </div>
             </div>
         `;
+        hideLoading();
+    } catch (error) {
+        console.error('Erro ao carregar turma:', error);
+        hideLoading();
     }
+}
 
-    async function carregarEncontros() {
+// ============================================================
+//  ENCONTROS
+// ============================================================
+async function carregarEncontros() {
+    try {
+        showLoading();
         const { data: a } = await sb.from('alunos').select('turma_id').eq('id', currentUserId).single();
         if (!a || !a.turma_id) {
             document.getElementById('tabelaEncontros').innerHTML = '<tr><td colspan="4"><div class="empty-state">Não matriculado</div></td></tr>';
+            hideLoading();
             return;
         }
         const { data: e } = await sb.from('encontros').select('*').eq('turma_id', a.turma_id).order('data', { ascending: true });
         document.getElementById('tabelaEncontros').innerHTML = (!e || e.length === 0) ?
             '<tr><td colspan="4"><div class="empty-state">Nenhum encontro agendado</div></td></tr>' :
             e.map(x => `<tr><td>${x.data}</td><td>${x.hora}</td><td><a href="${x.link_meet}" target="_blank">Meet</a></td><td><a href="${x.link_material}" target="_blank">Material</a></td></tr>`).join('');
+        hideLoading();
+    } catch (error) {
+        console.error('Erro ao carregar encontros:', error);
+        hideLoading();
     }
+}
 
-    async function carregarContadorSidebar() {
+// ============================================================
+//  TRABALHOS
+// ============================================================
+async function carregarContadorSidebar() {
+    try {
         const { data: tr } = await sb.from('trabalhos').select('data_envio').eq('aluno_id', currentUserId);
         const mes = new Date().getMonth();
         const tm = tr ? tr.filter(t => new Date(t.data_envio).getMonth() === mes) : [];
         document.getElementById('sideContador').textContent = `${tm.length}/2`;
+    } catch (error) {
+        console.error('Erro ao carregar contador:', error);
     }
+}
 
-    async function carregarTrabalhos() {
+async function carregarTrabalhos() {
+    try {
+        showLoading();
         const { data: tr } = await sb.from('trabalhos').select('*').eq('aluno_id', currentUserId).order('created_at', { ascending: false });
         const mes = new Date().getMonth();
         const tm = tr ? tr.filter(t => new Date(t.data_envio).getMonth() === mes) : [];
@@ -1122,6 +1161,7 @@
 
         if (!tr || tr.length === 0) {
             document.getElementById('tabelaTrabalhos').innerHTML = '<tr><td colspan="6"><div class="empty-state">Nenhum trabalho enviado</div></td></tr>';
+            hideLoading();
             return;
         }
         document.getElementById('tabelaTrabalhos').innerHTML = tr.map(t => {
@@ -1133,58 +1173,85 @@
                 '-';
             return `<tr><td><strong>${t.titulo}</strong></td><td>${t.data_envio}</td><td>${st}</td><td>${b}</td><td style="max-width:130px;overflow:hidden;text-overflow:ellipsis">${t.devolutiva || '-'}</td><td>${down}</td></tr>`;
         }).join('');
+        hideLoading();
+    } catch (error) {
+        console.error('Erro ao carregar trabalhos:', error);
+        hideLoading();
     }
+}
 
-    async function baixarArquivo(tid) {
+async function baixarArquivo(tid) {
+    try {
         const { data: t } = await sb.from('trabalhos').select('*').eq('id', tid).single();
-        if (!t || !t.arquivo_corrigido) { alert('Arquivo não disponível.'); return; }
+        if (!t || !t.arquivo_corrigido) { toast('Arquivo não disponível.'); return; }
         const a = document.createElement('a');
         a.href = t.arquivo_corrigido;
         a.download = t.nome_arquivo_corrigido || 'trabalho_corrigido';
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
+    } catch (error) {
+        toast('Erro ao baixar arquivo');
     }
+}
 
-    async function enviarTrabalho(e) {
-        e.preventDefault();
+async function enviarTrabalho(e) {
+    e.preventDefault();
+    
+    try {
         const { data: tr } = await sb.from('trabalhos').select('data_envio').eq('aluno_id', currentUserId);
         const mes = new Date().getMonth();
         const tm = tr ? tr.filter(t => new Date(t.data_envio).getMonth() === mes) : [];
-        if (tm.length >= 2) { alert('Limite de 2 trabalhos por mês atingido!'); return; }
+        if (tm.length >= 2) {
+            toast('Limite de 2 trabalhos por mês atingido!');
+            return;
+        }
 
         const { data: a } = await sb.from('alunos').select('turma_id').eq('id', currentUserId).single();
         const arq = document.getElementById('trabArquivo');
-        if (!arq.files[0]) { alert('Selecione um arquivo.'); return; }
+        if (!arq.files[0]) { toast('Selecione um arquivo.'); return; }
 
         const reader = new FileReader();
         reader.onload = async function(ev) {
-            showLoading();
-            const { error } = await sb.from('trabalhos').insert({
-                id: uid(),
-                aluno_id: currentUserId,
-                turma_id: a ? a.turma_id : null,
-                titulo: document.getElementById('trabTitulo').value,
-                data_envio: new Date().toISOString().split('T')[0],
-                status: 'aguardando',
-                arquivo_original: ev.target.result,
-                nome_arquivo_original: arq.files[0].name
-            });
-            hideLoading();
-            if (error) { alert('Erro ao enviar: ' + error.message); return; }
-            closeModal('Envio');
-            document.getElementById('formEnvio').reset();
-            carregarTrabalhos();
-            carregarContadorSidebar();
-            toast('Trabalho enviado com sucesso!');
+            try {
+                showLoading();
+                await sb.from('trabalhos').insert({
+                    id: uid(),
+                    aluno_id: currentUserId,
+                    turma_id: a ? a.turma_id : null,
+                    titulo: document.getElementById('trabTitulo').value,
+                    data_envio: new Date().toISOString().split('T')[0],
+                    status: 'aguardando',
+                    arquivo_original: ev.target.result,
+                    nome_arquivo_original: arq.files[0].name
+                });
+                hideLoading();
+                closeModal('Envio');
+                document.getElementById('formEnvio').reset();
+                carregarTrabalhos();
+                carregarContadorSidebar();
+                toast('Trabalho enviado com sucesso!');
+            } catch (error) {
+                hideLoading();
+                toast('Erro ao enviar trabalho: ' + error.message);
+            }
         };
         reader.readAsDataURL(arq.files[0]);
+    } catch (error) {
+        toast('Erro ao enviar trabalho');
     }
+}
 
-    async function carregarFinanceiro() {
+// ============================================================
+//  FINANCEIRO
+// ============================================================
+async function carregarFinanceiro() {
+    try {
+        showLoading();
         const { data: p } = await sb.from('pagamentos').select('*').eq('aluno_id', currentUserId);
         if (!p || p.length === 0) {
             document.getElementById('tabelaFinanceiro').innerHTML = '<tr><td colspan="4"><div class="empty-state">Nenhum registro financeiro</div></td></tr>';
+            hideLoading();
             return;
         }
         const { data: t } = await sb.from('turmas').select('id,nome');
@@ -1199,12 +1266,23 @@
                 <td>${x.status === 'pago' ? '<span class="badge badge-success">Pago</span>' : '<span class="badge badge-warning">Pendente</span>'}</td>
             </tr>
         `).join('');
+        hideLoading();
+    } catch (error) {
+        console.error('Erro ao carregar financeiro:', error);
+        hideLoading();
     }
+}
 
-    async function carregarBiblioteca() {
+// ============================================================
+//  BIBLIOTECA
+// ============================================================
+async function carregarBiblioteca() {
+    try {
+        showLoading();
         const { data } = await sb.from('biblioteca').select('*').order('created_at', { ascending: false });
         if (!data || data.length === 0) {
             document.getElementById('gridBiblioteca').innerHTML = '<div class="empty-state" style="grid-column:1/-1"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg><br>Nenhum material disponível</div>';
+            hideLoading();
             return;
         }
         const artigos = data.filter(b => b.tipo === 'artigo');
@@ -1233,9 +1311,18 @@
             `).join('');
         }
         document.getElementById('gridBiblioteca').innerHTML = h;
+        hideLoading();
+    } catch (error) {
+        console.error('Erro ao carregar biblioteca:', error);
+        hideLoading();
     }
+}
 
-    async function carregarPerfil() {
+// ============================================================
+//  PERFIL
+// ============================================================
+async function carregarPerfil() {
+    try {
         const { data } = await sb.from('alunos').select('*').eq('id', currentUserId).single();
         if (data) {
             document.getElementById('alunoNomePerfil').value = data.nome;
@@ -1246,40 +1333,64 @@
         const se = document.getElementById('sidebarAvatar');
         el.innerHTML = ft ? `<img src="${ft.foto_base64}" style="width:100%;height:100%;object-fit:cover">` : (userNome || 'A').charAt(0).toUpperCase();
         se.innerHTML = ft ? `<img src="${ft.foto_base64}" style="width:100%;height:100%;object-fit:cover">` : (userNome || 'A').charAt(0).toUpperCase();
+    } catch (error) {
+        console.error('Erro ao carregar perfil:', error);
     }
+}
 
-    async function atualizarFoto() {
-        const f = document.getElementById('alunoPhoto').files[0];
-        if (!f) return;
-        const r = new FileReader();
-        r.onload = async e => {
+async function atualizarFoto() {
+    const f = document.getElementById('alunoPhoto').files[0];
+    if (!f) return;
+    const r = new FileReader();
+    r.onload = async e => {
+        try {
             showLoading();
             await sb.from('fotos_perfil').upsert({ id: uid(), user_key: 'aluno_' + currentUserId, foto_base64: e.target.result }, { onConflict: 'user_key' });
             hideLoading();
             carregarPerfil();
             toast('Foto atualizada!');
-        };
-        r.readAsDataURL(f);
-    }
+        } catch (error) {
+            hideLoading();
+            toast('Erro ao atualizar foto');
+        }
+    };
+    r.readAsDataURL(f);
+}
 
-    async function salvarPerfil() {
-        const d = {
-            nome: document.getElementById('alunoNomePerfil').value,
-            email: document.getElementById('alunoEmailPerfil').value
-        };
-        const s = document.getElementById('alunoSenhaPerfil').value;
-        if (s) d.senha = s;
+async function salvarPerfil() {
+    const d = {
+        nome: document.getElementById('alunoNomePerfil').value,
+        email: document.getElementById('alunoEmailPerfil').value
+    };
+    const s = document.getElementById('alunoSenhaPerfil').value;
+    if (s) d.senha = s;
+    
+    try {
         showLoading();
         await sb.from('alunos').update(d).eq('id', currentUserId);
         hideLoading();
         document.getElementById('sidebarNome').textContent = d.nome;
         localStorage.setItem('mentorcr_user_nome', d.nome);
         toast('Perfil atualizado!');
+    } catch (error) {
+        hideLoading();
+        toast('Erro ao salvar perfil');
     }
+}
 
-    document.getElementById('formEnvio').addEventListener('submit', enviarTrabalho);
+// ============================================================
+//  INIT
+// ============================================================
+document.addEventListener('DOMContentLoaded', function() {
+    // Verificar autenticação
+    const session = localStorage.getItem('mentorcr_session');
+    if (!session) { window.location.href = 'index.html'; return; }
+    
     carregarTurma();
     carregarContadorSidebar();
+});
+
+console.log('✅ Aluno carregado com sucesso!');
 </script>
 </body>
 </html>
