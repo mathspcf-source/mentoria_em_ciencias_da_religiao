@@ -1,25 +1,42 @@
 // ============================================================
-//  SUPABASE - CONFIGURAÇÃO
+//  SUPABASE - CONFIGURAÇÃO COMPLETA
 //  MentorCR - Ciências da Religião
 // ============================================================
 
 const SUPABASE_URL = 'https://ggnjrzqzjdjhqnjaefom.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdnbmpyenF6amRqaHFuamFlZm9tIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODU1NTM2NzcsImV4cCI6MjEwMTEyOTY3N30.rQ4vcgc_nx2m4-hz6J434kbjWd4Gcn_vsPZLyg7osHQ';
 
-// ============================================================
-//  CLIENTE SUPABASE
-// ============================================================
 const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+// ============================================================
+//  VERIFICAÇÃO DE CONEXÃO
+// ============================================================
+
+async function testarConexao() {
+    try {
+        const { data, error } = await sb.from('configuracoes').select('*').limit(1);
+        if (error) {
+            console.error('❌ Erro de conexão com Supabase:', error);
+            return false;
+        }
+        console.log('✅ Conexão com Supabase estabelecida!');
+        console.log('📊 Tabelas disponíveis:', data);
+        return true;
+    } catch (e) {
+        console.error('❌ Falha ao conectar:', e);
+        return false;
+    }
+}
+
+// Executar teste automaticamente
+testarConexao();
 
 // ============================================================
 //  CONSTANTES
 // ============================================================
 const ADMIN_EMAIL = 'admin@mentorcr.com';
-const SESSION_DURATION = 2 * 60 * 60 * 1000; // 2 horas
+const SESSION_DURATION = 2 * 60 * 60 * 1000;
 
-// ============================================================
-//  VARIÁVEIS GLOBAIS
-// ============================================================
 let currentUser = null;
 let currentUserId = null;
 
@@ -74,7 +91,7 @@ window.onclick = function(e) {
 };
 
 // ============================================================
-//  GERENCIAMENTO DE SESSÃO
+//  SESSÃO
 // ============================================================
 
 function verificarSessao() {
@@ -116,7 +133,6 @@ function destruirSessao() {
     localStorage.removeItem('mentorcr_user_id');
     localStorage.removeItem('mentorcr_user_nome');
     localStorage.removeItem('mentorcr_user_tipo');
-
     currentUser = null;
     currentUserId = null;
 }
@@ -169,85 +185,117 @@ setInterval(() => {
 }, 240000);
 
 // ============================================================
-//  MÉTODOS CRUD - CORRIGIDOS
+//  CRUD BÁSICO
 // ============================================================
 
 async function buscarTodos(tabela, filtros = {}) {
-    let query = sb.from(tabela).select('*');
-    
-    if (filtros.eq) {
-        for (const [key, value] of Object.entries(filtros.eq)) {
-            query = query.eq(key, value);
+    try {
+        let query = sb.from(tabela).select('*');
+        
+        if (filtros.eq) {
+            for (const [key, value] of Object.entries(filtros.eq)) {
+                query = query.eq(key, value);
+            }
         }
+        
+        if (filtros.order) {
+            query = query.order(filtros.order.column, { 
+                ascending: filtros.order.ascending !== false 
+            });
+        }
+        
+        if (filtros.limit) {
+            query = query.limit(filtros.limit);
+        }
+        
+        const { data, error } = await query;
+        if (error) throw error;
+        return data;
+    } catch (error) {
+        console.error(`❌ Erro ao buscar ${tabela}:`, error);
+        return [];
     }
-    
-    if (filtros.order) {
-        query = query.order(filtros.order.column, { ascending: filtros.order.ascending !== false });
-    }
-    
-    if (filtros.limit) {
-        query = query.limit(filtros.limit);
-    }
-    
-    const { data, error } = await query;
-    if (error) throw error;
-    return data;
 }
 
 async function buscarPorId(tabela, id) {
-    const { data, error } = await sb
-        .from(tabela)
-        .select('*')
-        .eq('id', id)
-        .single();
-    
-    if (error) throw error;
-    return data;
+    try {
+        const { data, error } = await sb
+            .from(tabela)
+            .select('*')
+            .eq('id', id)
+            .single();
+        
+        if (error) throw error;
+        return data;
+    } catch (error) {
+        console.error(`❌ Erro ao buscar ${tabela} por ID:`, error);
+        return null;
+    }
 }
 
 async function criarRegistro(tabela, dados) {
-    const { data, error } = await sb
-        .from(tabela)
-        .insert(dados)
-        .select()
-        .single();
-    
-    if (error) throw error;
-    return data;
+    try {
+        const { data, error } = await sb
+            .from(tabela)
+            .insert(dados)
+            .select()
+            .single();
+        
+        if (error) throw error;
+        return data;
+    } catch (error) {
+        console.error(`❌ Erro ao criar registro em ${tabela}:`, error);
+        throw error;
+    }
 }
 
 async function atualizarRegistro(tabela, id, dados) {
-    const { data, error } = await sb
-        .from(tabela)
-        .update(dados)
-        .eq('id', id)
-        .select()
-        .single();
-    
-    if (error) throw error;
-    return data;
+    try {
+        const { data, error } = await sb
+            .from(tabela)
+            .update(dados)
+            .eq('id', id)
+            .select()
+            .single();
+        
+        if (error) throw error;
+        return data;
+    } catch (error) {
+        console.error(`❌ Erro ao atualizar ${tabela}:`, error);
+        throw error;
+    }
 }
 
 async function removerRegistro(tabela, id) {
-    const { error } = await sb
-        .from(tabela)
-        .delete()
-        .eq('id', id);
-    
-    if (error) throw error;
+    try {
+        const { error } = await sb
+            .from(tabela)
+            .delete()
+            .eq('id', id);
+        
+        if (error) throw error;
+    } catch (error) {
+        console.error(`❌ Erro ao remover ${tabela}:`, error);
+        throw error;
+    }
 }
 
 async function desativarRegistro(tabela, id) {
-    const { error } = await sb
-        .from(tabela)
-        .update({ ativo: false })
-        .eq('id', id);
-    
-    if (error) throw error;
+    try {
+        const { error } = await sb
+            .from(tabela)
+            .update({ ativo: false })
+            .eq('id', id);
+        
+        if (error) throw error;
+    } catch (error) {
+        console.error(`❌ Erro ao desativar ${tabela}:`, error);
+        throw error;
+    }
 }
 
 // ============================================================
-//  MÉTODOS ESPECÍFICOS - CORRIGIDOS
+//  FUNÇÕES ESPECÍFICAS - ADMIN
 // ============================================================
 
 async function obterEstatisticas() {
@@ -266,73 +314,111 @@ async function obterEstatisticas() {
             pendentes: pendentes.count || 0
         };
     } catch (error) {
-        console.error('Erro ao buscar estatísticas:', error);
+        console.error('❌ Erro ao buscar estatísticas:', error);
         return { professores: 0, alunos: 0, turmas: 0, pendentes: 0 };
     }
 }
 
+// ============================================================
+//  FUNÇÕES ESPECÍFICAS - PROFESSOR
+// ============================================================
+
 async function buscarTurmasDoProfessor(professorId) {
     try {
-        return await buscarTodos('turmas', {
-            eq: { professor_id: professorId, ativo: true }
-        });
+        const { data, error } = await sb
+            .from('turmas')
+            .select('*')
+            .eq('professor_id', professorId)
+            .eq('ativo', true);
+        
+        if (error) throw error;
+        return data || [];
     } catch (error) {
-        console.error('Erro ao buscar turmas do professor:', error);
+        console.error('❌ Erro ao buscar turmas do professor:', error);
         return [];
     }
 }
 
 async function buscarAlunosDaTurma(turmaId) {
     try {
-        return await buscarTodos('alunos', {
-            eq: { turma_id: turmaId, ativo: true }
-        });
+        const { data, error } = await sb
+            .from('alunos')
+            .select('*')
+            .eq('turma_id', turmaId)
+            .eq('ativo', true);
+        
+        if (error) throw error;
+        return data || [];
     } catch (error) {
-        console.error('Erro ao buscar alunos da turma:', error);
+        console.error('❌ Erro ao buscar alunos da turma:', error);
         return [];
     }
 }
 
 async function buscarEncontrosDaTurma(turmaId) {
     try {
-        return await buscarTodos('encontros', {
-            eq: { turma_id: turmaId },
-            order: { column: 'data', ascending: true }
-        });
+        const { data, error } = await sb
+            .from('encontros')
+            .select('*')
+            .eq('turma_id', turmaId)
+            .order('data', { ascending: true });
+        
+        if (error) throw error;
+        return data || [];
     } catch (error) {
-        console.error('Erro ao buscar encontros da turma:', error);
+        console.error('❌ Erro ao buscar encontros:', error);
         return [];
     }
 }
 
+// ============================================================
+//  FUNÇÕES ESPECÍFICAS - ALUNO
+// ============================================================
+
 async function buscarTrabalhosDoAluno(alunoId) {
     try {
-        return await buscarTodos('trabalhos', {
-            eq: { aluno_id: alunoId },
-            order: { column: 'created_at', ascending: false }
-        });
+        const { data, error } = await sb
+            .from('trabalhos')
+            .select('*')
+            .eq('aluno_id', alunoId)
+            .order('created_at', { ascending: false });
+        
+        if (error) throw error;
+        return data || [];
     } catch (error) {
-        console.error('Erro ao buscar trabalhos do aluno:', error);
+        console.error('❌ Erro ao buscar trabalhos do aluno:', error);
         return [];
     }
 }
 
 async function buscarPagamentosDoAluno(alunoId) {
     try {
-        return await buscarTodos('pagamentos', {
-            eq: { aluno_id: alunoId }
-        });
+        const { data, error } = await sb
+            .from('pagamentos')
+            .select('*')
+            .eq('aluno_id', alunoId);
+        
+        if (error) throw error;
+        return data || [];
     } catch (error) {
-        console.error('Erro ao buscar pagamentos do aluno:', error);
+        console.error('❌ Erro ao buscar pagamentos:', error);
         return [];
     }
 }
 
 async function confirmarPagamento(pagamentoId) {
     try {
-        return await atualizarRegistro('pagamentos', pagamentoId, { status: 'pago' });
+        const { data, error } = await sb
+            .from('pagamentos')
+            .update({ status: 'pago' })
+            .eq('id', pagamentoId)
+            .select()
+            .single();
+        
+        if (error) throw error;
+        return data;
     } catch (error) {
-        console.error('Erro ao confirmar pagamento:', error);
+        console.error('❌ Erro ao confirmar pagamento:', error);
         throw error;
     }
 }
@@ -345,9 +431,17 @@ async function enviarTrabalho(dados) {
             data_envio: new Date().toISOString().split('T')[0],
             status: 'aguardando'
         };
-        return await criarRegistro('trabalhos', trabalho);
+        
+        const { data, error } = await sb
+            .from('trabalhos')
+            .insert(trabalho)
+            .select()
+            .single();
+        
+        if (error) throw error;
+        return data;
     } catch (error) {
-        console.error('Erro ao enviar trabalho:', error);
+        console.error('❌ Erro ao enviar trabalho:', error);
         throw error;
     }
 }
@@ -359,44 +453,59 @@ async function devolverTrabalho(trabalhoId, dados) {
             status: 'devolvido',
             data_devolucao: new Date().toISOString().split('T')[0]
         };
-        return await atualizarRegistro('trabalhos', trabalhoId, update);
+        
+        const { data, error } = await sb
+            .from('trabalhos')
+            .update(update)
+            .eq('id', trabalhoId)
+            .select()
+            .single();
+        
+        if (error) throw error;
+        return data;
     } catch (error) {
-        console.error('Erro ao devolver trabalho:', error);
+        console.error('❌ Erro ao devolver trabalho:', error);
         throw error;
     }
 }
 
 // ============================================================
-//  MÉTODOS PARA BIBLIOTECA - CORRIGIDOS
+//  FUNÇÕES BIBLIOTECA
 // ============================================================
 
 async function buscarMateriais(tipo = null) {
     try {
-        const filtros = { order: { column: 'created_at', ascending: false } };
+        let query = sb.from('biblioteca').select('*').order('created_at', { ascending: false });
         if (tipo) {
-            filtros.eq = { tipo };
+            query = query.eq('tipo', tipo);
         }
-        return await buscarTodos('biblioteca', filtros);
+        const { data, error } = await query;
+        if (error) throw error;
+        return data || [];
     } catch (error) {
-        console.error('Erro ao buscar materiais:', error);
+        console.error('❌ Erro ao buscar materiais:', error);
         return [];
     }
 }
 
 async function buscarMateriaisPorTipo(tipo) {
     try {
-        return await buscarTodos('biblioteca', {
-            eq: { tipo },
-            order: { column: 'created_at', ascending: false }
-        });
+        const { data, error } = await sb
+            .from('biblioteca')
+            .select('*')
+            .eq('tipo', tipo)
+            .order('created_at', { ascending: false });
+        
+        if (error) throw error;
+        return data || [];
     } catch (error) {
-        console.error('Erro ao buscar materiais por tipo:', error);
+        console.error('❌ Erro ao buscar materiais por tipo:', error);
         return [];
     }
 }
 
 // ============================================================
-//  MÉTODOS PARA FOTOS DE PERFIL - CORRIGIDOS
+//  FUNÇÕES FOTO PERFIL
 // ============================================================
 
 async function salvarFotoPerfil(userKey, fotoBase64) {
@@ -416,7 +525,7 @@ async function salvarFotoPerfil(userKey, fotoBase64) {
         if (error) throw error;
         return data;
     } catch (error) {
-        console.error('Erro ao salvar foto de perfil:', error);
+        console.error('❌ Erro ao salvar foto:', error);
         throw error;
     }
 }
@@ -435,13 +544,13 @@ async function buscarFotoPerfil(userKey) {
         }
         return data ? data.foto_base64 : null;
     } catch (error) {
-        console.error('Erro ao buscar foto de perfil:', error);
+        console.error('❌ Erro ao buscar foto:', error);
         return null;
     }
 }
 
 // ============================================================
-//  MÉTODOS PARA BACKUP - CORRIGIDOS
+//  FUNÇÕES BACKUP
 // ============================================================
 
 async function exportarBackup() {
@@ -456,7 +565,7 @@ async function exportarBackup() {
         
         return backup;
     } catch (error) {
-        console.error('Erro ao exportar backup:', error);
+        console.error('❌ Erro ao exportar backup:', error);
         throw error;
     }
 }
@@ -477,13 +586,13 @@ async function restaurarBackup(dados) {
                     try {
                         await sb.from(tabela).insert(registro);
                     } catch (e) {
-                        console.warn(`Erro ao restaurar ${tabela}:`, e);
+                        console.warn(`⚠️ Erro ao restaurar ${tabela}:`, e);
                     }
                 }
             }
         }
     } catch (error) {
-        console.error('Erro ao restaurar backup:', error);
+        console.error('❌ Erro ao restaurar backup:', error);
         throw error;
     }
 }
@@ -502,23 +611,20 @@ async function apagarTodosOsDados() {
         
         await sb.from('configuracoes').upsert({ chave: 'admin_senha', valor: 'admin123' }, { onConflict: 'chave' });
     } catch (error) {
-        console.error('Erro ao apagar dados:', error);
+        console.error('❌ Erro ao apagar dados:', error);
         throw error;
     }
 }
 
 // ============================================================
-//  EXPORTAÇÃO PARA USO EM OUTROS ARQUIVOS
+//  EXPORTAÇÃO GLOBAL
 // ============================================================
 
-// Garantir que todas as funções estejam disponíveis globalmente
 window.sb = sb;
 window.SUPABASE_URL = SUPABASE_URL;
 window.SUPABASE_KEY = SUPABASE_KEY;
 window.ADMIN_EMAIL = ADMIN_EMAIL;
 window.SESSION_DURATION = SESSION_DURATION;
-window.currentUser = currentUser;
-window.currentUserId = currentUserId;
 
 window.uid = uid;
 window.$ = $;
@@ -561,6 +667,9 @@ window.exportarBackup = exportarBackup;
 window.restaurarBackup = restaurarBackup;
 window.apagarTodosOsDados = apagarTodosOsDados;
 
+window.testarConexao = testarConexao;
+
 console.log('✅ Supabase configurado com sucesso!');
 console.log('📊 URL:', SUPABASE_URL);
 console.log('🔑 Chave:', SUPABASE_KEY.substring(0, 20) + '...');
+console.log('📋 Execute testarConexao() para verificar a conexão.');
