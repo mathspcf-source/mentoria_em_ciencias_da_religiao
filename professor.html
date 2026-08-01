@@ -10,36 +10,43 @@
             --primary: #6c2bd9;
             --primary-dark: #4a1a8f;
             --primary-light: #8b5cf6;
-            --primary-bg: #2a0048;
-            --bg: #f0edf5;
+            --primary-bg: #1a0033;
+            --primary-gradient: linear-gradient(135deg, #6c2bd9, #8b5cf6);
+            --bg: #f4f0f9;
             --card-bg: #ffffff;
-            --card-shadow: 0 8px 32px rgba(42, 0, 72, 0.10);
             --text: #1a0a2e;
             --text-light: #5a4a6a;
-            --text-white: #ffffff;
             --text-muted: #8a7a9a;
+            --text-white: #ffffff;
             --success: #10b981;
             --success-light: #ecfdf5;
             --warning: #f59e0b;
             --warning-light: #fffbeb;
             --danger: #ef4444;
             --danger-light: #fef2f2;
-            --gold: #b8860b;
+            --info: #3b82f6;
+            --info-light: #eff6ff;
             --border: rgba(42, 0, 72, 0.08);
             --border-light: rgba(255, 255, 255, 0.10);
-            --radius: 16px;
-            --radius-sm: 10px;
-            --shadow-sm: 0 2px 8px rgba(42, 0, 72, 0.06);
+            --card-shadow: 0 8px 32px rgba(42, 0, 72, 0.08);
             --shadow: 0 4px 20px rgba(42, 0, 72, 0.08);
             --shadow-lg: 0 12px 48px rgba(42, 0, 72, 0.12);
+            --radius: 16px;
+            --radius-sm: 10px;
+            --radius-xs: 6px;
+            --radius-full: 9999px;
             --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             --sidebar-width: 270px;
         }
 
-        * { margin:0; padding:0; box-sizing:border-box; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
         body {
-            font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+            font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
             background: var(--bg);
             color: var(--text);
             font-size: 14px;
@@ -56,7 +63,7 @@
             display: none;
             position: fixed;
             inset: 0;
-            background: rgba(42, 0, 72, 0.6);
+            background: rgba(26, 0, 51, 0.6);
             backdrop-filter: blur(8px);
             z-index: 9999;
             justify-content: center;
@@ -66,8 +73,8 @@
         .spinner {
             width: 48px;
             height: 48px;
-            border: 3px solid rgba(255,255,255,0.1);
-            border-top-color: #fff;
+            border: 3px solid rgba(255, 255, 255, 0.1);
+            border-top-color: #ffffff;
             border-radius: 50%;
             animation: spin 0.6s linear infinite;
         }
@@ -97,7 +104,7 @@
             letter-spacing: -0.3px;
         }
         .mobile-header .menu-btn {
-            background: rgba(255,255,255,0.08);
+            background: rgba(255, 255, 255, 0.08);
             border: 1px solid var(--border-light);
             color: #fff;
             font-size: 20px;
@@ -107,7 +114,7 @@
             transition: var(--transition);
         }
         .mobile-header .menu-btn:hover {
-            background: rgba(255,255,255,0.15);
+            background: rgba(255, 255, 255, 0.15);
         }
 
         .sidebar {
@@ -125,7 +132,6 @@
             transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             overflow: hidden;
         }
-
         .sidebar-brand {
             padding: 24px 24px 20px;
             border-bottom: 1px solid var(--border-light);
@@ -147,7 +153,6 @@
             display: block;
             margin-top: -2px;
         }
-
         .sidebar-user {
             display: flex;
             align-items: center;
@@ -159,7 +164,7 @@
             width: 44px;
             height: 44px;
             border-radius: 50%;
-            background: linear-gradient(135deg, var(--primary-light), var(--primary));
+            background: var(--primary-gradient);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -168,7 +173,7 @@
             color: #fff;
             overflow: hidden;
             flex-shrink: 0;
-            border: 2px solid rgba(255,255,255,0.15);
+            border: 2px solid rgba(255, 255, 255, 0.15);
         }
         .sidebar-avatar img {
             width: 100%;
@@ -188,7 +193,6 @@
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
-
         .sidebar-nav {
             flex: 1;
             overflow-y: auto;
@@ -210,7 +214,7 @@
             padding: 10px 14px;
             background: transparent;
             border: none;
-            color: rgba(255,255,255,0.6);
+            color: rgba(255, 255, 255, 0.6);
             font-size: 12px;
             cursor: pointer;
             font-weight: 500;
@@ -222,11 +226,11 @@
             position: relative;
         }
         .sidebar-nav button:hover {
-            background: rgba(255,255,255,0.06);
+            background: rgba(255, 255, 255, 0.06);
             color: #fff;
         }
         .sidebar-nav button.active {
-            background: rgba(255,255,255,0.10);
+            background: rgba(255, 255, 255, 0.10);
             color: #fff;
         }
         .sidebar-nav button.active::before {
@@ -247,13 +251,12 @@
         }
         .sidebar-nav button .badge-nav {
             margin-left: auto;
-            background: rgba(255,255,255,0.10);
+            background: rgba(255, 255, 255, 0.10);
             padding: 2px 10px;
-            border-radius: 12px;
+            border-radius: var(--radius-full);
             font-size: 9px;
             color: #fff;
         }
-
         .sidebar-footer {
             padding: 16px 20px;
             border-top: 1px solid var(--border-light);
@@ -261,9 +264,9 @@
         .sidebar-footer button {
             width: 100%;
             padding: 10px;
-            background: rgba(255,255,255,0.05);
+            background: rgba(255, 255, 255, 0.05);
             border: 1px solid var(--border-light);
-            color: rgba(255,255,255,0.6);
+            color: rgba(255, 255, 255, 0.6);
             border-radius: var(--radius-sm);
             cursor: pointer;
             font-size: 11px;
@@ -279,12 +282,11 @@
             border-color: var(--danger);
             color: var(--danger);
         }
-
         .sidebar-overlay {
             display: none;
             position: fixed;
             inset: 0;
-            background: rgba(0,0,0,0.5);
+            background: rgba(0, 0, 0, 0.5);
             z-index: 199;
             backdrop-filter: blur(4px);
         }
@@ -297,7 +299,7 @@
         }
 
         .top-header {
-            background: rgba(255,255,255,0.80);
+            background: rgba(255, 255, 255, 0.80);
             backdrop-filter: blur(16px);
             padding: 16px 32px;
             display: flex;
@@ -331,13 +333,13 @@
             gap: 8px;
             background: var(--bg);
             padding: 8px 16px;
-            border-radius: 100px;
+            border-radius: var(--radius-full);
             border: 1px solid var(--border);
             transition: var(--transition);
         }
         .top-header-right .search-box:focus-within {
             border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(108, 43, 217, 0.10);
+            box-shadow: 0 0 0 4px rgba(108, 43, 217, 0.08);
         }
         .top-header-right .search-box input {
             border: none;
@@ -444,7 +446,7 @@
             left: 0;
             right: 0;
             height: 3px;
-            background: linear-gradient(90deg, var(--primary), var(--primary-light));
+            background: var(--primary-gradient);
             opacity: 0;
             transition: var(--transition);
         }
@@ -475,9 +477,14 @@
             margin-bottom: 2px;
         }
         .stat-card .stat-value {
-            font-size: 20px;
-            font-weight: 700;
+            font-size: 18px;
+            font-weight: 600;
             color: var(--text);
+        }
+        .stat-card .stat-meta {
+            font-size: 11px;
+            color: var(--text-light);
+            margin-top: 4px;
         }
 
         .table-container {
@@ -497,7 +504,7 @@
             text-align: left;
             font-size: 10px;
             font-weight: 600;
-            color: var(--text-light);
+            color: var(--text-muted);
             text-transform: uppercase;
             letter-spacing: 0.6px;
             border-bottom: 1px solid var(--border);
@@ -544,12 +551,14 @@
         .btn-outline:hover {
             background: var(--bg);
             border-color: var(--primary);
+            color: var(--primary);
         }
         .btn-success {
             background: var(--success);
             color: #fff;
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.25);
         }
-        .btn-success:hover { background: #059669; }
+        .btn-success:hover { background: #059669; transform: translateY(-1px); }
         .btn-danger {
             background: transparent;
             border: 1px solid #fecaca;
@@ -560,15 +569,16 @@
             border-color: var(--danger);
         }
         .btn-sm { padding: 5px 14px; font-size: 10px; }
-        .btn-xs { padding: 3px 10px; font-size: 9px; border-radius: 6px; }
+        .btn-xs { padding: 3px 10px; font-size: 9px; border-radius: var(--radius-xs); }
 
         .badge {
             padding: 3px 12px;
-            border-radius: 20px;
+            border-radius: var(--radius-full);
             font-size: 9px;
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 0.3px;
+            display: inline-block;
         }
         .badge-success { background: var(--success-light); color: var(--success); }
         .badge-warning { background: var(--warning-light); color: var(--warning); }
@@ -591,7 +601,7 @@
             display: none;
             position: fixed;
             inset: 0;
-            background: rgba(42, 0, 72, 0.5);
+            background: rgba(26, 0, 51, 0.5);
             backdrop-filter: blur(8px);
             z-index: 1000;
             align-items: center;
@@ -631,7 +641,7 @@
             border-radius: 50%;
             border: 1px solid var(--border);
             background: transparent;
-            color: var(--text-light);
+            color: var(--text-muted);
             cursor: pointer;
             font-size: 16px;
             display: flex;
@@ -688,7 +698,7 @@
             border: 1px solid var(--border);
             border-radius: var(--radius);
             padding: 20px 22px;
-            box-shadow: var(--shadow-sm);
+            box-shadow: 0 2px 8px rgba(42, 0, 72, 0.05);
             transition: var(--transition);
         }
         .bib-item:hover {
@@ -696,7 +706,7 @@
             transform: translateY(-2px);
         }
         .bib-item.bib-livro { border-left: 4px solid var(--primary); }
-        .bib-item.bib-artigo { border-left: 4px solid var(--gold); }
+        .bib-item.bib-artigo { border-left: 4px solid var(--warning); }
         .bib-item h4 {
             font-size: 14px;
             font-weight: 600;
@@ -718,7 +728,7 @@
         .bib-tipo-badge {
             display: inline-block;
             padding: 2px 10px;
-            border-radius: 4px;
+            border-radius: var(--radius-xs);
             font-size: 8px;
             font-weight: 700;
             text-transform: uppercase;
@@ -726,7 +736,7 @@
             margin-bottom: 8px;
         }
         .bib-tipo-badge.livro { background: #f0edf5; color: var(--primary); }
-        .bib-tipo-badge.artigo { background: var(--warning-light); color: var(--gold); }
+        .bib-tipo-badge.artigo { background: var(--warning-light); color: var(--warning); }
 
         .profile-section {
             display: flex;
@@ -737,7 +747,7 @@
             width: 80px;
             height: 80px;
             border-radius: 50%;
-            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            background: var(--primary-gradient);
             color: #fff;
             display: flex;
             align-items: center;
@@ -766,22 +776,24 @@
             font-weight: 500;
             font-size: 12px;
             z-index: 2000;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.15);
-            animation: slideIn 0.3s ease, slideOut 0.3s ease 2.5s forwards;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+            animation: toastIn 0.3s ease, toastOut 0.3s ease 2.5s forwards;
         }
-        @keyframes slideIn {
+        @keyframes toastIn {
             from { opacity: 0; transform: translateY(16px); }
             to { opacity: 1; transform: translateY(0); }
         }
-        @keyframes slideOut {
+        @keyframes toastOut {
             from { opacity: 1; }
             to { opacity: 0; transform: translateY(16px); }
         }
 
         .hidden { display: none !important; }
+        .w-full { width: 100%; }
 
         @media (max-width: 992px) {
             .top-header-right .search-box input { width: 100px; }
+            .form-row { grid-template-columns: 1fr; }
         }
 
         @media (max-width: 768px) {
@@ -801,25 +813,30 @@
             .stats-grid { grid-template-columns: 1fr; gap: 12px; }
             .stat-card { padding: 16px 18px; }
 
-            .form-row { grid-template-columns: 1fr; }
             .modal-content { padding: 20px; margin: 8px; }
 
             .biblioteca-grid { grid-template-columns: 1fr; }
             th, td { padding: 10px 14px; font-size: 11px; }
 
             .section-title { flex-direction: column; align-items: flex-start; gap: 8px; }
+
+            .profile-section { flex-direction: column; align-items: center; text-align: center; }
+            .profile-info { width: 100%; }
         }
 
         @media (max-width: 480px) {
             .content { padding: 12px; }
             .stat-card .stat-icon { width: 40px; height: 40px; }
             .stat-card .stat-icon svg { width: 18px; height: 18px; }
+            .btn { font-size: 11px; padding: 7px 14px; }
         }
     </style>
 </head>
 <body>
 
-<div class="loading" id="loading"><div class="spinner"></div></div>
+<div class="loading" id="loading">
+    <div class="spinner"></div>
+</div>
 
 <header class="mobile-header">
     <div class="brand">
@@ -912,7 +929,7 @@
 
         <!-- ENCONTROS -->
         <section class="content-section" id="section-encontros">
-            <div class="section-title"><h2>Encontros</h2><button class="btn btn-primary" onclick="openModal('modalEncontro')">+ Novo Encontro</button></div>
+            <div class="section-title"><h2>Encontros</h2><button class="btn btn-primary" onclick="openModal('Encontro')">+ Novo Encontro</button></div>
             <div class="table-container"><div class="table-wrapper"><table><thead><tr><th>Turma</th><th>Data</th><th>Horário</th><th>Meet</th><th>Material</th><th style="text-align:right">Ações</th></tr></thead><tbody id="tabelaEncontros"></tbody></table></div></div>
         </section>
 
@@ -941,7 +958,7 @@
                 <div>
                     <div class="profile-avatar" id="profAvatar">P</div>
                     <input type="file" id="profPhoto" accept="image/*" style="display:none" onchange="atualizarFoto()">
-                    <button class="btn btn-outline btn-sm" onclick="document.getElementById('profPhoto').click()" style="margin-top:10px">📷 Alterar Foto</button>
+                    <button class="btn btn-outline btn-sm" onclick="document.getElementById('profPhoto').click()" style="margin-top:10px">Alterar Foto</button>
                 </div>
                 <div class="profile-info">
                     <div class="form-group"><label>Nome</label><input type="text" id="profNomePerfil"></div>
@@ -957,381 +974,411 @@
 </main>
 
 <!-- MODAIS -->
-<div id="modalEncontro" class="modal"><div class="modal-content"><div class="modal-header"><h3>Agendar Encontro</h3><button class="modal-close" onclick="closeModal('modalEncontro')">&times;</button></div><form id="formEncontro"><div class="form-group"><label>Turma</label><select id="encontroTurma" required><option value="">Carregando...</option></select></div><div class="form-row"><div class="form-group"><label>Data</label><input type="date" id="encontroData" required></div><div class="form-group"><label>Horário</label><input type="time" id="encontroHora" required></div></div><div class="form-group"><label>Link Google Meet</label><input type="url" id="encontroMeet" required placeholder="https://meet.google.com/..."></div><div class="form-group"><label>Link Material</label><input type="url" id="encontroMaterial" required placeholder="https://drive.google.com/..."></div><button type="submit" class="btn btn-primary" style="width:100%">Agendar Encontro</button></form></div></div>
+<div id="modalEncontro" class="modal">
+    <div class="modal-content">
+        <div class="modal-header"><h3>Agendar Encontro</h3><button class="modal-close" onclick="closeModal('Encontro')">&times;</button></div>
+        <form id="formEncontro">
+            <div class="form-group"><label>Turma</label><select id="encontroTurma" required><option value="">Carregando...</option></select></div>
+            <div class="form-row">
+                <div class="form-group"><label>Data</label><input type="date" id="encontroData" required></div>
+                <div class="form-group"><label>Horário</label><input type="time" id="encontroHora" required></div>
+            </div>
+            <div class="form-group"><label>Link Google Meet</label><input type="url" id="encontroMeet" required placeholder="https://meet.google.com/..."></div>
+            <div class="form-group"><label>Link Material</label><input type="url" id="encontroMaterial" required placeholder="https://drive.google.com/..."></div>
+            <button type="submit" class="btn btn-primary w-full">Agendar Encontro</button>
+        </form>
+    </div>
+</div>
 
-<div id="modalBarema" class="modal"><div class="modal-content"><div class="modal-header"><h3>Barema e Devolutiva</h3><button class="modal-close" onclick="closeModal('modalBarema')">&times;</button></div><form id="formBarema"><input type="hidden" id="baremaTrabalhoId"><h4 style="font-size:14px;font-weight:600;color:var(--text);margin-bottom:10px">📊 Barema de Correção</h4><div class="form-row"><div class="form-group"><label>Clareza na Argumentação (0-10)</label><input type="number" id="bClareza" min="0" max="10" required></div><div class="form-group"><label>Fundamentação Teórica (0-10)</label><input type="number" id="bFund" min="0" max="10" required></div></div><div class="form-row"><div class="form-group"><label>Estrutura do Texto (0-10)</label><input type="number" id="bEst" min="0" max="10" required></div><div class="form-group"><label>Originalidade (0-10)</label><input type="number" id="bOrig" min="0" max="10" required></div></div><p style="color:var(--primary);font-size:14px;font-weight:600;margin-bottom:12px">Nota Total: <strong id="bTotal">0</strong> / 40</p><h4 style="font-size:14px;font-weight:600;color:var(--text);margin-bottom:10px">💬 Devolutiva</h4><div class="form-group"><label>Comentários</label><textarea id="bComentarios" required placeholder="Escreva sua devolutiva detalhada..."></textarea></div><div class="form-group"><label>Arquivo Corrigido (opcional)</label><input type="file" id="bArquivo"></div><button type="submit" class="btn btn-primary" style="width:100%">Enviar Devolutiva</button></form></div></div>
+<div id="modalBarema" class="modal">
+    <div class="modal-content">
+        <div class="modal-header"><h3>Barema e Devolutiva</h3><button class="modal-close" onclick="closeModal('Barema')">&times;</button></div>
+        <form id="formBarema">
+            <input type="hidden" id="baremaTrabalhoId">
+            <h4 style="font-size:14px;font-weight:600;color:var(--text);margin-bottom:10px">Barema de Correção</h4>
+            <div class="form-row">
+                <div class="form-group"><label>Clareza na Argumentação (0-10)</label><input type="number" id="bClareza" min="0" max="10" required></div>
+                <div class="form-group"><label>Fundamentação Teórica (0-10)</label><input type="number" id="bFund" min="0" max="10" required></div>
+            </div>
+            <div class="form-row">
+                <div class="form-group"><label>Estrutura do Texto (0-10)</label><input type="number" id="bEst" min="0" max="10" required></div>
+                <div class="form-group"><label>Originalidade (0-10)</label><input type="number" id="bOrig" min="0" max="10" required></div>
+            </div>
+            <p style="color:var(--primary);font-size:14px;font-weight:600;margin-bottom:12px">Nota Total: <strong id="bTotal">0</strong> / 40</p>
+            <h4 style="font-size:14px;font-weight:600;color:var(--text);margin-bottom:10px">Devolutiva</h4>
+            <div class="form-group"><label>Comentários</label><textarea id="bComentarios" required placeholder="Escreva sua devolutiva detalhada..."></textarea></div>
+            <div class="form-group"><label>Arquivo Corrigido (opcional)</label><input type="file" id="bArquivo"></div>
+            <button type="submit" class="btn btn-primary w-full">Enviar Devolutiva</button>
+        </form>
+    </div>
+</div>
 
 <script>
-// ==================== SUPABASE ====================
-const SUPABASE_URL = 'https://sejnrydyaoawzthnprvq.supabase.co';
-const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNlam5yeWR5YW9hd3p0aG5wcnZxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgzNTQyNjYsImV4cCI6MjA5MzkzMDI2Nn0.2GXQUF8drgT8HKLLp4YHT6vi0iBUjVdjw1t-ft1xsRA';
-const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-const SESSION_DURATION = 2 * 60 * 60 * 1000;
+    const SUPABASE_URL = 'https://ggnjrzqzjdjhqnjaefom.supabase.co';
+    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdnbmpyenF6amRqaHFuamFlZm9tIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODU1NTM2NzcsImV4cCI6MjEwMTEyOTY3N30.rQ4vcgc_nx2m4-hz6J434kbjWd4Gcn_vsPZLyg7osHQ';
+    const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    const SESSION_DURATION = 2 * 60 * 60 * 1000;
 
-// ==================== SESSÃO ====================
-(function() {
-    const d = localStorage.getItem('mentorcr_session');
-    if (!d) { window.location.href = 'index.html'; return; }
-    try {
-        const s = JSON.parse(d);
-        if (Date.now() - s.timestamp > SESSION_DURATION) {
-            localStorage.clear();
-            window.location.href = 'index.html';
+    (function() {
+        const d = localStorage.getItem('mentorcr_session');
+        if (!d) { window.location.href = 'index.html'; return; }
+        try {
+            const s = JSON.parse(d);
+            if (Date.now() - s.timestamp > SESSION_DURATION) {
+                localStorage.clear();
+                window.location.href = 'index.html';
+                return;
+            }
+            if (s.tipo !== 'professor') { window.location.href = 'index.html'; return; }
+        } catch(e) { window.location.href = 'index.html'; }
+    })();
+
+    let currentUserId = localStorage.getItem('mentorcr_user_id');
+    const userNome = localStorage.getItem('mentorcr_user_nome');
+    document.getElementById('sidebarNome').textContent = userNome || 'Professor';
+    document.getElementById('sidebarAvatar').textContent = (userNome || 'P').charAt(0).toUpperCase();
+
+    const $ = id => document.getElementById(id);
+    const showLoading = () => $('loading').classList.add('show');
+    const hideLoading = () => $('loading').classList.remove('show');
+
+    function toast(msg) {
+        const old = document.querySelector('.toast');
+        if (old) old.remove();
+        const t = document.createElement('div');
+        t.className = 'toast';
+        t.textContent = msg;
+        document.body.appendChild(t);
+        setTimeout(() => t.remove(), 2500);
+    }
+
+    function uid() { return Date.now().toString(36) + Math.random().toString(36).substr(2, 9); }
+    function openModal(id) { $('modal' + id).classList.add('show'); }
+    function closeModal(id) { $('modal' + id).classList.remove('show'); }
+    window.onclick = function(e) { if (e.target.classList.contains('modal')) e.target.classList.remove('show'); };
+    function logout() { localStorage.clear(); window.location.href = 'index.html'; }
+    function toggleSidebar() {
+        document.querySelector('.sidebar').classList.toggle('open');
+        document.querySelector('.sidebar-overlay').classList.toggle('show');
+    }
+    function closeSidebar() {
+        document.querySelector('.sidebar').classList.remove('open');
+        document.querySelector('.sidebar-overlay').classList.remove('show');
+    }
+
+    setInterval(() => {
+        sb.from('configuracoes').select('valor').eq('chave', 'admin_senha').single().then(() => {}).catch(() => {});
+    }, 240000);
+
+    const sectionTitles = {
+        turmas: { title: 'Minhas Turmas', subtitle: 'Gerencie suas turmas atribuídas' },
+        encontros: { title: 'Encontros', subtitle: 'Agendamentos e links' },
+        revisoes: { title: 'Revisões', subtitle: 'Correção de trabalhos' },
+        alunos: { title: 'Meus Alunos', subtitle: 'Alunos matriculados' },
+        biblioteca: { title: 'Biblioteca', subtitle: 'Materiais disponíveis' },
+        perfil: { title: 'Perfil', subtitle: 'Configurações da conta' }
+    };
+
+    document.querySelectorAll('#sidebarNav button').forEach(btn => {
+        btn.addEventListener('click', function() {
+            document.querySelectorAll('#sidebarNav button').forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+            const s = this.dataset.section;
+            document.querySelectorAll('.content-section').forEach(x => x.classList.remove('active'));
+            const el = document.getElementById('section-' + s);
+            if (el) el.classList.add('active');
+            if (window.innerWidth <= 768) closeSidebar();
+
+            const info = sectionTitles[s] || { title: s, subtitle: '' };
+            document.getElementById('pageTitle').textContent = info.title;
+            document.getElementById('pageSubtitle').textContent = info.subtitle;
+
+            const loaders = {
+                turmas: carregarTurmas,
+                encontros: carregarEncontros,
+                revisoes: carregarRevisoes,
+                alunos: carregarAlunos,
+                biblioteca: carregarBiblioteca,
+                perfil: carregarPerfil
+            };
+            if (loaders[s]) loaders[s]();
+        });
+    });
+
+    async function carregarTurmas() {
+        const { data } = await sb.from('turmas').select('*').eq('ativo', true).eq('professor_id', currentUserId);
+        const container = document.getElementById('cardsTurmas');
+        if (!data || data.length === 0) {
+            container.innerHTML = '<div class="empty-state" style="grid-column:1/-1"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/></svg><br>Nenhuma turma atribuída</div>';
             return;
         }
-        if (s.tipo !== 'professor') { window.location.href = 'index.html'; return; }
-    } catch(e) { window.location.href = 'index.html'; }
-})();
-
-let currentUserId = localStorage.getItem('mentorcr_user_id');
-const userNome = localStorage.getItem('mentorcr_user_nome');
-document.getElementById('sidebarNome').textContent = userNome || 'Professor';
-document.getElementById('sidebarAvatar').textContent = (userNome || 'P').charAt(0).toUpperCase();
-
-// ==================== UTILS ====================
-const $ = id => document.getElementById(id);
-const showLoading = () => $('loading').classList.add('show');
-const hideLoading = () => $('loading').classList.remove('show');
-function toast(msg) {
-    const old = document.querySelector('.toast');
-    if (old) old.remove();
-    const t = document.createElement('div');
-    t.className = 'toast';
-    t.textContent = msg;
-    document.body.appendChild(t);
-    setTimeout(() => t.remove(), 2500);
-}
-function uid() { return Date.now().toString(36) + Math.random().toString(36).substr(2, 9); }
-function openModal(id) { $('modal' + id).classList.add('show'); }
-function closeModal(id) { $('modal' + id).classList.remove('show'); }
-window.onclick = function(e) { if (e.target.classList.contains('modal')) e.target.classList.remove('show'); };
-function logout() { localStorage.clear(); window.location.href = 'index.html'; }
-function toggleSidebar() {
-    document.querySelector('.sidebar').classList.toggle('open');
-    document.querySelector('.sidebar-overlay').classList.toggle('show');
-}
-function closeSidebar() {
-    document.querySelector('.sidebar').classList.remove('open');
-    document.querySelector('.sidebar-overlay').classList.remove('show');
-}
-
-setInterval(() => {
-    sb.from('configuracoes').select('valor').eq('chave','admin_senha').single().then(()=>{}).catch(()=>{});
-}, 240000);
-
-// ==================== NAVEGAÇÃO ====================
-const sectionTitles = {
-    turmas: { title: 'Minhas Turmas', subtitle: 'Gerencie suas turmas atribuídas' },
-    encontros: { title: 'Encontros', subtitle: 'Agendamentos e links' },
-    revisoes: { title: 'Revisões', subtitle: 'Correção de trabalhos' },
-    alunos: { title: 'Meus Alunos', subtitle: 'Alunos matriculados' },
-    biblioteca: { title: 'Biblioteca', subtitle: 'Materiais disponíveis' },
-    perfil: { title: 'Perfil', subtitle: 'Configurações da conta' }
-};
-
-document.querySelectorAll('#sidebarNav button').forEach(btn => {
-    btn.addEventListener('click', function() {
-        document.querySelectorAll('#sidebarNav button').forEach(b => b.classList.remove('active'));
-        this.classList.add('active');
-        const s = this.dataset.section;
-        document.querySelectorAll('.content-section').forEach(x => x.classList.remove('active'));
-        const el = document.getElementById('section-' + s);
-        if (el) el.classList.add('active');
-        if (window.innerWidth <= 768) closeSidebar();
-
-        const info = sectionTitles[s] || { title: s, subtitle: '' };
-        document.getElementById('pageTitle').textContent = info.title;
-        document.getElementById('pageSubtitle').textContent = info.subtitle;
-
-        const loaders = {
-            turmas: carregarTurmas,
-            encontros: carregarEncontros,
-            revisoes: carregarRevisoes,
-            alunos: carregarAlunos,
-            biblioteca: carregarBiblioteca,
-            perfil: carregarPerfil
-        };
-        if (loaders[s]) loaders[s]();
-    });
-});
-
-// ==================== TURMAS ====================
-async function carregarTurmas() {
-    const { data } = await sb.from('turmas').select('*').eq('ativo', true).eq('professor_id', currentUserId);
-    const container = document.getElementById('cardsTurmas');
-    if (!data || data.length === 0) {
-        container.innerHTML = '<div class="empty-state" style="grid-column:1/-1"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/></svg><br>Nenhuma turma atribuída</div>';
-        return;
-    }
-    container.innerHTML = data.map(t => `
-        <div class="stat-card">
-            <div class="stat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/></svg></div>
-            <div class="stat-info">
-                <div class="stat-label">${t.nome}</div>
-                <div class="stat-value" style="font-size:16px;font-weight:500">${t.descricao}</div>
-                <div style="font-size:11px;color:var(--text-light);margin-top:4px">⏱️ ${t.carga} · R$ ${Number(t.valor).toFixed(2)}</div>
+        container.innerHTML = data.map(t => `
+            <div class="stat-card">
+                <div class="stat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/></svg></div>
+                <div class="stat-info">
+                    <div class="stat-label">${t.nome}</div>
+                    <div class="stat-value" style="font-size:16px;font-weight:500">${t.descricao}</div>
+                    <div class="stat-meta">Carga: ${t.carga} · R$ ${Number(t.valor).toFixed(2)}</div>
+                </div>
             </div>
-        </div>
-    `).join('');
-}
-
-// ==================== ENCONTROS ====================
-async function carregarSelectTurmas() {
-    const { data } = await sb.from('turmas').select('id,nome').eq('ativo', true).eq('professor_id', currentUserId);
-    const s = document.getElementById('encontroTurma');
-    if (!data || data.length === 0) {
-        s.innerHTML = '<option value="">Nenhuma turma disponível</option>';
-        return;
+        `).join('');
     }
-    s.innerHTML = '<option value="">Selecione uma turma</option>';
-    data.forEach(t => { s.innerHTML += `<option value="${t.id}">${t.nome}</option>`; });
-}
 
-async function salvarEncontro(e) {
-    e.preventDefault();
-    const tid = document.getElementById('encontroTurma').value;
-    const d = document.getElementById('encontroData').value;
-    const h = document.getElementById('encontroHora').value;
-    const m = document.getElementById('encontroMeet').value.trim();
-    const mt = document.getElementById('encontroMaterial').value.trim();
-    if (!tid || !d || !h || !m || !mt) { alert('Preencha todos os campos.'); return; }
-    showLoading();
-    const { error } = await sb.from('encontros').insert({
-        id: uid(),
-        turma_id: tid,
-        data: d,
-        hora: h,
-        link_meet: m,
-        link_material: mt
-    });
-    hideLoading();
-    if (error) { alert('Erro ao agendar: ' + error.message); return; }
-    closeModal('Encontro');
-    document.getElementById('formEncontro').reset();
-    carregarEncontros();
-    toast('✅ Encontro agendado!');
-}
-
-async function carregarEncontros() {
-    const { data: tu } = await sb.from('turmas').select('id,nome').eq('professor_id', currentUserId);
-    if (!tu || tu.length === 0) {
-        document.getElementById('tabelaEncontros').innerHTML = '<tr><td colspan="6"><div class="empty-state">Nenhuma turma</div></td></tr>';
-        return;
+    async function carregarSelectTurmas() {
+        const { data } = await sb.from('turmas').select('id,nome').eq('ativo', true).eq('professor_id', currentUserId);
+        const s = document.getElementById('encontroTurma');
+        if (!data || data.length === 0) {
+            s.innerHTML = '<option value="">Nenhuma turma disponível</option>';
+            return;
+        }
+        s.innerHTML = '<option value="">Selecione uma turma</option>';
+        data.forEach(t => { s.innerHTML += `<option value="${t.id}">${t.nome}</option>`; });
     }
-    const ids = tu.map(t => t.id);
-    const { data: en } = await sb.from('encontros').select('*').in('turma_id', ids).order('data', { ascending: true });
-    document.getElementById('tabelaEncontros').innerHTML = (!en || en.length === 0) ?
-        '<tr><td colspan="6"><div class="empty-state">Nenhum encontro agendado</div></td></tr>' :
-        en.map(e => {
-            const t = tu.find(x => x.id == e.turma_id);
-            return `<tr><td>${t ? t.nome : '-'}</td><td>${e.data}</td><td>${e.hora}</td><td><a href="${e.link_meet}" target="_blank">🔗 Meet</a></td><td><a href="${e.link_material}" target="_blank">📄 Material</a></td><td style="text-align:right"><button class="btn btn-danger btn-xs" onclick="removerEncontro('${e.id}')">Remover</button></td></tr>`;
+
+    async function salvarEncontro(e) {
+        e.preventDefault();
+        const tid = document.getElementById('encontroTurma').value;
+        const d = document.getElementById('encontroData').value;
+        const h = document.getElementById('encontroHora').value;
+        const m = document.getElementById('encontroMeet').value.trim();
+        const mt = document.getElementById('encontroMaterial').value.trim();
+        if (!tid || !d || !h || !m || !mt) { alert('Preencha todos os campos.'); return; }
+        showLoading();
+        const { error } = await sb.from('encontros').insert({
+            id: uid(),
+            turma_id: tid,
+            data: d,
+            hora: h,
+            link_meet: m,
+            link_material: mt
+        });
+        hideLoading();
+        if (error) { alert('Erro ao agendar: ' + error.message); return; }
+        closeModal('Encontro');
+        document.getElementById('formEncontro').reset();
+        carregarEncontros();
+        toast('Encontro agendado!');
+    }
+
+    async function carregarEncontros() {
+        const { data: tu } = await sb.from('turmas').select('id,nome').eq('professor_id', currentUserId);
+        if (!tu || tu.length === 0) {
+            document.getElementById('tabelaEncontros').innerHTML = '<tr><td colspan="6"><div class="empty-state">Nenhuma turma</div></td></tr>';
+            return;
+        }
+        const ids = tu.map(t => t.id);
+        const { data: en } = await sb.from('encontros').select('*').in('turma_id', ids).order('data', { ascending: true });
+        document.getElementById('tabelaEncontros').innerHTML = (!en || en.length === 0) ?
+            '<tr><td colspan="6"><div class="empty-state">Nenhum encontro agendado</div></td></tr>' :
+            en.map(e => {
+                const t = tu.find(x => x.id == e.turma_id);
+                return `<tr><td>${t ? t.nome : '-'}</td><td>${e.data}</td><td>${e.hora}</td><td><a href="${e.link_meet}" target="_blank">Meet</a></td><td><a href="${e.link_material}" target="_blank">Material</a></td><td style="text-align:right"><button class="btn btn-danger btn-xs" onclick="removerEncontro('${e.id}')">Remover</button></td></tr>`;
+            }).join('');
+    }
+
+    async function removerEncontro(id) {
+        if (!confirm('Remover este encontro?')) return;
+        showLoading();
+        await sb.from('encontros').delete().eq('id', id);
+        hideLoading();
+        carregarEncontros();
+        toast('Encontro removido.');
+    }
+
+    async function carregarRevisoes() {
+        const { data: tu } = await sb.from('turmas').select('id,nome').eq('professor_id', currentUserId);
+        if (!tu || tu.length === 0) {
+            document.getElementById('tabelaRevisoes').innerHTML = '<tr><td colspan="9"><div class="empty-state">Nenhuma turma</div></td></tr>';
+            return;
+        }
+        const ids = tu.map(t => t.id);
+        const { data: tr } = await sb.from('trabalhos').select('*').in('turma_id', ids).order('created_at', { ascending: false });
+        if (!tr || tr.length === 0) {
+            document.getElementById('tabelaRevisoes').innerHTML = '<tr><td colspan="9"><div class="empty-state">Nenhum trabalho enviado</div></td></tr>';
+            document.getElementById('revisoesBadge').textContent = '0';
+            return;
+        }
+        document.getElementById('revisoesBadge').textContent = tr.length;
+
+        const { data: al } = await sb.from('alunos').select('id,nome');
+        const ma = {};
+        if (al) al.forEach(a => ma[a.id] = a.nome);
+
+        document.getElementById('tabelaRevisoes').innerHTML = tr.map(t => {
+            const btn = t.status !== 'devolvido' ?
+                `<button class="btn btn-outline btn-xs" onclick="abrirBarema('${t.id}')">Avaliar</button>` :
+                'Concluído';
+            const nt = tu.find(x => x.id == t.turma_id);
+            let b = '-';
+            if (t.barema) b = `${(t.barema.clareza||0) + (t.barema.fundamentacao||0) + (t.barema.estrutura||0) + (t.barema.originalidade||0)}/40`;
+            const dl = t.arquivo_original ? `<a href="${t.arquivo_original}" download="${t.nome_arquivo_original || 'trabalho'}">Baixar</a>` : '-';
+            return `<tr><td>${ma[t.aluno_id] || '-'}</td><td>${nt ? nt.nome : '-'}</td><td>${t.titulo}</td><td>${dl}</td><td>${t.data_envio}</td><td>${t.status === 'devolvido' ? '<span class="badge badge-success">Devolvido</span>' : '<span class="badge badge-warning">Aguardando</span>'}</td><td>${b}</td><td style="max-width:120px;overflow:hidden;text-overflow:ellipsis">${t.devolutiva || '-'}</td><td style="text-align:right">${btn}</td></tr>`;
         }).join('');
-}
-
-async function removerEncontro(id) {
-    if (!confirm('Remover este encontro?')) return;
-    showLoading();
-    await sb.from('encontros').delete().eq('id', id);
-    hideLoading();
-    carregarEncontros();
-    toast('🗑️ Encontro removido.');
-}
-
-// ==================== REVISÕES ====================
-async function carregarRevisoes() {
-    const { data: tu } = await sb.from('turmas').select('id,nome').eq('professor_id', currentUserId);
-    if (!tu || tu.length === 0) {
-        document.getElementById('tabelaRevisoes').innerHTML = '<tr><td colspan="9"><div class="empty-state">Nenhuma turma</div></td></tr>';
-        return;
     }
-    const ids = tu.map(t => t.id);
-    const { data: tr } = await sb.from('trabalhos').select('*').in('turma_id', ids).order('created_at', { ascending: false });
-    if (!tr || tr.length === 0) {
-        document.getElementById('tabelaRevisoes').innerHTML = '<tr><td colspan="9"><div class="empty-state">Nenhum trabalho enviado</div></td></tr>';
-        document.getElementById('revisoesBadge').textContent = '0';
-        return;
+
+    function abrirBarema(id) {
+        document.getElementById('baremaTrabalhoId').value = id;
+        openModal('Barema');
+        ['bClareza','bFund','bEst','bOrig'].forEach(c => {
+            document.getElementById(c).oninput = () => {
+                const total = ['bClareza','bFund','bEst','bOrig'].reduce((s, x) => s + (parseInt(document.getElementById(x).value) || 0), 0);
+                document.getElementById('bTotal').textContent = total;
+            };
+        });
     }
-    document.getElementById('revisoesBadge').textContent = tr.length;
 
-    const { data: al } = await sb.from('alunos').select('id,nome');
-    const ma = {};
-    if (al) al.forEach(a => ma[a.id] = a.nome);
-
-    document.getElementById('tabelaRevisoes').innerHTML = tr.map(t => {
-        const btn = t.status !== 'devolvido' ?
-            `<button class="btn btn-outline btn-xs" onclick="abrirBarema('${t.id}')">📝 Avaliar</button>` :
-            '✅ Concluído';
-        const nt = tu.find(x => x.id == t.turma_id);
-        let b = '-';
-        if (t.barema) b = `${(t.barema.clareza||0) + (t.barema.fundamentacao||0) + (t.barema.estrutura||0) + (t.barema.originalidade||0)}/40`;
-        const dl = t.arquivo_original ? `<a href="${t.arquivo_original}" download="${t.nome_arquivo_original || 'trabalho'}">📎 Baixar</a>` : '-';
-        return `<tr><td>${ma[t.aluno_id] || '-'}</td><td>${nt ? nt.nome : '-'}</td><td>${t.titulo}</td><td>${dl}</td><td>${t.data_envio}</td><td>${t.status === 'devolvido' ? '<span class="badge badge-success">Devolvido</span>' : '<span class="badge badge-warning">Aguardando</span>'}</td><td>${b}</td><td style="max-width:120px;overflow:hidden;text-overflow:ellipsis">${t.devolutiva || '-'}</td><td style="text-align:right">${btn}</td></tr>`;
-    }).join('');
-}
-
-function abrirBarema(id) {
-    document.getElementById('baremaTrabalhoId').value = id;
-    openModal('Barema');
-    ['bClareza','bFund','bEst','bOrig'].forEach(c => {
-        document.getElementById(c).oninput = () => {
-            const total = ['bClareza','bFund','bEst','bOrig'].reduce((s, x) => s + (parseInt(document.getElementById(x).value) || 0), 0);
-            document.getElementById('bTotal').textContent = total;
+    async function salvarBarema(e) {
+        e.preventDefault();
+        const tid = document.getElementById('baremaTrabalhoId').value;
+        const ba = {
+            clareza: +document.getElementById('bClareza').value || 0,
+            fundamentacao: +document.getElementById('bFund').value || 0,
+            estrutura: +document.getElementById('bEst').value || 0,
+            originalidade: +document.getElementById('bOrig').value || 0
         };
-    });
-}
-
-async function salvarBarema(e) {
-    e.preventDefault();
-    const tid = document.getElementById('baremaTrabalhoId').value;
-    const ba = {
-        clareza: +document.getElementById('bClareza').value || 0,
-        fundamentacao: +document.getElementById('bFund').value || 0,
-        estrutura: +document.getElementById('bEst').value || 0,
-        originalidade: +document.getElementById('bOrig').value || 0
-    };
-    const update = {
-        barema: ba,
-        devolutiva: document.getElementById('bComentarios').value,
-        status: 'devolvido',
-        data_devolucao: new Date().toISOString().split('T')[0]
-    };
-    const arq = document.getElementById('bArquivo');
-    if (arq.files[0]) {
-        const reader = new FileReader();
-        reader.onload = async function(ev) {
-            update.arquivo_corrigido = ev.target.result;
-            update.nome_arquivo_corrigido = arq.files[0].name;
+        const update = {
+            barema: ba,
+            devolutiva: document.getElementById('bComentarios').value,
+            status: 'devolvido',
+            data_devolucao: new Date().toISOString().split('T')[0]
+        };
+        const arq = document.getElementById('bArquivo');
+        if (arq.files[0]) {
+            const reader = new FileReader();
+            reader.onload = async function(ev) {
+                update.arquivo_corrigido = ev.target.result;
+                update.nome_arquivo_corrigido = arq.files[0].name;
+                showLoading();
+                await sb.from('trabalhos').update(update).eq('id', tid);
+                hideLoading();
+                finalizarBarema();
+            };
+            reader.readAsDataURL(arq.files[0]);
+        } else {
             showLoading();
             await sb.from('trabalhos').update(update).eq('id', tid);
             hideLoading();
             finalizarBarema();
+        }
+    }
+
+    function finalizarBarema() {
+        closeModal('Barema');
+        document.getElementById('formBarema').reset();
+        document.getElementById('bTotal').textContent = '0';
+        carregarRevisoes();
+        toast('Devolutiva enviada!');
+    }
+
+    async function carregarAlunos() {
+        const { data: tu } = await sb.from('turmas').select('id,nome').eq('professor_id', currentUserId);
+        if (!tu || tu.length === 0) {
+            document.getElementById('tabelaAlunosProf').innerHTML = '<tr><td colspan="4"><div class="empty-state">Nenhum aluno</div></td></tr>';
+            return;
+        }
+        const ids = tu.map(t => t.id);
+        const { data: al } = await sb.from('alunos').select('*').in('turma_id', ids).eq('ativo', true);
+        if (!al || al.length === 0) {
+            document.getElementById('tabelaAlunosProf').innerHTML = '<tr><td colspan="4"><div class="empty-state">Nenhum aluno matriculado</div></td></tr>';
+            return;
+        }
+        const { data: tr } = await sb.from('trabalhos').select('aluno_id').in('turma_id', ids);
+        const cont = {};
+        if (tr) tr.forEach(t => cont[t.aluno_id] = (cont[t.aluno_id] || 0) + 1);
+
+        document.getElementById('tabelaAlunosProf').innerHTML = al.map(a => {
+            const t = tu.find(x => x.id == a.turma_id);
+            return `<tr><td><strong>${a.nome}</strong></td><td>${a.email}</td><td>${t ? t.nome : '-'}</td><td>${cont[a.id] || 0}</td></tr>`;
+        }).join('');
+    }
+
+    async function carregarBiblioteca() {
+        const { data } = await sb.from('biblioteca').select('*').order('created_at', { ascending: false });
+        if (!data || data.length === 0) {
+            document.getElementById('gridBiblioteca').innerHTML = '<div class="empty-state" style="grid-column:1/-1"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg><br>Nenhum material disponível</div>';
+            return;
+        }
+        const artigos = data.filter(b => b.tipo === 'artigo');
+        const livros = data.filter(b => b.tipo === 'livro');
+        let h = '';
+        if (livros.length > 0) {
+            h += `<div style="grid-column:1/-1;margin-top:4px"><h3 style="font-size:15px;font-weight:600;display:flex;align-items:center;gap:8px">Livros</h3></div>`;
+            h += livros.map(b => `
+                <div class="bib-item bib-livro">
+                    <div class="bib-tipo-badge livro">Livro</div>
+                    <h4>${b.titulo}</h4>
+                    <p>${b.descricao || ''}</p>
+                    <a href="${b.link}" target="_blank">Acessar Material</a>
+                </div>
+            `).join('');
+        }
+        if (artigos.length > 0) {
+            h += `<div style="grid-column:1/-1;margin-top:8px"><h3 style="font-size:15px;font-weight:600;display:flex;align-items:center;gap:8px">Artigos</h3></div>`;
+            h += artigos.map(b => `
+                <div class="bib-item bib-artigo">
+                    <div class="bib-tipo-badge artigo">Artigo</div>
+                    <h4>${b.titulo}</h4>
+                    <p>${b.descricao || ''}</p>
+                    <a href="${b.link}" target="_blank">Acessar Material</a>
+                </div>
+            `).join('');
+        }
+        document.getElementById('gridBiblioteca').innerHTML = h;
+    }
+
+    async function carregarPerfil() {
+        const { data } = await sb.from('professores').select('*').eq('id', currentUserId).single();
+        if (data) {
+            document.getElementById('profNomePerfil').value = data.nome;
+            document.getElementById('profEmailPerfil').value = data.email;
+            document.getElementById('profEspecialidadePerfil').value = data.especialidade;
+        }
+        const { data: ft } = await sb.from('fotos_perfil').select('foto_base64').eq('user_key', 'prof_' + currentUserId).single();
+        const el = document.getElementById('profAvatar');
+        const se = document.getElementById('sidebarAvatar');
+        el.innerHTML = ft ? `<img src="${ft.foto_base64}" style="width:100%;height:100%;object-fit:cover">` : (userNome || 'P').charAt(0).toUpperCase();
+        se.innerHTML = ft ? `<img src="${ft.foto_base64}" style="width:100%;height:100%;object-fit:cover">` : (userNome || 'P').charAt(0).toUpperCase();
+    }
+
+    async function atualizarFoto() {
+        const f = document.getElementById('profPhoto').files[0];
+        if (!f) return;
+        const r = new FileReader();
+        r.onload = async e => {
+            showLoading();
+            await sb.from('fotos_perfil').upsert({ id: uid(), user_key: 'prof_' + currentUserId, foto_base64: e.target.result }, { onConflict: 'user_key' });
+            hideLoading();
+            carregarPerfil();
+            toast('Foto atualizada!');
         };
-        reader.readAsDataURL(arq.files[0]);
-    } else {
+        r.readAsDataURL(f);
+    }
+
+    async function salvarPerfil() {
+        const d = {
+            nome: document.getElementById('profNomePerfil').value,
+            email: document.getElementById('profEmailPerfil').value,
+            especialidade: document.getElementById('profEspecialidadePerfil').value
+        };
+        const s = document.getElementById('profSenhaPerfil').value;
+        if (s) d.senha = s;
         showLoading();
-        await sb.from('trabalhos').update(update).eq('id', tid);
+        await sb.from('professores').update(d).eq('id', currentUserId);
         hideLoading();
-        finalizarBarema();
+        document.getElementById('sidebarNome').textContent = d.nome;
+        localStorage.setItem('mentorcr_user_nome', d.nome);
+        toast('Perfil atualizado!');
     }
-}
 
-function finalizarBarema() {
-    closeModal('Barema');
-    document.getElementById('formBarema').reset();
-    document.getElementById('bTotal').textContent = '0';
-    carregarRevisoes();
-    toast('✅ Devolutiva enviada!');
-}
-
-// ==================== ALUNOS ====================
-async function carregarAlunos() {
-    const { data: tu } = await sb.from('turmas').select('id,nome').eq('professor_id', currentUserId);
-    if (!tu || tu.length === 0) {
-        document.getElementById('tabelaAlunosProf').innerHTML = '<tr><td colspan="4"><div class="empty-state">Nenhum aluno</div></td></tr>';
-        return;
-    }
-    const ids = tu.map(t => t.id);
-    const { data: al } = await sb.from('alunos').select('*').in('turma_id', ids).eq('ativo', true);
-    if (!al || al.length === 0) {
-        document.getElementById('tabelaAlunosProf').innerHTML = '<tr><td colspan="4"><div class="empty-state">Nenhum aluno matriculado</div></td></tr>';
-        return;
-    }
-    const { data: tr } = await sb.from('trabalhos').select('aluno_id').in('turma_id', ids);
-    const cont = {};
-    if (tr) tr.forEach(t => cont[t.aluno_id] = (cont[t.aluno_id] || 0) + 1);
-
-    document.getElementById('tabelaAlunosProf').innerHTML = al.map(a => {
-        const t = tu.find(x => x.id == a.turma_id);
-        return `<tr><td><strong>${a.nome}</strong></td><td>${a.email}</td><td>${t ? t.nome : '-'}</td><td>${cont[a.id] || 0}</td></tr>`;
-    }).join('');
-}
-
-// ==================== BIBLIOTECA ====================
-async function carregarBiblioteca() {
-    const { data } = await sb.from('biblioteca').select('*').order('created_at', { ascending: false });
-    if (!data || data.length === 0) {
-        document.getElementById('gridBiblioteca').innerHTML = '<div class="empty-state" style="grid-column:1/-1"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg><br>Nenhum material disponível</div>';
-        return;
-    }
-    const artigos = data.filter(b => b.tipo === 'artigo');
-    const livros = data.filter(b => b.tipo === 'livro');
-    let h = '';
-    if (livros.length > 0) {
-        h += `<div style="grid-column:1/-1;margin-top:4px"><h3 style="font-size:15px;font-weight:600;display:flex;align-items:center;gap:8px">📚 Livros</h3></div>`;
-        h += livros.map(b => `
-            <div class="bib-item bib-livro">
-                <div class="bib-tipo-badge livro">Livro</div>
-                <h4>${b.titulo}</h4>
-                <p>${b.descricao || ''}</p>
-                <a href="${b.link}" target="_blank">🔗 Acessar Material</a>
-            </div>
-        `).join('');
-    }
-    if (artigos.length > 0) {
-        h += `<div style="grid-column:1/-1;margin-top:8px"><h3 style="font-size:15px;font-weight:600;display:flex;align-items:center;gap:8px">📄 Artigos</h3></div>`;
-        h += artigos.map(b => `
-            <div class="bib-item bib-artigo">
-                <div class="bib-tipo-badge artigo">Artigo</div>
-                <h4>${b.titulo}</h4>
-                <p>${b.descricao || ''}</p>
-                <a href="${b.link}" target="_blank">🔗 Acessar Material</a>
-            </div>
-        `).join('');
-    }
-    document.getElementById('gridBiblioteca').innerHTML = h;
-}
-
-// ==================== PERFIL ====================
-async function carregarPerfil() {
-    const { data } = await sb.from('professores').select('*').eq('id', currentUserId).single();
-    if (data) {
-        document.getElementById('profNomePerfil').value = data.nome;
-        document.getElementById('profEmailPerfil').value = data.email;
-        document.getElementById('profEspecialidadePerfil').value = data.especialidade;
-    }
-    const { data: ft } = await sb.from('fotos_perfil').select('foto_base64').eq('user_key', 'prof_' + currentUserId).single();
-    const el = document.getElementById('profAvatar');
-    const se = document.getElementById('sidebarAvatar');
-    el.innerHTML = ft ? `<img src="${ft.foto_base64}" style="width:100%;height:100%;object-fit:cover">` : (userNome || 'P').charAt(0).toUpperCase();
-    se.innerHTML = ft ? `<img src="${ft.foto_base64}" style="width:100%;height:100%;object-fit:cover">` : (userNome || 'P').charAt(0).toUpperCase();
-}
-
-async function atualizarFoto() {
-    const f = document.getElementById('profPhoto').files[0];
-    if (!f) return;
-    const r = new FileReader();
-    r.onload = async e => {
-        showLoading();
-        await sb.from('fotos_perfil').upsert({ id: uid(), user_key: 'prof_' + currentUserId, foto_base64: e.target.result }, { onConflict: 'user_key' });
-        hideLoading();
-        carregarPerfil();
-        toast('📷 Foto atualizada!');
+    const originalOpenModal = openModal;
+    openModal = function(id) {
+        originalOpenModal(id);
+        if (id === 'Encontro') carregarSelectTurmas();
     };
-    r.readAsDataURL(f);
-}
 
-async function salvarPerfil() {
-    const d = {
-        nome: document.getElementById('profNomePerfil').value,
-        email: document.getElementById('profEmailPerfil').value,
-        especialidade: document.getElementById('profEspecialidadePerfil').value
-    };
-    const s = document.getElementById('profSenhaPerfil').value;
-    if (s) d.senha = s;
-    showLoading();
-    await sb.from('professores').update(d).eq('id', currentUserId);
-    hideLoading();
-    document.getElementById('sidebarNome').textContent = d.nome;
-    localStorage.setItem('mentorcr_user_nome', d.nome);
-    toast('✅ Perfil atualizado!');
-}
-
-// ==================== INIT ====================
-document.getElementById('formEncontro').addEventListener('submit', salvarEncontro);
-document.getElementById('formBarema').addEventListener('submit', salvarBarema);
-
-// Forçar carregamento inicial
-carregarTurmas();
+    document.getElementById('formEncontro').addEventListener('submit', salvarEncontro);
+    document.getElementById('formBarema').addEventListener('submit', salvarBarema);
+    carregarTurmas();
 </script>
 </body>
 </html>
