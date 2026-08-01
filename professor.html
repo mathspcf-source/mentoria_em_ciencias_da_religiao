@@ -10,10 +10,10 @@
             --primary: #6c2bd9;
             --primary-dark: #4a1a8f;
             --primary-light: #8b5cf6;
-            --primary-bg: #1a0033;
-            --primary-gradient: linear-gradient(135deg, #6c2bd9, #8b5cf6);
-            --bg: #f4f0f9;
+            --primary-bg: #2a0048;
+            --bg: #f0edf5;
             --card-bg: #ffffff;
+            --card-shadow: 0 8px 32px rgba(42, 0, 72, 0.10);
             --text: #1a0a2e;
             --text-light: #5a4a6a;
             --text-muted: #8a7a9a;
@@ -24,17 +24,14 @@
             --warning-light: #fffbeb;
             --danger: #ef4444;
             --danger-light: #fef2f2;
-            --info: #3b82f6;
-            --info-light: #eff6ff;
+            --gold: #b8860b;
             --border: rgba(42, 0, 72, 0.08);
             --border-light: rgba(255, 255, 255, 0.10);
-            --card-shadow: 0 8px 32px rgba(42, 0, 72, 0.08);
-            --shadow: 0 4px 20px rgba(42, 0, 72, 0.08);
-            --shadow-lg: 0 12px 48px rgba(42, 0, 72, 0.12);
             --radius: 16px;
             --radius-sm: 10px;
-            --radius-xs: 6px;
-            --radius-full: 9999px;
+            --shadow-sm: 0 2px 8px rgba(42, 0, 72, 0.06);
+            --shadow: 0 4px 20px rgba(42, 0, 72, 0.08);
+            --shadow-lg: 0 12px 48px rgba(42, 0, 72, 0.12);
             --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             --sidebar-width: 270px;
         }
@@ -59,7 +56,7 @@
             display: none;
             position: fixed;
             inset: 0;
-            background: rgba(26, 0, 51, 0.6);
+            background: rgba(42, 0, 72, 0.6);
             backdrop-filter: blur(8px);
             z-index: 9999;
             justify-content: center;
@@ -69,8 +66,8 @@
         .spinner {
             width: 48px;
             height: 48px;
-            border: 3px solid rgba(255, 255, 255, 0.1);
-            border-top-color: #ffffff;
+            border: 3px solid rgba(255,255,255,0.1);
+            border-top-color: #fff;
             border-radius: 50%;
             animation: spin 0.6s linear infinite;
         }
@@ -100,7 +97,7 @@
             letter-spacing: -0.3px;
         }
         .mobile-header .menu-btn {
-            background: rgba(255, 255, 255, 0.08);
+            background: rgba(255,255,255,0.08);
             border: 1px solid var(--border-light);
             color: #fff;
             font-size: 20px;
@@ -110,7 +107,7 @@
             transition: var(--transition);
         }
         .mobile-header .menu-btn:hover {
-            background: rgba(255, 255, 255, 0.15);
+            background: rgba(255,255,255,0.15);
         }
 
         .sidebar {
@@ -128,6 +125,7 @@
             transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             overflow: hidden;
         }
+
         .sidebar-brand {
             padding: 24px 24px 20px;
             border-bottom: 1px solid var(--border-light);
@@ -149,6 +147,7 @@
             display: block;
             margin-top: -2px;
         }
+
         .sidebar-user {
             display: flex;
             align-items: center;
@@ -160,7 +159,7 @@
             width: 44px;
             height: 44px;
             border-radius: 50%;
-            background: var(--primary-gradient);
+            background: linear-gradient(135deg, var(--primary-light), var(--primary));
             display: flex;
             align-items: center;
             justify-content: center;
@@ -169,7 +168,7 @@
             color: #fff;
             overflow: hidden;
             flex-shrink: 0;
-            border: 2px solid rgba(255, 255, 255, 0.15);
+            border: 2px solid rgba(255,255,255,0.15);
         }
         .sidebar-avatar img {
             width: 100%;
@@ -189,6 +188,7 @@
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
+
         .sidebar-nav {
             flex: 1;
             overflow-y: auto;
@@ -210,7 +210,7 @@
             padding: 10px 14px;
             background: transparent;
             border: none;
-            color: rgba(255, 255, 255, 0.6);
+            color: rgba(255,255,255,0.6);
             font-size: 12px;
             cursor: pointer;
             font-weight: 500;
@@ -222,11 +222,11 @@
             position: relative;
         }
         .sidebar-nav button:hover {
-            background: rgba(255, 255, 255, 0.06);
+            background: rgba(255,255,255,0.06);
             color: #fff;
         }
         .sidebar-nav button.active {
-            background: rgba(255, 255, 255, 0.10);
+            background: rgba(255,255,255,0.10);
             color: #fff;
         }
         .sidebar-nav button.active::before {
@@ -247,12 +247,13 @@
         }
         .sidebar-nav button .badge-nav {
             margin-left: auto;
-            background: rgba(255, 255, 255, 0.10);
+            background: rgba(255,255,255,0.10);
             padding: 2px 10px;
             border-radius: var(--radius-full);
             font-size: 9px;
             color: #fff;
         }
+
         .sidebar-footer {
             padding: 16px 20px;
             border-top: 1px solid var(--border-light);
@@ -260,9 +261,9 @@
         .sidebar-footer button {
             width: 100%;
             padding: 10px;
-            background: rgba(255, 255, 255, 0.05);
+            background: rgba(255,255,255,0.05);
             border: 1px solid var(--border-light);
-            color: rgba(255, 255, 255, 0.6);
+            color: rgba(255,255,255,0.6);
             border-radius: var(--radius-sm);
             cursor: pointer;
             font-size: 11px;
@@ -278,6 +279,7 @@
             border-color: var(--danger);
             color: var(--danger);
         }
+
         .sidebar-overlay {
             display: none;
             position: fixed;
@@ -295,7 +297,7 @@
         }
 
         .top-header {
-            background: rgba(255, 255, 255, 0.80);
+            background: rgba(255,255,255,0.80);
             backdrop-filter: blur(16px);
             padding: 16px 32px;
             display: flex;
@@ -329,13 +331,13 @@
             gap: 8px;
             background: var(--bg);
             padding: 8px 16px;
-            border-radius: var(--radius-full);
+            border-radius: 100px;
             border: 1px solid var(--border);
             transition: var(--transition);
         }
         .top-header-right .search-box:focus-within {
             border-color: var(--primary);
-            box-shadow: 0 0 0 4px rgba(108, 43, 217, 0.08);
+            box-shadow: 0 0 0 3px rgba(108, 43, 217, 0.10);
         }
         .top-header-right .search-box input {
             border: none;
@@ -442,7 +444,7 @@
             left: 0;
             right: 0;
             height: 3px;
-            background: var(--primary-gradient);
+            background: linear-gradient(90deg, var(--primary), var(--primary-light));
             opacity: 0;
             transition: var(--transition);
         }
@@ -565,7 +567,7 @@
             border-color: var(--danger);
         }
         .btn-sm { padding: 5px 14px; font-size: 10px; }
-        .btn-xs { padding: 3px 10px; font-size: 9px; border-radius: var(--radius-xs); }
+        .btn-xs { padding: 3px 10px; font-size: 9px; border-radius: 6px; }
 
         .badge {
             padding: 3px 12px;
@@ -597,7 +599,7 @@
             display: none;
             position: fixed;
             inset: 0;
-            background: rgba(26, 0, 51, 0.5);
+            background: rgba(42, 0, 72, 0.5);
             backdrop-filter: blur(8px);
             z-index: 1000;
             align-items: center;
@@ -694,7 +696,7 @@
             border: 1px solid var(--border);
             border-radius: var(--radius);
             padding: 20px 22px;
-            box-shadow: 0 2px 8px rgba(42, 0, 72, 0.05);
+            box-shadow: var(--shadow-sm);
             transition: var(--transition);
         }
         .bib-item:hover {
@@ -702,7 +704,7 @@
             transform: translateY(-2px);
         }
         .bib-item.bib-livro { border-left: 4px solid var(--primary); }
-        .bib-item.bib-artigo { border-left: 4px solid var(--warning); }
+        .bib-item.bib-artigo { border-left: 4px solid var(--gold); }
         .bib-item h4 {
             font-size: 14px;
             font-weight: 600;
@@ -732,7 +734,7 @@
             margin-bottom: 8px;
         }
         .bib-tipo-badge.livro { background: #f0edf5; color: var(--primary); }
-        .bib-tipo-badge.artigo { background: var(--warning-light); color: var(--warning); }
+        .bib-tipo-badge.artigo { background: var(--warning-light); color: var(--gold); }
 
         .profile-section {
             display: flex;
@@ -743,7 +745,7 @@
             width: 80px;
             height: 80px;
             border-radius: 50%;
-            background: var(--primary-gradient);
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
             color: #fff;
             display: flex;
             align-items: center;
@@ -884,7 +886,7 @@
             Biblioteca
         </button>
         <button data-section="perfil" onclick="navegarPara('perfil')">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09A1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
             Perfil
         </button>
     </div>
@@ -925,14 +927,33 @@
 
         <!-- ENCONTROS -->
         <section class="content-section" id="section-encontros">
-            <div class="section-title"><h2>Encontros</h2><button class="btn btn-primary" onclick="openModal('Encontro')">+ Novo Encontro</button></div>
+            <div class="section-title"><h2>Encontros</h2><button class="btn btn-primary" onclick="abrirModal('Encontro')">+ Novo Encontro</button></div>
             <div class="table-container"><div class="table-wrapper"><table><thead><tr><th>Turma</th><th>Data</th><th>Horário</th><th>Meet</th><th>Material</th><th style="text-align:right">Ações</th></tr></thead><tbody id="tabelaEncontros"></tbody></table></div></div>
         </section>
 
         <!-- REVISÕES -->
         <section class="content-section" id="section-revisoes">
             <div class="section-title"><h2>Trabalhos para Revisão</h2></div>
-            <div class="table-container"><div class="table-wrapper"><table><thead><tr><th>Aluno</th><th>Turma</th><th>Trabalho</th><th>Arquivo</th><th>Envio</th><th>Status</th><th>Barema</th><th>Devolutiva</th><th style="text-align:right">Ações</th></tr></thead><tbody id="tabelaRevisoes"></tbody></table></div></div>
+            <div class="table-container">
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Aluno</th>
+                                <th>Turma</th>
+                                <th>Trabalho</th>
+                                <th>Arquivo</th>
+                                <th>Envio</th>
+                                <th>Status</th>
+                                <th>Barema</th>
+                                <th>Devolutiva</th>
+                                <th style="text-align:right">Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabelaRevisoes"></tbody>
+                    </table>
+                </div>
+            </div>
         </section>
 
         <!-- ALUNOS -->
@@ -969,10 +990,10 @@
     </div>
 </main>
 
-<!-- MODAIS -->
+<!-- MODAL ENCONTRO -->
 <div id="modalEncontro" class="modal">
     <div class="modal-content">
-        <div class="modal-header"><h3>Agendar Encontro</h3><button class="modal-close" onclick="closeModal('Encontro')">&times;</button></div>
+        <div class="modal-header"><h3>Agendar Encontro</h3><button class="modal-close" onclick="fecharModal('Encontro')">&times;</button></div>
         <form id="formEncontro" onsubmit="salvarEncontro(event)">
             <div class="form-group"><label>Turma</label><select id="encontroTurma" required><option value="">Carregando...</option></select></div>
             <div class="form-row">
@@ -986,24 +1007,64 @@
     </div>
 </div>
 
+<!-- MODAL BAREMA - CORRIGIDO: Cada competência vale 2,5, total 10, arquivo obrigatório -->
 <div id="modalBarema" class="modal">
     <div class="modal-content">
-        <div class="modal-header"><h3>Barema e Devolutiva</h3><button class="modal-close" onclick="closeModal('Barema')">&times;</button></div>
+        <div class="modal-header">
+            <h3>Barema e Devolutiva</h3>
+            <button class="modal-close" onclick="fecharModal('Barema')">&times;</button>
+        </div>
         <form id="formBarema" onsubmit="salvarBarema(event)">
             <input type="hidden" id="baremaTrabalhoId">
-            <h4 style="font-size:14px;font-weight:600;color:var(--text);margin-bottom:10px">Barema de Correção</h4>
+            
+            <div style="background: #f0edf5; border-radius: 10px; padding: 16px; margin-bottom: 16px;">
+                <p style="font-size: 12px; color: var(--text-light); margin-bottom: 4px;">
+                    Cada competência vale <strong>2,5 pontos</strong>
+                </p>
+                <p style="font-size: 12px; color: var(--text-light);">
+                    Nota máxima: <strong style="color: var(--primary);">10 pontos</strong>
+                </p>
+            </div>
+
             <div class="form-row">
-                <div class="form-group"><label>Clareza na Argumentação (0-10)</label><input type="number" id="bClareza" min="0" max="10" required></div>
-                <div class="form-group"><label>Fundamentação Teórica (0-10)</label><input type="number" id="bFund" min="0" max="10" required></div>
+                <div class="form-group">
+                    <label>Clareza na Argumentação (0 - 2,5)</label>
+                    <input type="number" id="bClareza" min="0" max="2.5" step="0.1" required>
+                </div>
+                <div class="form-group">
+                    <label>Fundamentação Teórica (0 - 2,5)</label>
+                    <input type="number" id="bFund" min="0" max="2.5" step="0.1" required>
+                </div>
             </div>
             <div class="form-row">
-                <div class="form-group"><label>Estrutura do Texto (0-10)</label><input type="number" id="bEst" min="0" max="10" required></div>
-                <div class="form-group"><label>Originalidade (0-10)</label><input type="number" id="bOrig" min="0" max="10" required></div>
+                <div class="form-group">
+                    <label>Estrutura do Texto (0 - 2,5)</label>
+                    <input type="number" id="bEst" min="0" max="2.5" step="0.1" required>
+                </div>
+                <div class="form-group">
+                    <label>Originalidade (0 - 2,5)</label>
+                    <input type="number" id="bOrig" min="0" max="2.5" step="0.1" required>
+                </div>
             </div>
-            <p style="color:var(--primary);font-size:14px;font-weight:600;margin-bottom:12px">Nota Total: <strong id="bTotal">0</strong> / 40</p>
-            <h4 style="font-size:14px;font-weight:600;color:var(--text);margin-bottom:10px">Devolutiva</h4>
-            <div class="form-group"><label>Comentários</label><textarea id="bComentarios" required placeholder="Escreva sua devolutiva detalhada..."></textarea></div>
-            <div class="form-group"><label>Arquivo Corrigido (opcional)</label><input type="file" id="bArquivo"></div>
+
+            <div style="background: var(--primary-light); border-radius: 10px; padding: 12px 16px; margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center;">
+                <span style="font-weight: 600; color: var(--primary);">Nota Total:</span>
+                <span style="font-size: 24px; font-weight: 700; color: var(--primary);">
+                    <strong id="bTotal">0,0</strong> / 10
+                </span>
+            </div>
+
+            <div class="form-group">
+                <label>Devolutiva</label>
+                <textarea id="bComentarios" required placeholder="Escreva sua devolutiva detalhada..."></textarea>
+            </div>
+
+            <div class="form-group">
+                <label style="color: var(--danger);">Arquivo Corrigido (obrigatório)</label>
+                <input type="file" id="bArquivo" required accept=".pdf,.doc,.docx,.txt,.zip">
+                <small style="color: var(--text-muted); font-size: 10px;">Formatos aceitos: PDF, DOC, DOCX, TXT, ZIP</small>
+            </div>
+
             <button type="submit" class="btn btn-primary w-full">Enviar Devolutiva</button>
         </form>
     </div>
@@ -1057,45 +1118,102 @@ function toast(msg) {
     setTimeout(() => t.remove(), 2500);
 }
 
-function uid() { return Date.now().toString(36) + Math.random().toString(36).substr(2, 9); }
-function openModal(id) { $('modal' + id).classList.add('show'); }
-function closeModal(id) { $('modal' + id).classList.remove('show'); }
-window.onclick = function(e) { if (e.target.classList.contains('modal')) e.target.classList.remove('show'); };
+function uid() {
+    return Date.now().toString(36) + Math.random().toString(36).substr(2, 9);
+}
 
-function logout() { localStorage.clear(); window.location.href = 'index.html'; }
+function logout() {
+    localStorage.clear();
+    window.location.href = 'index.html';
+}
+
 function toggleSidebar() {
     document.querySelector('.sidebar').classList.toggle('open');
     document.querySelector('.sidebar-overlay').classList.toggle('show');
 }
+
 function closeSidebar() {
     document.querySelector('.sidebar').classList.remove('open');
     document.querySelector('.sidebar-overlay').classList.remove('show');
 }
 
 // ============================================================
-//  NAVEGAÇÃO
+//  MODAL
 // ============================================================
-const sectionTitles = {
-    turmas: { title: 'Minhas Turmas', subtitle: 'Gerencie suas turmas atribuídas' },
-    encontros: { title: 'Encontros', subtitle: 'Agendamentos e links' },
-    revisoes: { title: 'Revisões', subtitle: 'Correção de trabalhos' },
-    alunos: { title: 'Meus Alunos', subtitle: 'Alunos matriculados' },
-    biblioteca: { title: 'Biblioteca', subtitle: 'Materiais disponíveis' },
-    perfil: { title: 'Perfil', subtitle: 'Configurações da conta' }
+function abrirModal(id) {
+    const modal = document.getElementById('modal' + id);
+    if (!modal) return;
+    modal.classList.add('show');
+    if (id === 'Encontro') carregarSelectTurmasProfessor();
+    if (id === 'Barema') {
+        // Resetar valores ao abrir
+        document.getElementById('bClareza').value = '';
+        document.getElementById('bFund').value = '';
+        document.getElementById('bEst').value = '';
+        document.getElementById('bOrig').value = '';
+        document.getElementById('bTotal').textContent = '0,0';
+        document.getElementById('bComentarios').value = '';
+        document.getElementById('bArquivo').value = '';
+    }
+}
+
+function fecharModal(id) {
+    const modal = document.getElementById('modal' + id);
+    if (modal) modal.classList.remove('show');
+}
+
+window.onclick = function(e) {
+    if (e.target.classList.contains('modal')) {
+        e.target.classList.remove('show');
+    }
 };
 
+// ============================================================
+//  BAREMA - CÁLCULO EM TEMPO REAL (2,5 POR COMPETÊNCIA)
+// ============================================================
+document.addEventListener('DOMContentLoaded', function() {
+    ['bClareza', 'bFund', 'bEst', 'bOrig'].forEach(id => {
+        const input = document.getElementById(id);
+        if (input) {
+            input.addEventListener('input', calcularTotalBarema);
+            input.addEventListener('change', calcularTotalBarema);
+        }
+    });
+});
+
+function calcularTotalBarema() {
+    const clareza = parseFloat(document.getElementById('bClareza').value) || 0;
+    const fund = parseFloat(document.getElementById('bFund').value) || 0;
+    const est = parseFloat(document.getElementById('bEst').value) || 0;
+    const orig = parseFloat(document.getElementById('bOrig').value) || 0;
+    
+    const total = clareza + fund + est + orig;
+    document.getElementById('bTotal').textContent = total.toFixed(1);
+}
+
+// ============================================================
+//  NAVEGAÇÃO
+// ============================================================
 function navegarPara(section) {
     document.querySelectorAll('.sidebar-nav button').forEach(b => b.classList.remove('active'));
     document.querySelector(`.sidebar-nav button[data-section="${section}"]`).classList.add('active');
     
-    document.querySelectorAll('.content-section').forEach(x => x.classList.remove('active'));
-    const el = document.getElementById('section-' + section);
-    if (el) el.classList.add('active');
+    document.querySelectorAll('.content-section').forEach(el => el.classList.remove('active'));
+    const target = document.getElementById('section-' + section);
+    if (target) target.classList.add('active');
+    
     if (window.innerWidth <= 768) closeSidebar();
 
-    const info = sectionTitles[section] || { title: section, subtitle: '' };
-    document.getElementById('pageTitle').textContent = info.title;
-    document.getElementById('pageSubtitle').textContent = info.subtitle;
+    const titles = {
+        turmas: { title: 'Minhas Turmas', subtitle: 'Gerencie suas turmas atribuídas' },
+        encontros: { title: 'Encontros', subtitle: 'Agendamentos e links' },
+        revisoes: { title: 'Revisões', subtitle: 'Correção de trabalhos' },
+        alunos: { title: 'Meus Alunos', subtitle: 'Alunos matriculados' },
+        biblioteca: { title: 'Biblioteca', subtitle: 'Materiais disponíveis' },
+        perfil: { title: 'Perfil', subtitle: 'Configurações da conta' }
+    };
+    document.getElementById('pageTitle').textContent = titles[section].title;
+    document.getElementById('pageSubtitle').textContent = titles[section].subtitle;
 
     const loaders = {
         turmas: carregarTurmas,
@@ -1114,8 +1232,10 @@ function navegarPara(section) {
 async function carregarTurmas() {
     try {
         showLoading();
-        const { data } = await sb.from('turmas').select('*').eq('ativo', true).eq('professor_id', currentUserId);
+        const { data, error } = await sb.from('turmas').select('*').eq('ativo', true).eq('professor_id', currentUserId);
         const container = document.getElementById('cardsTurmas');
+        
+        if (error) throw error;
         
         if (!data || data.length === 0) {
             container.innerHTML = '<div class="empty-state" style="grid-column:1/-1"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/></svg><br>Nenhuma turma atribuída</div>';
@@ -1143,15 +1263,20 @@ async function carregarTurmas() {
 // ============================================================
 //  ENCONTROS
 // ============================================================
-async function carregarSelectTurmas() {
-    const { data } = await sb.from('turmas').select('id,nome').eq('ativo', true).eq('professor_id', currentUserId);
-    const s = document.getElementById('encontroTurma');
-    if (!data || data.length === 0) {
-        s.innerHTML = '<option value="">Nenhuma turma disponível</option>';
-        return;
+async function carregarSelectTurmasProfessor() {
+    try {
+        const { data, error } = await sb.from('turmas').select('id,nome').eq('ativo', true).eq('professor_id', currentUserId);
+        const s = document.getElementById('encontroTurma');
+        if (error) throw error;
+        if (!data || data.length === 0) {
+            s.innerHTML = '<option value="">Nenhuma turma disponível</option>';
+            return;
+        }
+        s.innerHTML = '<option value="">Selecione uma turma</option>';
+        data.forEach(t => { s.innerHTML += `<option value="${t.id}">${t.nome}</option>`; });
+    } catch (error) {
+        console.error('Erro ao carregar turmas:', error);
     }
-    s.innerHTML = '<option value="">Selecione uma turma</option>';
-    data.forEach(t => { s.innerHTML += `<option value="${t.id}">${t.nome}</option>`; });
 }
 
 async function salvarEncontro(e) {
@@ -1169,7 +1294,7 @@ async function salvarEncontro(e) {
 
     try {
         showLoading();
-        await sb.from('encontros').insert({
+        const { error } = await sb.from('encontros').insert({
             id: uid(),
             turma_id: tid,
             data: data,
@@ -1177,12 +1302,14 @@ async function salvarEncontro(e) {
             link_meet: meet,
             link_material: material
         });
+        if (error) throw error;
         hideLoading();
-        closeModal('Encontro');
+        fecharModal('Encontro');
         document.getElementById('formEncontro').reset();
         carregarEncontros();
         toast('Encontro agendado!');
     } catch (error) {
+        console.error('Erro ao agendar encontro:', error);
         hideLoading();
         toast('Erro ao agendar: ' + error.message);
     }
@@ -1191,14 +1318,16 @@ async function salvarEncontro(e) {
 async function carregarEncontros() {
     try {
         showLoading();
-        const { data: tu } = await sb.from('turmas').select('id,nome').eq('professor_id', currentUserId);
+        const { data: tu, error: err1 } = await sb.from('turmas').select('id,nome').eq('professor_id', currentUserId);
+        if (err1) throw err1;
         if (!tu || tu.length === 0) {
             document.getElementById('tabelaEncontros').innerHTML = '<tr><td colspan="6"><div class="empty-state">Nenhuma turma</div></td></tr>';
             hideLoading();
             return;
         }
         const ids = tu.map(t => t.id);
-        const { data: en } = await sb.from('encontros').select('*').in('turma_id', ids).order('data', { ascending: true });
+        const { data: en, error: err2 } = await sb.from('encontros').select('*').in('turma_id', ids).order('data', { ascending: true });
+        if (err2) throw err2;
         
         document.getElementById('tabelaEncontros').innerHTML = (!en || en.length === 0) ?
             '<tr><td colspan="6"><div class="empty-state">Nenhum encontro agendado</div></td></tr>' :
@@ -1217,30 +1346,34 @@ async function removerEncontro(id) {
     if (!confirm('Remover este encontro?')) return;
     try {
         showLoading();
-        await sb.from('encontros').delete().eq('id', id);
+        const { error } = await sb.from('encontros').delete().eq('id', id);
+        if (error) throw error;
         hideLoading();
         carregarEncontros();
         toast('Encontro removido.');
     } catch (error) {
+        console.error('Erro ao remover encontro:', error);
         hideLoading();
         toast('Erro ao remover encontro');
     }
 }
 
 // ============================================================
-//  REVISÕES
+//  REVISÕES - BAREMA CORRIGIDO (2,5 POR COMPETÊNCIA)
 // ============================================================
 async function carregarRevisoes() {
     try {
         showLoading();
-        const { data: tu } = await sb.from('turmas').select('id,nome').eq('professor_id', currentUserId);
+        const { data: tu, error: err1 } = await sb.from('turmas').select('id,nome').eq('professor_id', currentUserId);
+        if (err1) throw err1;
         if (!tu || tu.length === 0) {
             document.getElementById('tabelaRevisoes').innerHTML = '<tr><td colspan="9"><div class="empty-state">Nenhuma turma</div></td></tr>';
             hideLoading();
             return;
         }
         const ids = tu.map(t => t.id);
-        const { data: tr } = await sb.from('trabalhos').select('*').in('turma_id', ids).order('created_at', { ascending: false });
+        const { data: tr, error: err2 } = await sb.from('trabalhos').select('*').in('turma_id', ids).order('created_at', { ascending: false });
+        if (err2) throw err2;
         
         if (!tr || tr.length === 0) {
             document.getElementById('tabelaRevisoes').innerHTML = '<tr><td colspan="9"><div class="empty-state">Nenhum trabalho enviado</div></td></tr>';
@@ -1250,7 +1383,8 @@ async function carregarRevisoes() {
         }
         document.getElementById('revisoesBadge').textContent = tr.length;
 
-        const { data: al } = await sb.from('alunos').select('id,nome');
+        const { data: al, error: err3 } = await sb.from('alunos').select('id,nome');
+        if (err3) throw err3;
         const ma = {};
         if (al) al.forEach(a => ma[a.id] = a.nome);
 
@@ -1260,9 +1394,24 @@ async function carregarRevisoes() {
                 'Concluído';
             const nt = tu.find(x => x.id == t.turma_id);
             let b = '-';
-            if (t.barema) b = `${(t.barema.clareza||0) + (t.barema.fundamentacao||0) + (t.barema.estrutura||0) + (t.barema.originalidade||0)}/40`;
+            if (t.barema) {
+                const total = (t.barema.clareza || 0) + (t.barema.fundamentacao || 0) + (t.barema.estrutura || 0) + (t.barema.originalidade || 0);
+                b = total.toFixed(1) + '/10';
+            }
             const dl = t.arquivo_original ? `<a href="${t.arquivo_original}" download="${t.nome_arquivo_original || 'trabalho'}">Baixar</a>` : '-';
-            return `<tr><td>${ma[t.aluno_id] || '-'}</td><td>${nt ? nt.nome : '-'}</td><td>${t.titulo}</td><td>${dl}</td><td>${t.data_envio}</td><td>${t.status === 'devolvido' ? '<span class="badge badge-success">Devolvido</span>' : '<span class="badge badge-warning">Aguardando</span>'}</td><td>${b}</td><td style="max-width:120px;overflow:hidden;text-overflow:ellipsis">${t.devolutiva || '-'}</td><td style="text-align:right">${btn}</td></tr>`;
+            const statusClass = t.status === 'devolvido' ? 'badge badge-success' : 'badge badge-warning';
+            const statusText = t.status === 'devolvido' ? 'Devolvido' : 'Aguardando';
+            return `<tr>
+                <td>${ma[t.aluno_id] || '-'}</td>
+                <td>${nt ? nt.nome : '-'}</td>
+                <td><strong>${t.titulo}</strong></td>
+                <td>${dl}</td>
+                <td>${t.data_envio}</td>
+                <td><span class="${statusClass}">${statusText}</span></td>
+                <td>${b}</td>
+                <td style="max-width:120px;overflow:hidden;text-overflow:ellipsis;font-size:11px;">${t.devolutiva || '-'}</td>
+                <td style="text-align:right">${btn}</td>
+            </tr>`;
         }).join('');
         hideLoading();
     } catch (error) {
@@ -1271,62 +1420,109 @@ async function carregarRevisoes() {
     }
 }
 
+// ============================================================
+//  ABRIR BAREMA - CORRIGIDO
+// ============================================================
 function abrirBarema(id) {
     document.getElementById('baremaTrabalhoId').value = id;
-    openModal('Barema');
-    ['bClareza','bFund','bEst','bOrig'].forEach(c => {
-        document.getElementById(c).oninput = () => {
-            const total = ['bClareza','bFund','bEst','bOrig'].reduce((s, x) => s + (parseInt(document.getElementById(x).value) || 0), 0);
-            document.getElementById('bTotal').textContent = total;
-        };
-    });
+    
+    // Resetar campos
+    document.getElementById('bClareza').value = '';
+    document.getElementById('bFund').value = '';
+    document.getElementById('bEst').value = '';
+    document.getElementById('bOrig').value = '';
+    document.getElementById('bTotal').textContent = '0,0';
+    document.getElementById('bComentarios').value = '';
+    document.getElementById('bArquivo').value = '';
+    
+    abrirModal('Barema');
 }
 
+// ============================================================
+//  SALVAR BAREMA - CORRIGIDO (2,5 POR COMPETÊNCIA, ARQUIVO OBRIGATÓRIO)
+// ============================================================
 async function salvarBarema(e) {
     e.preventDefault();
-    const tid = document.getElementById('baremaTrabalhoId').value;
-    const ba = {
-        clareza: +document.getElementById('bClareza').value || 0,
-        fundamentacao: +document.getElementById('bFund').value || 0,
-        estrutura: +document.getElementById('bEst').value || 0,
-        originalidade: +document.getElementById('bOrig').value || 0
-    };
-    const update = {
-        barema: ba,
-        devolutiva: document.getElementById('bComentarios').value,
-        status: 'devolvido',
-        data_devolucao: new Date().toISOString().split('T')[0]
-    };
-    const arq = document.getElementById('bArquivo');
     
+    const tid = document.getElementById('baremaTrabalhoId').value;
+    const clareza = parseFloat(document.getElementById('bClareza').value) || 0;
+    const fundamentacao = parseFloat(document.getElementById('bFund').value) || 0;
+    const estrutura = parseFloat(document.getElementById('bEst').value) || 0;
+    const originalidade = parseFloat(document.getElementById('bOrig').value) || 0;
+    const devolutiva = document.getElementById('bComentarios').value.trim();
+    const arquivo = document.getElementById('bArquivo').files[0];
+
+    // Validar campos
+    if (!devolutiva) {
+        toast('❌ Por favor, escreva uma devolutiva.');
+        return;
+    }
+
+    if (!arquivo) {
+        toast('❌ O arquivo corrigido é obrigatório.');
+        return;
+    }
+
+    // Validar notas (máximo 2,5 cada)
+    if (clareza > 2.5 || fundamentacao > 2.5 || estrutura > 2.5 || originalidade > 2.5) {
+        toast('❌ Cada competência vale no máximo 2,5 pontos.');
+        return;
+    }
+
+    const total = clareza + fundamentacao + estrutura + originalidade;
+    if (total > 10) {
+        toast('❌ A soma das notas não pode ultrapassar 10 pontos.');
+        return;
+    }
+
+    const barema = {
+        clareza: clareza,
+        fundamentacao: fundamentacao,
+        estrutura: estrutura,
+        originalidade: originalidade
+    };
+
     try {
         showLoading();
-        if (arq.files[0]) {
-            const reader = new FileReader();
-            reader.onload = async function(ev) {
-                update.arquivo_corrigido = ev.target.result;
-                update.nome_arquivo_corrigido = arq.files[0].name;
-                await sb.from('trabalhos').update(update).eq('id', tid);
-                finalizarBarema();
-            };
-            reader.readAsDataURL(arq.files[0]);
-        } else {
-            await sb.from('trabalhos').update(update).eq('id', tid);
-            finalizarBarema();
-        }
-    } catch (error) {
-        hideLoading();
-        toast('Erro ao salvar devolutiva');
-    }
-}
+        
+        // Ler o arquivo corrigido
+        const reader = new FileReader();
+        reader.onload = async function(ev) {
+            try {
+                const update = {
+                    barema: barema,
+                    devolutiva: devolutiva,
+                    status: 'devolvido',
+                    data_devolucao: new Date().toISOString().split('T')[0],
+                    arquivo_corrigido: ev.target.result,
+                    nome_arquivo_corrigido: arquivo.name
+                };
 
-function finalizarBarema() {
-    hideLoading();
-    closeModal('Barema');
-    document.getElementById('formBarema').reset();
-    document.getElementById('bTotal').textContent = '0';
-    carregarRevisoes();
-    toast('Devolutiva enviada!');
+                const { error } = await sb
+                    .from('trabalhos')
+                    .update(update)
+                    .eq('id', tid);
+
+                if (error) throw error;
+                
+                hideLoading();
+                fecharModal('Barema');
+                document.getElementById('formBarema').reset();
+                document.getElementById('bTotal').textContent = '0,0';
+                carregarRevisoes();
+                toast('✅ Devolutiva enviada com sucesso!');
+            } catch (error) {
+                console.error('Erro ao salvar barema:', error);
+                hideLoading();
+                toast('❌ Erro ao enviar devolutiva: ' + error.message);
+            }
+        };
+        reader.readAsDataURL(arquivo);
+    } catch (error) {
+        console.error('Erro ao processar arquivo:', error);
+        hideLoading();
+        toast('❌ Erro ao processar arquivo.');
+    }
 }
 
 // ============================================================
@@ -1335,20 +1531,23 @@ function finalizarBarema() {
 async function carregarAlunos() {
     try {
         showLoading();
-        const { data: tu } = await sb.from('turmas').select('id,nome').eq('professor_id', currentUserId);
+        const { data: tu, error: err1 } = await sb.from('turmas').select('id,nome').eq('professor_id', currentUserId);
+        if (err1) throw err1;
         if (!tu || tu.length === 0) {
             document.getElementById('tabelaAlunosProf').innerHTML = '<tr><td colspan="4"><div class="empty-state">Nenhum aluno</div></td></tr>';
             hideLoading();
             return;
         }
         const ids = tu.map(t => t.id);
-        const { data: al } = await sb.from('alunos').select('*').in('turma_id', ids).eq('ativo', true);
+        const { data: al, error: err2 } = await sb.from('alunos').select('*').in('turma_id', ids).eq('ativo', true);
+        if (err2) throw err2;
         if (!al || al.length === 0) {
             document.getElementById('tabelaAlunosProf').innerHTML = '<tr><td colspan="4"><div class="empty-state">Nenhum aluno matriculado</div></td></tr>';
             hideLoading();
             return;
         }
-        const { data: tr } = await sb.from('trabalhos').select('aluno_id').in('turma_id', ids);
+        const { data: tr, error: err3 } = await sb.from('trabalhos').select('aluno_id').in('turma_id', ids);
+        if (err3) throw err3;
         const cont = {};
         if (tr) tr.forEach(t => cont[t.aluno_id] = (cont[t.aluno_id] || 0) + 1);
 
@@ -1369,7 +1568,8 @@ async function carregarAlunos() {
 async function carregarBiblioteca() {
     try {
         showLoading();
-        const { data } = await sb.from('biblioteca').select('*').order('created_at', { ascending: false });
+        const { data, error } = await sb.from('biblioteca').select('*').order('created_at', { ascending: false });
+        if (error) throw error;
         if (!data || data.length === 0) {
             document.getElementById('gridBiblioteca').innerHTML = '<div class="empty-state" style="grid-column:1/-1"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg><br>Nenhum material disponível</div>';
             hideLoading();
@@ -1413,19 +1613,22 @@ async function carregarBiblioteca() {
 // ============================================================
 async function carregarPerfil() {
     try {
-        const { data } = await sb.from('professores').select('*').eq('id', currentUserId).single();
+        const { data, error } = await sb.from('professores').select('*').eq('id', currentUserId).single();
+        if (error) throw error;
         if (data) {
             document.getElementById('profNomePerfil').value = data.nome;
             document.getElementById('profEmailPerfil').value = data.email;
             document.getElementById('profEspecialidadePerfil').value = data.especialidade;
         }
-        const { data: ft } = await sb.from('fotos_perfil').select('foto_base64').eq('user_key', 'prof_' + currentUserId).single();
+        const { data: ft, error: err2 } = await sb.from('fotos_perfil').select('foto_base64').eq('user_key', 'prof_' + currentUserId).single();
         const el = document.getElementById('profAvatar');
         const se = document.getElementById('sidebarAvatar');
-        el.innerHTML = ft ? `<img src="${ft.foto_base64}" style="width:100%;height:100%;object-fit:cover">` : (userNome || 'P').charAt(0).toUpperCase();
-        se.innerHTML = ft ? `<img src="${ft.foto_base64}" style="width:100%;height:100%;object-fit:cover">` : (userNome || 'P').charAt(0).toUpperCase();
+        if (ft && ft.foto_base64) {
+            el.innerHTML = `<img src="${ft.foto_base64}" style="width:100%;height:100%;object-fit:cover">`;
+            se.innerHTML = `<img src="${ft.foto_base64}" style="width:100%;height:100%;object-fit:cover">`;
+        }
     } catch (error) {
-        console.error('Erro ao carregar perfil:', error);
+        console.log('Sem foto de perfil');
     }
 }
 
@@ -1436,11 +1639,17 @@ async function atualizarFoto() {
     r.onload = async e => {
         try {
             showLoading();
-            await sb.from('fotos_perfil').upsert({ id: uid(), user_key: 'prof_' + currentUserId, foto_base64: e.target.result }, { onConflict: 'user_key' });
+            const { error } = await sb.from('fotos_perfil').upsert({ 
+                id: uid(), 
+                user_key: 'prof_' + currentUserId, 
+                foto_base64: e.target.result 
+            }, { onConflict: 'user_key' });
+            if (error) throw error;
             hideLoading();
             carregarPerfil();
             toast('Foto atualizada!');
         } catch (error) {
+            console.error('Erro ao atualizar foto:', error);
             hideLoading();
             toast('Erro ao atualizar foto');
         }
@@ -1456,39 +1665,36 @@ async function salvarPerfil() {
     };
     const s = document.getElementById('profSenhaPerfil').value;
     if (s) d.senha = s;
-    
     try {
         showLoading();
-        await sb.from('professores').update(d).eq('id', currentUserId);
+        const { error } = await sb.from('professores').update(d).eq('id', currentUserId);
+        if (error) throw error;
         hideLoading();
         document.getElementById('sidebarNome').textContent = d.nome;
         localStorage.setItem('mentorcr_user_nome', d.nome);
         toast('Perfil atualizado!');
     } catch (error) {
+        console.error('Erro ao salvar perfil:', error);
         hideLoading();
         toast('Erro ao salvar perfil');
     }
 }
 
 // ============================================================
-//  INIT
+//  INICIALIZAÇÃO
 // ============================================================
 document.addEventListener('DOMContentLoaded', function() {
-    // Verificar autenticação
     const session = localStorage.getItem('mentorcr_session');
-    if (!session) { window.location.href = 'index.html'; return; }
-    
+    if (!session) {
+        window.location.href = 'index.html';
+        return;
+    }
     carregarTurmas();
 });
 
-// Sobrescrever openModal
-const originalOpenModal = openModal;
-openModal = function(id) {
-    originalOpenModal(id);
-    if (id === 'Encontro') carregarSelectTurmas();
-};
-
 console.log('✅ Professor carregado com sucesso!');
+console.log('📋 BAREMA: Cada competência vale 2,5 pontos (total 10)');
+console.log('📋 Arquivo corrigido é obrigatório');
 </script>
 </body>
 </html>
