@@ -493,98 +493,6 @@
         .stat-gold .stat-icon { background: var(--warning-light); color: var(--gold); }
         .stat-purple .stat-icon { background: #f0edf5; color: var(--primary); }
 
-        .charts-grid {
-            display: grid;
-            grid-template-columns: 2fr 1fr;
-            gap: 18px;
-        }
-        .chart-card {
-            background: var(--card-bg);
-            border-radius: var(--radius);
-            padding: 22px 24px;
-            box-shadow: var(--card-shadow);
-            border: 1px solid var(--border);
-            transition: var(--transition);
-        }
-        .chart-card:hover { box-shadow: var(--shadow-lg); }
-        .chart-card h3 {
-            font-size: 14px;
-            font-weight: 600;
-            color: var(--text);
-            margin-bottom: 16px;
-        }
-        .chart-bars {
-            display: flex;
-            align-items: flex-end;
-            gap: 14px;
-            height: 180px;
-            padding-top: 8px;
-        }
-        .chart-bar-item {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 8px;
-        }
-        .chart-bar {
-            width: 100%;
-            border-radius: 8px 8px 0 0;
-            transition: var(--transition);
-            min-height: 20px;
-        }
-        .chart-bar.purple { background: linear-gradient(180deg, var(--primary), var(--primary-light)); }
-        .chart-bar.blue { background: linear-gradient(180deg, #3b82f6, #60a5fa); }
-        .chart-bar.green { background: linear-gradient(180deg, #10b981, #34d399); }
-        .chart-bar.gold { background: linear-gradient(180deg, #b8860b, #f59e0b); }
-        .chart-bar-label {
-            font-size: 10px;
-            color: var(--text-light);
-            font-weight: 500;
-        }
-        .chart-donut {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 24px;
-        }
-        .chart-donut-circle {
-            width: 140px;
-            height: 140px;
-            border-radius: 50%;
-            background: conic-gradient(var(--primary) 0deg 180deg, #f59e0b 180deg 270deg, #10b981 270deg 360deg);
-            position: relative;
-            box-shadow: 0 4px 20px rgba(42, 0, 72, 0.08);
-        }
-        .chart-donut-circle::after {
-            content: '';
-            position: absolute;
-            inset: 28px;
-            background: #fff;
-            border-radius: 50%;
-        }
-        .chart-donut-legend {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-        .chart-donut-item {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 12px;
-            color: var(--text);
-        }
-        .chart-donut-dot {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            flex-shrink: 0;
-        }
-        .chart-donut-dot.purple { background: var(--primary); }
-        .chart-donut-dot.gold { background: #f59e0b; }
-        .chart-donut-dot.green { background: #10b981; }
-
         .table-container {
             background: var(--card-bg);
             border-radius: var(--radius);
@@ -666,6 +574,11 @@
             background: var(--danger-light);
             border-color: var(--danger);
         }
+        .btn-warning {
+            background: var(--warning);
+            color: #fff;
+        }
+        .btn-warning:hover { background: #d97706; }
         .btn-sm { padding: 5px 14px; font-size: 10px; }
         .btn-xs { padding: 3px 10px; font-size: 9px; border-radius: 6px; }
 
@@ -680,6 +593,7 @@
         }
         .badge-success { background: var(--success-light); color: var(--success); }
         .badge-warning { background: var(--warning-light); color: var(--warning); }
+        .badge-danger { background: var(--danger-light); color: var(--danger); }
 
         .empty-state {
             text-align: center;
@@ -712,7 +626,7 @@
             border-radius: var(--radius);
             padding: 28px;
             width: 100%;
-            max-width: 480px;
+            max-width: 520px;
             max-height: 85vh;
             overflow-y: auto;
             box-shadow: 0 24px 64px rgba(42, 0, 72, 0.16);
@@ -912,9 +826,26 @@
         .hidden { display: none !important; }
         .w-full { width: 100%; }
 
+        /* Planos - Status visual */
+        .plano-ativo { 
+            background: var(--success-light); 
+            color: var(--success);
+            padding: 2px 10px;
+            border-radius: var(--radius-full);
+            font-size: 9px;
+            font-weight: 600;
+        }
+        .plano-inativo {
+            background: var(--danger-light);
+            color: var(--danger);
+            padding: 2px 10px;
+            border-radius: var(--radius-full);
+            font-size: 9px;
+            font-weight: 600;
+        }
+
         @media (max-width: 1200px) {
             .stats-grid { grid-template-columns: repeat(2, 1fr); }
-            .charts-grid { grid-template-columns: 1fr; }
         }
 
         @media (max-width: 992px) {
@@ -939,11 +870,6 @@
             .stats-grid { grid-template-columns: 1fr; gap: 12px; }
             .stat-card { padding: 16px 18px; }
             .stat-card .stat-value { font-size: 20px; }
-
-            .charts-grid { grid-template-columns: 1fr; }
-            .chart-bars { height: 140px; }
-            .chart-donut { flex-direction: column; }
-            .chart-donut-circle { width: 120px; height: 120px; }
 
             .modal-content { padding: 20px; margin: 8px; }
 
@@ -1158,45 +1084,6 @@
                     </div>
                 </div>
             </div>
-
-            <div class="charts-grid">
-                <div class="chart-card">
-                    <h3>Atividades por Categoria</h3>
-                    <div class="chart-bars">
-                        <div class="chart-bar-item">
-                            <div class="chart-bar purple" style="height:140px"></div>
-                            <div class="chart-bar-label">Prof.</div>
-                        </div>
-                        <div class="chart-bar-item">
-                            <div class="chart-bar gold" style="height:100px"></div>
-                            <div class="chart-bar-label">Alunos</div>
-                        </div>
-                        <div class="chart-bar-item">
-                            <div class="chart-bar green" style="height:120px"></div>
-                            <div class="chart-bar-label">Turmas</div>
-                        </div>
-                        <div class="chart-bar-item">
-                            <div class="chart-bar blue" style="height:80px"></div>
-                            <div class="chart-bar-label">Trab.</div>
-                        </div>
-                        <div class="chart-bar-item">
-                            <div class="chart-bar purple" style="height:160px"></div>
-                            <div class="chart-bar-label">Encont.</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="chart-card">
-                    <h3>Distribuição</h3>
-                    <div class="chart-donut">
-                        <div class="chart-donut-circle"></div>
-                        <div class="chart-donut-legend">
-                            <div class="chart-donut-item"><span class="chart-donut-dot purple"></span>Professores</div>
-                            <div class="chart-donut-item"><span class="chart-donut-dot gold"></span>Alunos</div>
-                            <div class="chart-donut-item"><span class="chart-donut-dot green"></span>Turmas</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
         </section>
 
         <!-- PROFESSORES -->
@@ -1213,6 +1100,7 @@
                                 <th>Nome</th>
                                 <th>Email</th>
                                 <th>Especialidade</th>
+                                <th>Status</th>
                                 <th style="text-align:right">Ações</th>
                             </tr>
                         </thead>
@@ -1237,6 +1125,7 @@
                                 <th>Email</th>
                                 <th>Turma</th>
                                 <th>Financeiro</th>
+                                <th>Status</th>
                                 <th style="text-align:right">Ações</th>
                             </tr>
                         </thead>
@@ -1262,6 +1151,7 @@
                                 <th>Alunos</th>
                                 <th>Valor</th>
                                 <th>Plano</th>
+                                <th>Status</th>
                                 <th style="text-align:right">Ações</th>
                             </tr>
                         </thead>
@@ -1280,7 +1170,7 @@
                 <div>
                     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
                         <h3 style="font-size:15px;font-weight:600">Planos</h3>
-                        <button class="btn btn-primary btn-sm" onclick="abrirModal('Plano')">+ Novo</button>
+                        <button class="btn btn-primary btn-sm" onclick="abrirModal('Plano')">+ Novo Plano</button>
                     </div>
                     <div class="table-container">
                         <div class="table-wrapper">
@@ -1290,6 +1180,7 @@
                                         <th>Plano</th>
                                         <th>Frequência</th>
                                         <th>Valor</th>
+                                        <th>Status</th>
                                         <th style="text-align:right">Ações</th>
                                     </tr>
                                 </thead>
@@ -1375,14 +1266,15 @@
 <!-- MODAIS -->
 <!-- ============================================================ -->
 
-<!-- MODAL PROFESSOR -->
+<!-- MODAL PROFESSOR (CREATE/EDIT) -->
 <div id="modalProfessor" class="modal">
     <div class="modal-content">
         <div class="modal-header">
-            <h3>Novo Professor</h3>
+            <h3 id="profModalTitle">Novo Professor</h3>
             <button class="modal-close" onclick="fecharModal('Professor')">&times;</button>
         </div>
         <form id="formProfessor" onsubmit="salvarProfessor(event)">
+            <input type="hidden" id="profId">
             <div class="form-group">
                 <label>Nome Completo</label>
                 <input type="text" id="profNome" required>
@@ -1396,53 +1288,55 @@
                 <input type="text" id="profEspecialidade" required>
             </div>
             <div class="form-group">
-                <label>Senha</label>
-                <input type="password" id="profSenha" required>
+                <label>Senha <small style="color:var(--text-muted)">(deixe em branco para manter)</small></label>
+                <input type="password" id="profSenha" placeholder="Digite uma nova senha">
             </div>
-            <button type="submit" class="btn btn-primary w-full">Salvar Professor</button>
+            <button type="submit" class="btn btn-primary w-full">Salvar</button>
         </form>
     </div>
 </div>
 
-<!-- MODAL ALUNO (CORRIGIDO) -->
+<!-- MODAL ALUNO (CREATE/EDIT) -->
 <div id="modalAluno" class="modal">
     <div class="modal-content">
         <div class="modal-header">
-            <h3>Novo Aluno</h3>
+            <h3 id="alunoModalTitle">Novo Aluno</h3>
             <button class="modal-close" onclick="fecharModal('Aluno')">&times;</button>
         </div>
         <form id="formAluno" onsubmit="salvarAluno(event)">
+            <input type="hidden" id="alunoId">
             <div class="form-group">
                 <label>Nome Completo</label>
-                <input type="text" id="alunoNome" placeholder="Digite o nome completo" required>
+                <input type="text" id="alunoNome" required>
             </div>
             <div class="form-group">
                 <label>Email</label>
-                <input type="email" id="alunoEmail" placeholder="email@exemplo.com" required>
+                <input type="email" id="alunoEmail" required>
             </div>
             <div class="form-group">
-                <label>Senha</label>
-                <input type="password" id="alunoSenha" placeholder="Digite uma senha" required>
+                <label>Senha <small style="color:var(--text-muted)">(deixe em branco para manter)</small></label>
+                <input type="password" id="alunoSenha" placeholder="Digite uma nova senha">
             </div>
             <div class="form-group">
                 <label>Turma</label>
                 <select id="alunoTurma">
-                    <option value="">Carregando turmas...</option>
+                    <option value="">Selecione uma turma</option>
                 </select>
             </div>
-            <button type="submit" class="btn btn-primary w-full">Salvar Aluno</button>
+            <button type="submit" class="btn btn-primary w-full">Salvar</button>
         </form>
     </div>
 </div>
 
-<!-- MODAL TURMA -->
+<!-- MODAL TURMA (CREATE/EDIT) -->
 <div id="modalTurma" class="modal">
     <div class="modal-content">
         <div class="modal-header">
-            <h3>Nova Turma</h3>
+            <h3 id="turmaModalTitle">Nova Turma</h3>
             <button class="modal-close" onclick="fecharModal('Turma')">&times;</button>
         </div>
         <form id="formTurma" onsubmit="salvarTurma(event)">
+            <input type="hidden" id="turmaId">
             <div class="form-group">
                 <label>Nome da Turma</label>
                 <input type="text" id="turmaNome" required>
@@ -1464,28 +1358,29 @@
             <div class="form-group">
                 <label>Professor Responsável</label>
                 <select id="turmaProfessor" required>
-                    <option value="">Carregando professores...</option>
+                    <option value="">Carregando...</option>
                 </select>
             </div>
             <div class="form-group">
                 <label>Plano de Pagamento</label>
                 <select id="turmaPlano">
-                    <option value="">Carregando planos...</option>
+                    <option value="">Carregando...</option>
                 </select>
             </div>
-            <button type="submit" class="btn btn-primary w-full">Criar Turma</button>
+            <button type="submit" class="btn btn-primary w-full">Salvar</button>
         </form>
     </div>
 </div>
 
-<!-- MODAL PLANO -->
+<!-- MODAL PLANO (CREATE/EDIT) -->
 <div id="modalPlano" class="modal">
     <div class="modal-content">
         <div class="modal-header">
-            <h3>Novo Plano</h3>
+            <h3 id="planoModalTitle">Novo Plano</h3>
             <button class="modal-close" onclick="fecharModal('Plano')">&times;</button>
         </div>
         <form id="formPlano" onsubmit="salvarPlano(event)">
+            <input type="hidden" id="planoId">
             <div class="form-group">
                 <label>Nome do Plano</label>
                 <input type="text" id="planoNome" required>
@@ -1509,7 +1404,7 @@
                     </select>
                 </div>
             </div>
-            <button type="submit" class="btn btn-primary w-full">Salvar Plano</button>
+            <button type="submit" class="btn btn-primary w-full">Salvar</button>
         </form>
     </div>
 </div>
@@ -1592,7 +1487,7 @@ function toast(msg) {
     t.className = 'toast';
     t.textContent = msg;
     document.body.appendChild(t);
-    setTimeout(() => t.remove(), 2500);
+    setTimeout(() => t.remove(), 3000);
 }
 
 function uid() {
@@ -1617,7 +1512,7 @@ function closeSidebar() {
 // ============================================================
 //  MODAL
 // ============================================================
-function abrirModal(id) {
+function abrirModal(id, data = null) {
     const modal = document.getElementById('modal' + id);
     if (!modal) {
         console.error('❌ Modal não encontrado: modal' + id);
@@ -1625,17 +1520,62 @@ function abrirModal(id) {
     }
     
     modal.classList.add('show');
-    console.log('📂 Modal aberto:', id);
 
-    if (id === 'Turma') {
+    if (id === 'Professor') {
+        document.getElementById('profModalTitle').textContent = data ? 'Editar Professor' : 'Novo Professor';
+        if (data) {
+            document.getElementById('profId').value = data.id;
+            document.getElementById('profNome').value = data.nome;
+            document.getElementById('profEmail').value = data.email;
+            document.getElementById('profEspecialidade').value = data.especialidade || '';
+            document.getElementById('profSenha').value = '';
+        } else {
+            document.getElementById('formProfessor').reset();
+            document.getElementById('profId').value = '';
+        }
+    } else if (id === 'Aluno') {
+        document.getElementById('alunoModalTitle').textContent = data ? 'Editar Aluno' : 'Novo Aluno';
+        carregarSelectTurmas();
+        if (data) {
+            document.getElementById('alunoId').value = data.id;
+            document.getElementById('alunoNome').value = data.nome;
+            document.getElementById('alunoEmail').value = data.email;
+            document.getElementById('alunoTurma').value = data.turma_id || '';
+            document.getElementById('alunoSenha').value = '';
+        } else {
+            document.getElementById('formAluno').reset();
+            document.getElementById('alunoId').value = '';
+        }
+    } else if (id === 'Turma') {
+        document.getElementById('turmaModalTitle').textContent = data ? 'Editar Turma' : 'Nova Turma';
         carregarSelectProfessores();
         carregarSelectPlanos();
-    } else if (id === 'Aluno') {
-        setTimeout(() => {
-            carregarSelectTurmas();
-        }, 100);
+        if (data) {
+            document.getElementById('turmaId').value = data.id;
+            document.getElementById('turmaNome').value = data.nome;
+            document.getElementById('turmaDescricao').value = data.descricao || '';
+            document.getElementById('turmaCarga').value = data.carga || '';
+            document.getElementById('turmaValor').value = data.valor || '';
+            document.getElementById('turmaProfessor').value = data.professor_id || '';
+            document.getElementById('turmaPlano').value = data.plano_id || '';
+        } else {
+            document.getElementById('formTurma').reset();
+            document.getElementById('turmaId').value = '';
+        }
+    } else if (id === 'Plano') {
+        document.getElementById('planoModalTitle').textContent = data ? 'Editar Plano' : 'Novo Plano';
+        if (data) {
+            document.getElementById('planoId').value = data.id;
+            document.getElementById('planoNome').value = data.nome;
+            document.getElementById('planoDescricao').value = data.descricao || '';
+            document.getElementById('planoValor').value = data.valor || '';
+            document.getElementById('planoFrequencia').value = data.frequencia || 'mensal';
+        } else {
+            document.getElementById('formPlano').reset();
+            document.getElementById('planoId').value = '';
+        }
     } else if (id === 'Biblioteca') {
-        resetFormBiblioteca();
+        // já implementado
     }
 }
 
@@ -1668,7 +1608,6 @@ async function carregarSelectProfessores() {
             data.forEach(p => {
                 select.innerHTML += `<option value="${p.id}">${p.nome}</option>`;
             });
-            console.log(`✅ ${data.length} professores carregados`);
         } else {
             select.innerHTML = '<option value="">📭 Nenhum professor disponível</option>';
         }
@@ -1681,10 +1620,7 @@ async function carregarSelectProfessores() {
 async function carregarSelectTurmas() {
     try {
         const select = document.getElementById('alunoTurma');
-        if (!select) {
-            console.error('❌ Select "alunoTurma" não encontrado');
-            return;
-        }
+        if (!select) return;
         
         select.innerHTML = '<option value="">⏳ Carregando...</option>';
         const { data, error } = await sb
@@ -1700,7 +1636,6 @@ async function carregarSelectTurmas() {
             data.forEach(t => {
                 select.innerHTML += `<option value="${t.id}">${t.nome}</option>`;
             });
-            console.log(`✅ ${data.length} turmas carregadas`);
         } else {
             select.innerHTML = '<option value="">📭 Nenhuma turma disponível</option>';
         }
@@ -1728,7 +1663,6 @@ async function carregarSelectPlanos() {
             data.forEach(p => {
                 select.innerHTML += `<option value="${p.id}">${p.nome} - R$ ${Number(p.valor).toFixed(2)}</option>`;
             });
-            console.log(`✅ ${data.length} planos carregados`);
         } else {
             select.innerHTML = '<option value="">📭 Nenhum plano disponível</option>';
         }
@@ -1812,15 +1746,15 @@ async function carregarDashboard() {
 }
 
 // ============================================================
-//  TABELAS
+//  TABELAS COMPLETAS (COM EDIÇÃO E STATUS)
 // ============================================================
 async function carregarTabelas() {
     try {
         showLoading();
         const [professores, alunos, turmas, pagamentos, planos] = await Promise.all([
-            sb.from('professores').select('*').eq('ativo', true),
-            sb.from('alunos').select('*').eq('ativo', true),
-            sb.from('turmas').select('*').eq('ativo', true),
+            sb.from('professores').select('*'),
+            sb.from('alunos').select('*'),
+            sb.from('turmas').select('*'),
             sb.from('pagamentos').select('*'),
             sb.from('planos').select('*')
         ]);
@@ -1834,33 +1768,37 @@ async function carregarTabelas() {
         const planosMap = {};
         planosData.forEach(p => planosMap[p.id] = p.nome);
 
-        // Professores
+        // ===== PROFESSORES =====
         const tabelaProf = document.getElementById('tabelaProfessores');
         if (profData.length === 0) {
-            tabelaProf.innerHTML = '<tr><td colspan="4"><div class="empty-state">Nenhum professor cadastrado</div></td></tr>';
+            tabelaProf.innerHTML = '<tr><td colspan="5"><div class="empty-state">Nenhum professor cadastrado</div></td></tr>';
         } else {
             tabelaProf.innerHTML = profData.map(p => `
                 <tr>
                     <td><strong>${p.nome}</strong></td>
                     <td>${p.email}</td>
                     <td>${p.especialidade || '-'}</td>
+                    <td>${p.ativo ? '<span class="badge badge-success">Ativo</span>' : '<span class="badge badge-danger">Inativo</span>'}</td>
                     <td style="text-align:right">
-                        <button class="btn btn-danger btn-xs" onclick="desativarProfessor('${p.id}')">Desativar</button>
+                        <button class="btn btn-outline btn-xs" onclick="editarProfessor('${p.id}')">✏️</button>
+                        ${p.ativo ? 
+                            `<button class="btn btn-danger btn-xs" onclick="toggleProfessor('${p.id}', false)">Desativar</button>` :
+                            `<button class="btn btn-success btn-xs" onclick="toggleProfessor('${p.id}', true)">Ativar</button>`
+                        }
                     </td>
                 </tr>
             `).join('');
         }
 
-        // Alunos
+        // ===== ALUNOS =====
         const tabelaAlunos = document.getElementById('tabelaAlunos');
         if (alunosData.length === 0) {
-            tabelaAlunos.innerHTML = '<tr><td colspan="5"><div class="empty-state">Nenhum aluno cadastrado</div></td></tr>';
+            tabelaAlunos.innerHTML = '<tr><td colspan="6"><div class="empty-state">Nenhum aluno cadastrado</div></td></tr>';
         } else {
-            const alunoMap = {};
-            alunosData.forEach(a => alunoMap[a.id] = a.nome);
+            const turmaMap = {};
+            turmasData.forEach(t => turmaMap[t.id] = t.nome);
 
             tabelaAlunos.innerHTML = alunosData.map(a => {
-                const turma = turmasData.find(t => t.id === a.turma_id);
                 const pagamento = pagamentosData.find(p => p.aluno_id === a.id);
                 const status = pagamento ? (pagamento.status === 'pago' ? 
                     '<span class="badge badge-success">Pago</span>' : 
@@ -1869,57 +1807,74 @@ async function carregarTabelas() {
                     <tr>
                         <td><strong>${a.nome}</strong></td>
                         <td>${a.email}</td>
-                        <td>${turma ? turma.nome : '-'}</td>
+                        <td>${turmaMap[a.turma_id] || '-'}</td>
                         <td>${status}</td>
+                        <td>${a.ativo ? '<span class="badge badge-success">Ativo</span>' : '<span class="badge badge-danger">Inativo</span>'}</td>
                         <td style="text-align:right">
-                            <button class="btn btn-danger btn-xs" onclick="desativarAluno('${a.id}')">Desativar</button>
+                            <button class="btn btn-outline btn-xs" onclick="editarAluno('${a.id}')">✏️</button>
+                            ${a.ativo ? 
+                                `<button class="btn btn-danger btn-xs" onclick="toggleAluno('${a.id}', false)">Desativar</button>` :
+                                `<button class="btn btn-success btn-xs" onclick="toggleAluno('${a.id}', true)">Ativar</button>`
+                            }
                         </td>
                     </tr>
                 `;
             }).join('');
         }
 
-        // Turmas
+        // ===== TURMAS =====
         const tabelaTurmas = document.getElementById('tabelaTurmas');
         if (turmasData.length === 0) {
-            tabelaTurmas.innerHTML = '<tr><td colspan="6"><div class="empty-state">Nenhuma turma criada</div></td></tr>';
+            tabelaTurmas.innerHTML = '<tr><td colspan="7"><div class="empty-state">Nenhuma turma criada</div></td></tr>';
         } else {
+            const profMap = {};
+            profData.forEach(p => profMap[p.id] = p.nome);
+
             tabelaTurmas.innerHTML = turmasData.map(t => {
-                const professor = profData.find(p => p.id === t.professor_id);
                 const qtd = alunosData.filter(a => a.turma_id === t.id).length;
                 return `
                     <tr>
                         <td><strong>${t.nome}</strong></td>
-                        <td>${professor ? professor.nome : '-'}</td>
+                        <td>${profMap[t.professor_id] || '-'}</td>
                         <td>${qtd}</td>
                         <td>R$ ${Number(t.valor).toFixed(2)}</td>
                         <td>${planosMap[t.plano_id] || '-'}</td>
+                        <td>${t.ativo ? '<span class="badge badge-success">Ativa</span>' : '<span class="badge badge-danger">Inativa</span>'}</td>
                         <td style="text-align:right">
-                            <button class="btn btn-danger btn-xs" onclick="desativarTurma('${t.id}')">Desativar</button>
+                            <button class="btn btn-outline btn-xs" onclick="editarTurma('${t.id}')">✏️</button>
+                            ${t.ativo ? 
+                                `<button class="btn btn-danger btn-xs" onclick="toggleTurma('${t.id}', false)">Desativar</button>` :
+                                `<button class="btn btn-success btn-xs" onclick="toggleTurma('${t.id}', true)">Ativar</button>`
+                            }
                         </td>
                     </tr>
                 `;
             }).join('');
         }
 
-        // Planos
+        // ===== PLANOS =====
         const tabelaPlanos = document.getElementById('tabelaPlanos');
         if (planosData.length === 0) {
-            tabelaPlanos.innerHTML = '<tr><td colspan="4"><div class="empty-state">Nenhum plano</div></td></tr>';
+            tabelaPlanos.innerHTML = '<tr><td colspan="5"><div class="empty-state">Nenhum plano cadastrado</div></td></tr>';
         } else {
             tabelaPlanos.innerHTML = planosData.map(p => `
                 <tr>
                     <td><strong>${p.nome}</strong></td>
                     <td>${p.frequencia}</td>
                     <td>R$ ${Number(p.valor).toFixed(2)}</td>
+                    <td>${p.ativo ? '<span class="plano-ativo">Ativo</span>' : '<span class="plano-inativo">Inativo</span>'}</td>
                     <td style="text-align:right">
-                        <button class="btn btn-danger btn-xs" onclick="desativarPlano('${p.id}')">Desativar</button>
+                        <button class="btn btn-outline btn-xs" onclick="editarPlano('${p.id}')">✏️</button>
+                        ${p.ativo ? 
+                            `<button class="btn btn-danger btn-xs" onclick="togglePlano('${p.id}', false)">Desativar</button>` :
+                            `<button class="btn btn-success btn-xs" onclick="togglePlano('${p.id}', true)">Ativar</button>`
+                        }
                     </td>
                 </tr>
             `).join('');
         }
 
-        // Pagamentos
+        // ===== PAGAMENTOS =====
         const tabelaFinanceiro = document.getElementById('tabelaFinanceiro');
         if (pagamentosData.length === 0) {
             tabelaFinanceiro.innerHTML = '<tr><td colspan="6"><div class="empty-state">Nenhum pagamento registrado</div></td></tr>';
@@ -1954,10 +1909,352 @@ async function carregarTabelas() {
 }
 
 // ============================================================
+//  FUNÇÕES DE EDIÇÃO (PROFESSOR, ALUNO, TURMA, PLANO)
+// ============================================================
+
+// --- PROFESSOR ---
+async function editarProfessor(id) {
+    try {
+        const { data, error } = await sb.from('professores').select('*').eq('id', id).single();
+        if (error) throw error;
+        if (data) {
+            abrirModal('Professor', data);
+        }
+    } catch (error) {
+        console.error('Erro ao carregar professor:', error);
+        toast('Erro ao carregar dados do professor');
+    }
+}
+
+async function toggleProfessor(id, ativar) {
+    const msg = ativar ? 'Ativar este professor?' : 'Desativar este professor?';
+    if (!confirm(msg)) return;
+    try {
+        showLoading();
+        const { error } = await sb.from('professores').update({ ativo: ativar }).eq('id', id);
+        if (error) throw error;
+        hideLoading();
+        toast(ativar ? 'Professor ativado!' : 'Professor desativado!');
+        carregarDashboard();
+        carregarTabelas();
+    } catch (error) {
+        console.error('Erro ao alterar status do professor:', error);
+        hideLoading();
+        toast('Erro ao alterar status');
+    }
+}
+
+// --- ALUNO ---
+async function editarAluno(id) {
+    try {
+        const { data, error } = await sb.from('alunos').select('*').eq('id', id).single();
+        if (error) throw error;
+        if (data) {
+            abrirModal('Aluno', data);
+        }
+    } catch (error) {
+        console.error('Erro ao carregar aluno:', error);
+        toast('Erro ao carregar dados do aluno');
+    }
+}
+
+async function toggleAluno(id, ativar) {
+    const msg = ativar ? 'Ativar este aluno?' : 'Desativar este aluno?';
+    if (!confirm(msg)) return;
+    try {
+        showLoading();
+        const { error } = await sb.from('alunos').update({ ativo: ativar }).eq('id', id);
+        if (error) throw error;
+        hideLoading();
+        toast(ativar ? 'Aluno ativado!' : 'Aluno desativado!');
+        carregarDashboard();
+        carregarTabelas();
+    } catch (error) {
+        console.error('Erro ao alterar status do aluno:', error);
+        hideLoading();
+        toast('Erro ao alterar status');
+    }
+}
+
+// --- TURMA ---
+async function editarTurma(id) {
+    try {
+        const { data, error } = await sb.from('turmas').select('*').eq('id', id).single();
+        if (error) throw error;
+        if (data) {
+            abrirModal('Turma', data);
+        }
+    } catch (error) {
+        console.error('Erro ao carregar turma:', error);
+        toast('Erro ao carregar dados da turma');
+    }
+}
+
+async function toggleTurma(id, ativar) {
+    const msg = ativar ? 'Ativar esta turma?' : 'Desativar esta turma?';
+    if (!confirm(msg)) return;
+    try {
+        showLoading();
+        const { error } = await sb.from('turmas').update({ ativo: ativar }).eq('id', id);
+        if (error) throw error;
+        hideLoading();
+        toast(ativar ? 'Turma ativada!' : 'Turma desativada!');
+        carregarDashboard();
+        carregarTabelas();
+    } catch (error) {
+        console.error('Erro ao alterar status da turma:', error);
+        hideLoading();
+        toast('Erro ao alterar status');
+    }
+}
+
+// --- PLANO ---
+async function editarPlano(id) {
+    try {
+        const { data, error } = await sb.from('planos').select('*').eq('id', id).single();
+        if (error) throw error;
+        if (data) {
+            abrirModal('Plano', data);
+        }
+    } catch (error) {
+        console.error('Erro ao carregar plano:', error);
+        toast('Erro ao carregar dados do plano');
+    }
+}
+
+async function togglePlano(id, ativar) {
+    const msg = ativar ? 'Ativar este plano?' : 'Desativar este plano?';
+    if (!confirm(msg)) return;
+    try {
+        showLoading();
+        const { error } = await sb.from('planos').update({ ativo: ativar }).eq('id', id);
+        if (error) throw error;
+        hideLoading();
+        toast(ativar ? 'Plano ativado!' : 'Plano desativado!');
+        carregarFinanceiro();
+    } catch (error) {
+        console.error('Erro ao alterar status do plano:', error);
+        hideLoading();
+        toast('Erro ao alterar status');
+    }
+}
+
+// ============================================================
+//  CRUD - SALVAR (CREATE/UPDATE)
+// ============================================================
+
+// --- PROFESSOR ---
+async function salvarProfessor(e) {
+    e.preventDefault();
+    const id = document.getElementById('profId').value;
+    const nome = document.getElementById('profNome').value.trim();
+    const email = document.getElementById('profEmail').value.trim();
+    const especialidade = document.getElementById('profEspecialidade').value.trim();
+    const senha = document.getElementById('profSenha').value.trim();
+    
+    if (!nome || !email || !especialidade) {
+        toast('Preencha todos os campos obrigatórios.');
+        return;
+    }
+
+    try {
+        showLoading();
+        const dados = { nome, email, especialidade };
+        if (senha) dados.senha = senha;
+
+        if (id) {
+            const { error } = await sb.from('professores').update(dados).eq('id', id);
+            if (error) throw error;
+            toast('Professor atualizado!');
+        } else {
+            dados.id = uid();
+            dados.ativo = true;
+            const { error } = await sb.from('professores').insert(dados);
+            if (error) throw error;
+            toast('Professor cadastrado!');
+        }
+
+        hideLoading();
+        fecharModal('Professor');
+        document.getElementById('formProfessor').reset();
+        carregarDashboard();
+        carregarTabelas();
+    } catch (error) {
+        console.error('Erro ao salvar professor:', error);
+        hideLoading();
+        toast('Erro ao salvar: ' + error.message);
+    }
+}
+
+// --- ALUNO ---
+async function salvarAluno(e) {
+    e.preventDefault();
+    const id = document.getElementById('alunoId').value;
+    const nome = document.getElementById('alunoNome').value.trim();
+    const email = document.getElementById('alunoEmail').value.trim();
+    const senha = document.getElementById('alunoSenha').value.trim();
+    const turmaId = document.getElementById('alunoTurma').value;
+
+    if (!nome || !email) {
+        toast('Preencha nome e email.');
+        return;
+    }
+
+    try {
+        showLoading();
+        const dados = { nome, email, turma_id: turmaId || null };
+        if (senha) dados.senha = senha;
+
+        if (id) {
+            const { error } = await sb.from('alunos').update(dados).eq('id', id);
+            if (error) throw error;
+            toast('Aluno atualizado!');
+        } else {
+            dados.id = uid();
+            dados.ativo = true;
+            const { error } = await sb.from('alunos').insert(dados);
+            if (error) throw error;
+            toast('Aluno cadastrado!');
+            
+            // Criar pagamento se tiver turma
+            if (turmaId) {
+                try {
+                    const { data: turma } = await sb.from('turmas').select('valor, plano_id').eq('id', turmaId).single();
+                    if (turma) {
+                        await sb.from('pagamentos').insert({
+                            id: uid(),
+                            aluno_id: dados.id,
+                            turma_id: turmaId,
+                            plano_id: turma.plano_id || null,
+                            valor: turma.valor || 0,
+                            vencimento: new Date().toISOString().split('T')[0],
+                            status: 'pendente'
+                        });
+                    }
+                } catch (err) {
+                    console.warn('Erro ao criar pagamento:', err);
+                }
+            }
+        }
+
+        hideLoading();
+        fecharModal('Aluno');
+        document.getElementById('formAluno').reset();
+        carregarDashboard();
+        carregarTabelas();
+    } catch (error) {
+        console.error('Erro ao salvar aluno:', error);
+        hideLoading();
+        toast('Erro ao salvar: ' + error.message);
+    }
+}
+
+// --- TURMA ---
+async function salvarTurma(e) {
+    e.preventDefault();
+    const id = document.getElementById('turmaId').value;
+    const nome = document.getElementById('turmaNome').value.trim();
+    const descricao = document.getElementById('turmaDescricao').value.trim();
+    const carga = document.getElementById('turmaCarga').value.trim();
+    const valor = parseFloat(document.getElementById('turmaValor').value);
+    const professorId = document.getElementById('turmaProfessor').value;
+    const planoId = document.getElementById('turmaPlano').value;
+
+    if (!nome || !descricao || !carga || !valor || !professorId) {
+        toast('Preencha todos os campos.');
+        return;
+    }
+
+    try {
+        showLoading();
+        const dados = { nome, descricao, carga, valor, professor_id: professorId, plano_id: planoId || null };
+
+        if (id) {
+            const { error } = await sb.from('turmas').update(dados).eq('id', id);
+            if (error) throw error;
+            toast('Turma atualizada!');
+        } else {
+            dados.id = uid();
+            dados.ativo = true;
+            const { error } = await sb.from('turmas').insert(dados);
+            if (error) throw error;
+            toast('Turma criada!');
+        }
+
+        hideLoading();
+        fecharModal('Turma');
+        document.getElementById('formTurma').reset();
+        carregarDashboard();
+        carregarTabelas();
+    } catch (error) {
+        console.error('Erro ao salvar turma:', error);
+        hideLoading();
+        toast('Erro ao salvar: ' + error.message);
+    }
+}
+
+// --- PLANO ---
+async function salvarPlano(e) {
+    e.preventDefault();
+    const id = document.getElementById('planoId').value;
+    const nome = document.getElementById('planoNome').value.trim();
+    const descricao = document.getElementById('planoDescricao').value.trim();
+    const valor = parseFloat(document.getElementById('planoValor').value);
+    const frequencia = document.getElementById('planoFrequencia').value;
+
+    if (!nome || !descricao || !valor || !frequencia) {
+        toast('Preencha todos os campos.');
+        return;
+    }
+
+    try {
+        showLoading();
+        const dados = { nome, descricao, valor, frequencia };
+
+        if (id) {
+            const { error } = await sb.from('planos').update(dados).eq('id', id);
+            if (error) throw error;
+            toast('Plano atualizado!');
+        } else {
+            dados.id = uid();
+            dados.ativo = true;
+            const { error } = await sb.from('planos').insert(dados);
+            if (error) throw error;
+            toast('Plano criado!');
+        }
+
+        hideLoading();
+        fecharModal('Plano');
+        document.getElementById('formPlano').reset();
+        carregarFinanceiro();
+    } catch (error) {
+        console.error('Erro ao salvar plano:', error);
+        hideLoading();
+        toast('Erro ao salvar: ' + error.message);
+    }
+}
+
+// ============================================================
 //  FINANCEIRO
 // ============================================================
 async function carregarFinanceiro() {
     await carregarTabelas();
+}
+
+async function confirmarPagamento(id) {
+    try {
+        showLoading();
+        const { error } = await sb.from('pagamentos').update({ status: 'pago' }).eq('id', id);
+        if (error) throw error;
+        hideLoading();
+        toast('Pagamento confirmado!');
+        carregarDashboard();
+        carregarTabelas();
+    } catch (error) {
+        console.error('Erro ao confirmar pagamento:', error);
+        hideLoading();
+        toast('Erro ao confirmar pagamento');
+    }
 }
 
 // ============================================================
@@ -1982,7 +2279,7 @@ async function carregarBiblioteca() {
         let html = '';
 
         if (livros.length > 0) {
-            html += `<div style="grid-column:1/-1;margin-top:4px"><h3 style="font-size:15px;font-weight:600;display:flex;align-items:center;gap:8px">Livros</h3></div>`;
+            html += `<div style="grid-column:1/-1;margin-top:4px"><h3 style="font-size:15px;font-weight:600;display:flex;align-items:center;gap:8px">📚 Livros</h3></div>`;
             html += livros.map(b => `
                 <div class="bib-item bib-livro">
                     <div class="bib-tipo-badge livro">Livro</div>
@@ -1990,7 +2287,6 @@ async function carregarBiblioteca() {
                     <p>${b.descricao || ''}</p>
                     <a href="${b.link}" target="_blank">Acessar Material</a>
                     <div class="bib-actions">
-                        <button class="btn btn-outline btn-xs" onclick="editarMaterial('${b.id}')">Editar</button>
                         <button class="btn btn-danger btn-xs" onclick="removerMaterial('${b.id}')">Remover</button>
                     </div>
                 </div>
@@ -1998,7 +2294,7 @@ async function carregarBiblioteca() {
         }
 
         if (artigos.length > 0) {
-            html += `<div style="grid-column:1/-1;margin-top:8px"><h3 style="font-size:15px;font-weight:600;display:flex;align-items:center;gap:8px">Artigos</h3></div>`;
+            html += `<div style="grid-column:1/-1;margin-top:8px"><h3 style="font-size:15px;font-weight:600;display:flex;align-items:center;gap:8px">📄 Artigos</h3></div>`;
             html += artigos.map(b => `
                 <div class="bib-item bib-artigo">
                     <div class="bib-tipo-badge artigo">Artigo</div>
@@ -2006,7 +2302,6 @@ async function carregarBiblioteca() {
                     <p>${b.descricao || ''}</p>
                     <a href="${b.link}" target="_blank">Acessar Material</a>
                     <div class="bib-actions">
-                        <button class="btn btn-outline btn-xs" onclick="editarMaterial('${b.id}')">Editar</button>
                         <button class="btn btn-danger btn-xs" onclick="removerMaterial('${b.id}')">Remover</button>
                     </div>
                 </div>
@@ -2021,317 +2316,6 @@ async function carregarBiblioteca() {
     }
 }
 
-function resetFormBiblioteca() {
-    document.getElementById('formBiblioteca').reset();
-    document.getElementById('bibId').value = '';
-    document.getElementById('bibModalTitle').textContent = 'Adicionar Material';
-}
-
-async function editarMaterial(id) {
-    try {
-        const { data, error } = await sb.from('biblioteca').select('*').eq('id', id).single();
-        if (error) throw error;
-        if (!data) return;
-
-        document.getElementById('bibId').value = data.id;
-        document.getElementById('bibTipo').value = data.tipo;
-        document.getElementById('bibNome').value = data.titulo;
-        document.getElementById('bibDescricao').value = data.descricao || '';
-        document.getElementById('bibLink').value = data.link;
-        document.getElementById('bibModalTitle').textContent = 'Editar Material';
-        abrirModal('Biblioteca');
-    } catch (error) {
-        console.error('Erro ao carregar material:', error);
-        toast('Erro ao carregar material para edição');
-    }
-}
-
-async function removerMaterial(id) {
-    if (!confirm('Remover este material permanentemente?')) return;
-    try {
-        showLoading();
-        const { error } = await sb.from('biblioteca').delete().eq('id', id);
-        if (error) throw error;
-        hideLoading();
-        carregarBiblioteca();
-        toast('Material removido.');
-    } catch (error) {
-        console.error('Erro ao remover material:', error);
-        hideLoading();
-        toast('Erro ao remover material');
-    }
-}
-
-// ============================================================
-//  CRUD - SALVAR ALUNO (CORRIGIDO)
-// ============================================================
-async function salvarAluno(e) {
-    e.preventDefault();
-    
-    // Obter valores do formulário
-    const nome = document.getElementById('alunoNome').value.trim();
-    const email = document.getElementById('alunoEmail').value.trim();
-    const senha = document.getElementById('alunoSenha').value.trim();
-    const turmaId = document.getElementById('alunoTurma').value;
-
-    // Validar campos obrigatórios
-    if (!nome) {
-        toast('❌ O nome do aluno é obrigatório.');
-        return;
-    }
-    if (!email) {
-        toast('❌ O email do aluno é obrigatório.');
-        return;
-    }
-    if (!senha) {
-        toast('❌ A senha do aluno é obrigatória.');
-        return;
-    }
-
-    // Validar formato do email
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-        toast('❌ Por favor, insira um email válido.');
-        return;
-    }
-
-    try {
-        showLoading();
-        
-        // Verificar se o email já está cadastrado
-        const { data: emailCheck, error: checkError } = await sb
-            .from('alunos')
-            .select('id')
-            .eq('email', email)
-            .maybeSingle();
-        
-        if (checkError) {
-            console.error('Erro ao verificar email:', checkError);
-        }
-        
-        if (emailCheck) {
-            hideLoading();
-            toast('❌ Este email já está cadastrado.');
-            return;
-        }
-
-        // Gerar ID único para o aluno
-        const alunoId = uid();
-        
-        // Preparar dados do aluno
-        const alunoData = {
-            id: alunoId,
-            nome: nome,
-            email: email,
-            senha: senha,
-            turma_id: turmaId || null,
-            ativo: true,
-            created_at: new Date().toISOString()
-        };
-
-        console.log('📝 Inserindo aluno:', alunoData);
-
-        // Inserir aluno
-        const { data: aluno, error: err1 } = await sb
-            .from('alunos')
-            .insert(alunoData)
-            .select()
-            .single();
-
-        if (err1) {
-            console.error('❌ Erro ao inserir aluno:', err1);
-            hideLoading();
-            toast('❌ Erro ao cadastrar aluno: ' + err1.message);
-            return;
-        }
-
-        console.log('✅ Aluno inserido com sucesso:', aluno);
-
-        // Se tiver turma, criar pagamento
-        if (turmaId) {
-            try {
-                // Buscar dados da turma
-                const { data: turma, error: err2 } = await sb
-                    .from('turmas')
-                    .select('valor, plano_id')
-                    .eq('id', turmaId)
-                    .single();
-
-                if (err2) {
-                    console.error('❌ Erro ao buscar turma:', err2);
-                } else if (turma) {
-                    // Criar pagamento
-                    const pagamentoData = {
-                        id: uid(),
-                        aluno_id: alunoId,
-                        turma_id: turmaId,
-                        plano_id: turma.plano_id || null,
-                        valor: turma.valor || 0,
-                        vencimento: new Date().toISOString().split('T')[0],
-                        status: 'pendente',
-                        created_at: new Date().toISOString()
-                    };
-
-                    console.log('📝 Inserindo pagamento:', pagamentoData);
-
-                    const { error: err3 } = await sb
-                        .from('pagamentos')
-                        .insert(pagamentoData);
-
-                    if (err3) {
-                        console.error('❌ Erro ao inserir pagamento:', err3);
-                    } else {
-                        console.log('✅ Pagamento criado com sucesso');
-                    }
-                }
-            } catch (err) {
-                console.error('❌ Erro ao processar pagamento:', err);
-            }
-        }
-
-        hideLoading();
-        fecharModal('Aluno');
-        
-        // Resetar formulário
-        document.getElementById('formAluno').reset();
-        carregarSelectTurmas();
-        
-        // Recarregar dados
-        carregarDashboard();
-        carregarTabelas();
-        
-        toast('✅ Aluno cadastrado com sucesso!');
-        
-    } catch (error) {
-        console.error('❌ Erro geral ao salvar aluno:', error);
-        hideLoading();
-        toast('❌ Erro ao cadastrar aluno: ' + (error.message || 'Erro desconhecido'));
-    }
-}
-
-// ============================================================
-//  CRUD - PROFESSOR
-// ============================================================
-async function salvarProfessor(e) {
-    e.preventDefault();
-    const nome = document.getElementById('profNome').value.trim();
-    const email = document.getElementById('profEmail').value.trim();
-    const especialidade = document.getElementById('profEspecialidade').value.trim();
-    const senha = document.getElementById('profSenha').value.trim();
-    
-    if (!nome || !email || !especialidade || !senha) {
-        toast('Preencha todos os campos.');
-        return;
-    }
-
-    try {
-        showLoading();
-        const { error } = await sb.from('professores').insert({
-            id: uid(),
-            nome,
-            email,
-            especialidade,
-            senha,
-            ativo: true
-        });
-        if (error) throw error;
-        hideLoading();
-        fecharModal('Professor');
-        document.getElementById('formProfessor').reset();
-        toast('Professor cadastrado com sucesso!');
-        carregarDashboard();
-        carregarTabelas();
-    } catch (error) {
-        console.error('Erro ao salvar professor:', error);
-        hideLoading();
-        toast('Erro ao cadastrar professor');
-    }
-}
-
-// ============================================================
-//  CRUD - TURMA
-// ============================================================
-async function salvarTurma(e) {
-    e.preventDefault();
-    const nome = document.getElementById('turmaNome').value.trim();
-    const descricao = document.getElementById('turmaDescricao').value.trim();
-    const carga = document.getElementById('turmaCarga').value.trim();
-    const valor = parseFloat(document.getElementById('turmaValor').value);
-    const professorId = document.getElementById('turmaProfessor').value;
-    const planoId = document.getElementById('turmaPlano').value;
-
-    if (!nome || !descricao || !carga || !valor || !professorId) {
-        toast('Preencha todos os campos.');
-        return;
-    }
-
-    try {
-        showLoading();
-        const { error } = await sb.from('turmas').insert({
-            id: uid(),
-            nome,
-            descricao,
-            carga,
-            valor,
-            professor_id: professorId,
-            plano_id: planoId || null,
-            ativo: true
-        });
-        if (error) throw error;
-        hideLoading();
-        fecharModal('Turma');
-        document.getElementById('formTurma').reset();
-        toast('Turma criada com sucesso!');
-        carregarDashboard();
-        carregarTabelas();
-    } catch (error) {
-        console.error('Erro ao salvar turma:', error);
-        hideLoading();
-        toast('Erro ao criar turma');
-    }
-}
-
-// ============================================================
-//  CRUD - PLANO
-// ============================================================
-async function salvarPlano(e) {
-    e.preventDefault();
-    const nome = document.getElementById('planoNome').value.trim();
-    const descricao = document.getElementById('planoDescricao').value.trim();
-    const valor = parseFloat(document.getElementById('planoValor').value);
-    const frequencia = document.getElementById('planoFrequencia').value;
-
-    if (!nome || !descricao || !valor || !frequencia) {
-        toast('Preencha todos os campos.');
-        return;
-    }
-
-    try {
-        showLoading();
-        const { error } = await sb.from('planos').insert({
-            id: uid(),
-            nome,
-            descricao,
-            valor,
-            frequencia,
-            ativo: true
-        });
-        if (error) throw error;
-        hideLoading();
-        fecharModal('Plano');
-        document.getElementById('formPlano').reset();
-        toast('Plano criado com sucesso!');
-        carregarFinanceiro();
-    } catch (error) {
-        console.error('Erro ao salvar plano:', error);
-        hideLoading();
-        toast('Erro ao criar plano');
-    }
-}
-
-// ============================================================
-//  CRUD - MATERIAL
-// ============================================================
 async function salvarMaterial(e) {
     e.preventDefault();
     const id = document.getElementById('bibId').value;
@@ -2373,89 +2357,19 @@ async function salvarMaterial(e) {
     }
 }
 
-// ============================================================
-//  DESATIVAR
-// ============================================================
-async function desativarProfessor(id) {
-    if (!confirm('Desativar este professor?')) return;
+async function removerMaterial(id) {
+    if (!confirm('Remover este material permanentemente?')) return;
     try {
         showLoading();
-        const { error } = await sb.from('professores').update({ ativo: false }).eq('id', id);
+        const { error } = await sb.from('biblioteca').delete().eq('id', id);
         if (error) throw error;
         hideLoading();
-        toast('Professor desativado!');
-        carregarDashboard();
-        carregarTabelas();
+        carregarBiblioteca();
+        toast('Material removido.');
     } catch (error) {
-        console.error('Erro ao desativar professor:', error);
+        console.error('Erro ao remover material:', error);
         hideLoading();
-        toast('Erro ao desativar professor');
-    }
-}
-
-async function desativarAluno(id) {
-    if (!confirm('Desativar este aluno?')) return;
-    try {
-        showLoading();
-        const { error } = await sb.from('alunos').update({ ativo: false }).eq('id', id);
-        if (error) throw error;
-        hideLoading();
-        toast('Aluno desativado!');
-        carregarDashboard();
-        carregarTabelas();
-    } catch (error) {
-        console.error('Erro ao desativar aluno:', error);
-        hideLoading();
-        toast('Erro ao desativar aluno');
-    }
-}
-
-async function desativarTurma(id) {
-    if (!confirm('Desativar esta turma?')) return;
-    try {
-        showLoading();
-        const { error } = await sb.from('turmas').update({ ativo: false }).eq('id', id);
-        if (error) throw error;
-        hideLoading();
-        toast('Turma desativada!');
-        carregarDashboard();
-        carregarTabelas();
-    } catch (error) {
-        console.error('Erro ao desativar turma:', error);
-        hideLoading();
-        toast('Erro ao desativar turma');
-    }
-}
-
-async function desativarPlano(id) {
-    if (!confirm('Desativar este plano?')) return;
-    try {
-        showLoading();
-        const { error } = await sb.from('planos').update({ ativo: false }).eq('id', id);
-        if (error) throw error;
-        hideLoading();
-        toast('Plano desativado!');
-        carregarFinanceiro();
-    } catch (error) {
-        console.error('Erro ao desativar plano:', error);
-        hideLoading();
-        toast('Erro ao desativar plano');
-    }
-}
-
-async function confirmarPagamento(id) {
-    try {
-        showLoading();
-        const { error } = await sb.from('pagamentos').update({ status: 'pago' }).eq('id', id);
-        if (error) throw error;
-        hideLoading();
-        toast('Pagamento confirmado!');
-        carregarDashboard();
-        carregarTabelas();
-    } catch (error) {
-        console.error('Erro ao confirmar pagamento:', error);
-        hideLoading();
-        toast('Erro ao confirmar pagamento');
+        toast('Erro ao remover material');
     }
 }
 
@@ -2640,10 +2554,10 @@ document.addEventListener('DOMContentLoaded', function() {
     carregarPerfil();
     
     console.log('✅ Admin carregado com sucesso!');
-    console.log('📋 Funções disponíveis:');
-    console.log('  - abrirModal(id) - Abrir modal');
-    console.log('  - fecharModal(id) - Fechar modal');
-    console.log('  - carregarSelectTurmas() - Recarregar select de turmas');
+    console.log('📋 Novas funcionalidades:');
+    console.log('  - Editar professores, alunos, turmas e planos');
+    console.log('  - Ativar/Desativar professores, alunos, turmas e planos');
+    console.log('  - Visualizar status de cada registro');
 });
 </script>
 </body>
