@@ -612,6 +612,13 @@
         .badge-vencimento.vencido { background: var(--danger-light); color: var(--danger); }
         .badge-vencimento.hoje { background: var(--warning-light); color: var(--warning); }
         .badge-vencimento.em-dia { background: var(--success-light); color: var(--success); }
+        .badge-vencimento.alerta { background: var(--warning-light); color: var(--warning); animation: pulse 1.5s infinite; }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
 
         .empty-state {
             text-align: center;
@@ -844,7 +851,6 @@
         .hidden { display: none !important; }
         .w-full { width: 100%; }
 
-        /* Planos - Status visual */
         .plano-ativo { 
             background: var(--success-light); 
             color: var(--success);
@@ -862,7 +868,6 @@
             font-weight: 600;
         }
 
-        /* Painel de Vencimentos */
         .vencimentos-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -912,6 +917,34 @@
             font-size: 11px;
             color: var(--text-muted);
             margin-top: 2px;
+        }
+
+        /* Alerta de vencimento */
+        .alerta-vencimento {
+            background: var(--danger-light);
+            border: 1px solid var(--danger);
+            border-radius: var(--radius-sm);
+            padding: 12px 16px;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            animation: pulse 1.5s infinite;
+        }
+        .alerta-vencimento svg {
+            width: 24px;
+            height: 24px;
+            color: var(--danger);
+            flex-shrink: 0;
+        }
+        .alerta-vencimento .alerta-texto {
+            flex: 1;
+            font-size: 12px;
+            color: var(--danger);
+            font-weight: 500;
+        }
+        .alerta-vencimento .alerta-texto strong {
+            color: var(--text);
         }
 
         @media (max-width: 1200px) {
@@ -1092,12 +1125,12 @@
                 </svg>
                 <input type="text" placeholder="Buscar...">
             </div>
-            <div class="notify-btn">
+            <div class="notify-btn" id="notifyBtn" onclick="toggleNotificacoes()">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
                     <path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/>
                     <path d="M13.73 21a2 2 0 01-3.46 0"/>
                 </svg>
-                <span class="dot"></span>
+                <span class="dot" id="notifyDot"></span>
             </div>
         </div>
     </header>
@@ -1110,6 +1143,10 @@
                 <h2>Visão Geral</h2>
                 <p>Dados atualizados em tempo real</p>
             </div>
+
+            <!-- Alertas de vencimento -->
+            <div id="alertasContainer"></div>
+
             <div class="stats-grid">
                 <div class="stat-card stat-blue">
                     <div class="stat-icon">
@@ -1158,14 +1195,13 @@
                         </svg>
                     </div>
                     <div class="stat-info">
-                        <div class="stat-label">Vencidos Hoje</div>
-                        <div class="stat-value" id="totalVencidosHoje">0</div>
-                        <div class="stat-change down">Pagamentos vencidos</div>
+                        <div class="stat-label">Alerta 7 Dias</div>
+                        <div class="stat-value" id="totalAlerta7Dias">0</div>
+                        <div class="stat-change down">Vencimentos próximos</div>
                     </div>
                 </div>
             </div>
 
-            <!-- Cards de Vencimentos Rápidos -->
             <div class="vencimentos-grid">
                 <div class="vencimento-card">
                     <div class="v-icon danger">
@@ -1176,7 +1212,7 @@
                         </svg>
                     </div>
                     <div class="v-info">
-                        <div class="v-label">⚠️ Vencidos</div>
+                        <div class="v-label">Vencidos</div>
                         <div class="v-value" id="vencidosTotal">0</div>
                         <div class="v-detail">Pagamentos em atraso</div>
                     </div>
@@ -1189,9 +1225,9 @@
                         </svg>
                     </div>
                     <div class="v-info">
-                        <div class="v-label">📅 Vencem Hoje</div>
-                        <div class="v-value" id="vencemHoje">0</div>
-                        <div class="v-detail">Pagamentos com vencimento hoje</div>
+                        <div class="v-label">Alerta 7 Dias</div>
+                        <div class="v-value" id="alerta7DiasCard">0</div>
+                        <div class="v-detail">Vencem em até 7 dias</div>
                     </div>
                 </div>
                 <div class="vencimento-card">
@@ -1202,7 +1238,7 @@
                         </svg>
                     </div>
                     <div class="v-info">
-                        <div class="v-label">✅ Em Dia</div>
+                        <div class="v-label">Em Dia</div>
                         <div class="v-value" id="emDia">0</div>
                         <div class="v-detail">Pagamentos em dia</div>
                     </div>
@@ -1215,7 +1251,7 @@
                         </svg>
                     </div>
                     <div class="v-info">
-                        <div class="v-label">💰 Total em Atraso</div>
+                        <div class="v-label">Total em Atraso</div>
                         <div class="v-value" id="totalEmAtraso">R$ 0,00</div>
                         <div class="v-detail">Soma de todos os vencidos</div>
                     </div>
@@ -1261,7 +1297,7 @@
                                 <th>Nome</th>
                                 <th>Email</th>
                                 <th>Turma</th>
-                                <th>Financeiro</th>
+                                <th>Vencimento</th>
                                 <th>Status</th>
                                 <th style="text-align:right">Ações</th>
                             </tr>
@@ -1337,7 +1373,7 @@
                                         <th>Plano</th>
                                         <th>Valor</th>
                                         <th>Vencimento</th>
-                                        <th>Situação</th>
+                                        <th>Status</th>
                                         <th style="text-align:right">Ações</th>
                                     </tr>
                                 </thead>
@@ -1352,12 +1388,15 @@
         <!-- VENCIMENTOS -->
         <section class="content-section" id="section-vencimentos">
             <div class="section-title">
-                <h2>📅 Controle de Vencimentos</h2>
+                <h2>Controle de Vencimentos</h2>
                 <div style="display:flex;gap:10px;flex-wrap:wrap">
-                    <button class="btn btn-success btn-sm" onclick="gerarCobrancas()">🔄 Gerar Cobranças</button>
-                    <button class="btn btn-outline btn-sm" onclick="carregarVencimentos()">🔄 Atualizar</button>
+                    <button class="btn btn-success btn-sm" onclick="gerarCobrancas()">Gerar Cobranças</button>
+                    <button class="btn btn-outline btn-sm" onclick="carregarVencimentos()">Atualizar</button>
                 </div>
             </div>
+
+            <div id="alertasContainerVencimentos"></div>
+
             <div class="table-container">
                 <div class="table-wrapper">
                     <table>
@@ -1463,7 +1502,7 @@
     </div>
 </div>
 
-<!-- MODAL ALUNO -->
+<!-- MODAL ALUNO - COM DATA DE VENCIMENTO -->
 <div id="modalAluno" class="modal">
     <div class="modal-content">
         <div class="modal-header">
@@ -1486,9 +1525,19 @@
             </div>
             <div class="form-group">
                 <label>Turma</label>
-                <select id="alunoTurma">
+                <select id="alunoTurma" onchange="atualizarValorPlano()">
                     <option value="">Selecione uma turma</option>
                 </select>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Valor do Plano (R$)</label>
+                    <input type="number" id="alunoValor" step="0.01" readonly style="background:var(--bg);cursor:not-allowed;">
+                </div>
+                <div class="form-group">
+                    <label>Data de Vencimento</label>
+                    <input type="date" id="alunoVencimento" required>
+                </div>
             </div>
             <button type="submit" class="btn btn-primary w-full">Salvar</button>
         </form>
@@ -1622,6 +1671,7 @@ const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZ
 const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 const ADMIN_EMAIL = 'admin@mentorcr.com';
 const SESSION_DURATION = 2 * 60 * 60 * 1000;
+const DIAS_ALERTA = 7;
 
 // ============================================================
 //  SESSÃO
@@ -1680,8 +1730,8 @@ function obterStatusVencimento(dataStr) {
     const dias = calcularDiasAte(dataStr);
     if (dias < 0) return { texto: 'Vencido', classe: 'vencido', badge: 'badge-danger' };
     if (dias === 0) return { texto: 'Vence Hoje', classe: 'hoje', badge: 'badge-warning' };
-    if (dias <= 3) return { texto: `Vence em ${dias} dia(s)`, classe: 'em-dia', badge: 'badge-warning' };
-    return { texto: `Vence em ${dias} dia(s)`, classe: 'em-dia', badge: 'badge-success' };
+    if (dias <= DIAS_ALERTA) return { texto: `Alerta: ${dias} dias`, classe: 'alerta', badge: 'badge-vencimento alerta' };
+    return { texto: `${dias} dias`, classe: 'em-dia', badge: 'badge-success' };
 }
 
 function logout() {
@@ -1700,12 +1750,55 @@ function closeSidebar() {
 }
 
 // ============================================================
+//  NOTIFICAÇÕES
+// ============================================================
+let notificacoesAbertas = false;
+
+function toggleNotificacoes() {
+    notificacoesAbertas = !notificacoesAbertas;
+    const container = document.getElementById('alertasContainer');
+    if (container) {
+        container.style.display = notificacoesAbertas ? 'block' : 'none';
+    }
+}
+
+function mostrarAlertas(alertas) {
+    const container = document.getElementById('alertasContainer');
+    if (!container) return;
+
+    if (alertas.length === 0) {
+        container.innerHTML = '';
+        container.style.display = 'none';
+        document.getElementById('notifyDot').style.display = 'none';
+        return;
+    }
+
+    container.style.display = 'block';
+    document.getElementById('notifyDot').style.display = 'block';
+
+    container.innerHTML = alertas.map(a => `
+        <div class="alerta-vencimento">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"/>
+                <polyline points="12 6 12 12 16 14"/>
+            </svg>
+            <div class="alerta-texto">
+                <strong>${a.aluno}</strong> - 
+                Vencimento em <strong>${a.dias} dias</strong> 
+                (${formatDate(a.vencimento)})
+                ${a.turma ? ` - Turma: ${a.turma}` : ''}
+            </div>
+        </div>
+    `).join('');
+}
+
+// ============================================================
 //  MODAL
 // ============================================================
 function abrirModal(id, data = null) {
     const modal = document.getElementById('modal' + id);
     if (!modal) {
-        console.error('❌ Modal não encontrado: modal' + id);
+        console.error('Modal não encontrado: modal' + id);
         return;
     }
     
@@ -1731,10 +1824,16 @@ function abrirModal(id, data = null) {
             document.getElementById('alunoNome').value = data.nome;
             document.getElementById('alunoEmail').value = data.email;
             document.getElementById('alunoTurma').value = data.turma_id || '';
+            document.getElementById('alunoValor').value = data.valor || '';
+            document.getElementById('alunoVencimento').value = data.vencimento || '';
             document.getElementById('alunoSenha').value = '';
         } else {
             document.getElementById('formAluno').reset();
             document.getElementById('alunoId').value = '';
+            // Data padrão: 30 dias a partir de hoje
+            const dataPadrao = new Date();
+            dataPadrao.setDate(dataPadrao.getDate() + 30);
+            document.getElementById('alunoVencimento').value = dataPadrao.toISOString().split('T')[0];
         }
     } else if (id === 'Turma') {
         document.getElementById('turmaModalTitle').textContent = data ? 'Editar Turma' : 'Nova Turma';
@@ -1788,7 +1887,7 @@ async function carregarSelectProfessores() {
         const select = document.getElementById('turmaProfessor');
         if (!select) return;
         
-        select.innerHTML = '<option value="">⏳ Carregando...</option>';
+        select.innerHTML = '<option value="">Carregando...</option>';
         const { data, error } = await sb.from('professores').select('*').eq('ativo', true);
         
         if (error) throw error;
@@ -1799,11 +1898,11 @@ async function carregarSelectProfessores() {
                 select.innerHTML += `<option value="${p.id}">${p.nome}</option>`;
             });
         } else {
-            select.innerHTML = '<option value="">📭 Nenhum professor disponível</option>';
+            select.innerHTML = '<option value="">Nenhum professor disponível</option>';
         }
     } catch (error) {
-        console.error('❌ Erro ao carregar professores:', error);
-        document.getElementById('turmaProfessor').innerHTML = '<option value="">⚠️ Erro ao carregar</option>';
+        console.error('Erro ao carregar professores:', error);
+        document.getElementById('turmaProfessor').innerHTML = '<option value="">Erro ao carregar</option>';
     }
 }
 
@@ -1812,29 +1911,40 @@ async function carregarSelectTurmas() {
         const select = document.getElementById('alunoTurma');
         if (!select) return;
         
-        select.innerHTML = '<option value="">⏳ Carregando...</option>';
+        select.innerHTML = '<option value="">Carregando...</option>';
         const { data, error } = await sb
             .from('turmas')
-            .select('id, nome')
+            .select('id, nome, valor')
             .eq('ativo', true)
             .order('nome', { ascending: true });
         
         if (error) throw error;
         
-        select.innerHTML = '<option value="">📚 Selecione uma turma</option>';
+        select.innerHTML = '<option value="">Selecione uma turma</option>';
         if (data && data.length > 0) {
             data.forEach(t => {
-                select.innerHTML += `<option value="${t.id}">${t.nome}</option>`;
+                select.innerHTML += `<option value="${t.id}" data-valor="${t.valor || 0}">${t.nome}</option>`;
             });
         } else {
-            select.innerHTML = '<option value="">📭 Nenhuma turma disponível</option>';
+            select.innerHTML = '<option value="">Nenhuma turma disponível</option>';
         }
     } catch (error) {
-        console.error('❌ Erro ao carregar turmas:', error);
+        console.error('Erro ao carregar turmas:', error);
         const select = document.getElementById('alunoTurma');
         if (select) {
-            select.innerHTML = '<option value="">⚠️ Erro ao carregar</option>';
+            select.innerHTML = '<option value="">Erro ao carregar</option>';
         }
+    }
+}
+
+function atualizarValorPlano() {
+    const select = document.getElementById('alunoTurma');
+    const valorInput = document.getElementById('alunoValor');
+    const selectedOption = select.options[select.selectedIndex];
+    if (selectedOption && selectedOption.dataset.valor) {
+        valorInput.value = parseFloat(selectedOption.dataset.valor).toFixed(2);
+    } else {
+        valorInput.value = '';
     }
 }
 
@@ -1843,7 +1953,7 @@ async function carregarSelectPlanos() {
         const select = document.getElementById('turmaPlano');
         if (!select) return;
         
-        select.innerHTML = '<option value="">⏳ Carregando...</option>';
+        select.innerHTML = '<option value="">Carregando...</option>';
         const { data, error } = await sb.from('planos').select('*').eq('ativo', true);
         
         if (error) throw error;
@@ -1854,11 +1964,11 @@ async function carregarSelectPlanos() {
                 select.innerHTML += `<option value="${p.id}">${p.nome} - R$ ${Number(p.valor).toFixed(2)}</option>`;
             });
         } else {
-            select.innerHTML = '<option value="">📭 Nenhum plano disponível</option>';
+            select.innerHTML = '<option value="">Nenhum plano disponível</option>';
         }
     } catch (error) {
-        console.error('❌ Erro ao carregar planos:', error);
-        document.getElementById('turmaPlano').innerHTML = '<option value="">⚠️ Erro ao carregar</option>';
+        console.error('Erro ao carregar planos:', error);
+        document.getElementById('turmaPlano').innerHTML = '<option value="">Erro ao carregar</option>';
     }
 }
 
@@ -1881,7 +1991,7 @@ function navegarPara(section) {
         alunos: { title: 'Alunos', subtitle: 'Gerenciar discentes' },
         turmas: { title: 'Turmas', subtitle: 'Gerenciar turmas' },
         financeiro: { title: 'Financeiro', subtitle: 'Planos e pagamentos' },
-        vencimentos: { title: '📅 Vencimentos', subtitle: 'Controle de pagamentos' },
+        vencimentos: { title: 'Vencimentos', subtitle: 'Controle de pagamentos' },
         biblioteca: { title: 'Biblioteca', subtitle: 'Materiais disponíveis' },
         backup: { title: 'Backup', subtitle: 'Exportar e restaurar dados' },
         perfil: { title: 'Perfil', subtitle: 'Configurações da conta' }
@@ -1920,45 +2030,68 @@ async function carregarDashboard() {
         hoje.setHours(0, 0, 0, 0);
 
         let vencidos = 0;
-        let venceHoje = 0;
+        let alerta7Dias = 0;
         let emDia = 0;
         let totalAtraso = 0;
+        const alertas = [];
+
+        // Buscar nomes dos alunos
+        const { data: alunosData } = await sb.from('alunos').select('id, nome');
+        const alunoMap = {};
+        if (alunosData) alunosData.forEach(a => alunoMap[a.id] = a.nome);
 
         pagData.forEach(p => {
             const venc = new Date(p.vencimento);
             venc.setHours(0, 0, 0, 0);
+            const dias = calcularDiasAte(p.vencimento);
+            
             if (p.status === 'pago') {
                 emDia++;
             } else {
                 if (venc < hoje) {
                     vencidos++;
                     totalAtraso += Number(p.valor) || 0;
-                } else if (venc.getTime() === hoje.getTime()) {
-                    venceHoje++;
+                } else if (dias >= 0 && dias <= DIAS_ALERTA) {
+                    alerta7Dias++;
+                    // Adicionar ao alerta se não for hoje (já mostrado como vencido)
+                    if (dias > 0) {
+                        alertas.push({
+                            aluno: alunoMap[p.aluno_id] || 'Aluno',
+                            turma: p.turma_id || '',
+                            vencimento: p.vencimento,
+                            dias: dias
+                        });
+                    }
                 }
             }
         });
 
+        // Limitar alertas a 5 para não poluir a tela
+        const alertasMostrar = alertas.slice(0, 5);
+
         document.getElementById('totalProfessores').textContent = professores.count || 0;
         document.getElementById('totalAlunos').textContent = alunos.count || 0;
         document.getElementById('totalTurmas').textContent = turmas.count || 0;
+        document.getElementById('totalAlerta7Dias').textContent = alerta7Dias;
         
         const pendentes = pagData.filter(p => p.status === 'pendente').length;
         document.getElementById('pendentesBadge').textContent = pendentes;
         
         document.getElementById('vencidosTotal').textContent = vencidos;
-        document.getElementById('vencemHoje').textContent = venceHoje;
+        document.getElementById('alerta7DiasCard').textContent = alerta7Dias;
         document.getElementById('emDia').textContent = emDia;
         document.getElementById('totalEmAtraso').textContent = `R$ ${totalAtraso.toFixed(2)}`;
-        document.getElementById('totalVencidosHoje').textContent = vencidos + venceHoje;
 
         // Badge do menu
         const badgeVenc = document.getElementById('vencimentosBadge');
         if (badgeVenc) {
-            const totalVenc = vencidos + venceHoje;
+            const totalVenc = vencidos + alerta7Dias;
             badgeVenc.textContent = totalVenc;
             badgeVenc.style.display = totalVenc > 0 ? 'inline' : 'none';
         }
+
+        // Mostrar alertas
+        mostrarAlertas(alertasMostrar);
 
         hideLoading();
         return { professores: professores.count || 0, alunos: alunos.count || 0, turmas: turmas.count || 0, pendentes };
@@ -2022,18 +2155,27 @@ async function carregarTabelas() {
             const turmaMap = {};
             turmasData.forEach(t => turmaMap[t.id] = t.nome);
 
+            // Buscar último pagamento de cada aluno
+            const ultimoPagamento = {};
+            pagamentosData.forEach(p => {
+                if (!ultimoPagamento[p.aluno_id] || new Date(p.vencimento) > new Date(ultimoPagamento[p.aluno_id].vencimento)) {
+                    ultimoPagamento[p.aluno_id] = p;
+                }
+            });
+
             tabelaAlunos.innerHTML = alunosData.map(a => {
-                const pagamento = pagamentosData.find(p => p.aluno_id === a.id);
-                const status = pagamento ? (pagamento.status === 'pago' ? 
-                    '<span class="badge badge-success">Pago</span>' : 
-                    '<span class="badge badge-warning">Pendente</span>') : '-';
+                const pag = ultimoPagamento[a.id];
+                const statusVenc = pag ? obterStatusVencimento(pag.vencimento) : { texto: 'Sem pagamento', badge: 'badge-secondary' };
+                const badgeClasse = pag && pag.status === 'pago' ? 'badge-success' : 
+                                   (statusVenc.classe === 'alerta' ? 'badge-vencimento alerta' : 
+                                   statusVenc.classe === 'vencido' ? 'badge-danger' : 'badge-warning');
                 return `
                     <tr>
                         <td><strong>${a.nome}</strong></td>
                         <td>${a.email}</td>
                         <td>${turmaMap[a.turma_id] || '-'}</td>
-                        <td>${status}</td>
-                        <td>${a.ativo ? '<span class="badge badge-success">Ativo</span>' : '<span class="badge badge-danger">Inativo</span>'}</td>
+                        <td>${pag ? formatDate(pag.vencimento) : '-'}</td>
+                        <td><span class="${badgeClasse}">${pag ? (pag.status === 'pago' ? 'Pago' : statusVenc.texto) : 'Sem pagamento'}</span></td>
                         <td style="text-align:right">
                             <button class="btn btn-outline btn-xs" onclick="editarAluno('${a.id}')">✏️</button>
                             ${a.ativo ? 
@@ -2098,6 +2240,34 @@ async function carregarTabelas() {
             `).join('');
         }
 
+        // ===== PAGAMENTOS =====
+        const tabelaFinanceiro = document.getElementById('tabelaFinanceiro');
+        if (pagamentosData.length === 0) {
+            tabelaFinanceiro.innerHTML = '<tr><td colspan="6"><div class="empty-state">Nenhum pagamento registrado</div></td></tr>';
+        } else {
+            const alunoMap = {};
+            alunosData.forEach(a => alunoMap[a.id] = a.nome);
+
+            tabelaFinanceiro.innerHTML = pagamentosData.map(p => {
+                const statusVenc = obterStatusVencimento(p.vencimento);
+                const status = p.status === 'pago' ? 
+                    '<span class="badge badge-success">Pago</span>' : 
+                    `<span class="badge ${statusVenc.badge}">${statusVenc.texto}</span>`;
+                const btn = p.status === 'pendente' ? 
+                    `<button class="btn btn-success btn-xs" onclick="confirmarPagamento('${p.id}')">Confirmar</button>` : '';
+                return `
+                    <tr>
+                        <td>${alunoMap[p.aluno_id] || '-'}</td>
+                        <td>${planosMap[p.plano_id] || '-'}</td>
+                        <td>R$ ${Number(p.valor).toFixed(2)}</td>
+                        <td>${formatDate(p.vencimento)}</td>
+                        <td>${status}</td>
+                        <td style="text-align:right">${btn}</td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
         hideLoading();
     } catch (error) {
         console.error('Erro ao carregar tabelas:', error);
@@ -2140,7 +2310,15 @@ async function editarAluno(id) {
     try {
         const { data, error } = await sb.from('alunos').select('*').eq('id', id).single();
         if (error) throw error;
-        if (data) abrirModal('Aluno', data);
+        if (data) {
+            // Buscar pagamento do aluno
+            const { data: pag } = await sb.from('pagamentos').select('*').eq('aluno_id', id).order('created_at', { ascending: false }).limit(1);
+            if (pag && pag.length > 0) {
+                data.vencimento = pag[0].vencimento;
+                data.valor = pag[0].valor;
+            }
+            abrirModal('Aluno', data);
+        }
     } catch (error) {
         console.error('Erro ao carregar aluno:', error);
         toast('Erro ao carregar dados do aluno');
@@ -2267,9 +2445,15 @@ async function salvarAluno(e) {
     const email = document.getElementById('alunoEmail').value.trim();
     const senha = document.getElementById('alunoSenha').value.trim();
     const turmaId = document.getElementById('alunoTurma').value;
+    const valor = parseFloat(document.getElementById('alunoValor').value) || 0;
+    const vencimento = document.getElementById('alunoVencimento').value;
 
     if (!nome || !email) {
         toast('Preencha nome e email.');
+        return;
+    }
+    if (!vencimento) {
+        toast('Selecione uma data de vencimento.');
         return;
     }
 
@@ -2279,7 +2463,28 @@ async function salvarAluno(e) {
         if (senha) dados.senha = senha;
 
         if (id) {
+            // Atualizar aluno
             await sb.from('alunos').update(dados).eq('id', id);
+            
+            // Atualizar pagamento se existir
+            const { data: pagExistente } = await sb.from('pagamentos').select('id').eq('aluno_id', id).order('created_at', { ascending: false }).limit(1);
+            if (pagExistente && pagExistente.length > 0) {
+                await sb.from('pagamentos').update({
+                    valor: valor,
+                    vencimento: vencimento,
+                    turma_id: turmaId || null
+                }).eq('id', pagExistente[0].id);
+            } else if (turmaId && valor > 0) {
+                await sb.from('pagamentos').insert({
+                    id: uid(),
+                    aluno_id: id,
+                    turma_id: turmaId,
+                    plano_id: null,
+                    valor: valor,
+                    vencimento: vencimento,
+                    status: 'pendente'
+                });
+            }
             toast('Aluno atualizado!');
         } else {
             dados.id = uid();
@@ -2287,25 +2492,16 @@ async function salvarAluno(e) {
             await sb.from('alunos').insert(dados);
             toast('Aluno cadastrado!');
             
-            if (turmaId) {
-                try {
-                    const { data: turma } = await sb.from('turmas').select('valor, plano_id').eq('id', turmaId).single();
-                    if (turma) {
-                        const vencimento = new Date();
-                        vencimento.setMonth(vencimento.getMonth() + 1);
-                        await sb.from('pagamentos').insert({
-                            id: uid(),
-                            aluno_id: dados.id,
-                            turma_id: turmaId,
-                            plano_id: turma.plano_id || null,
-                            valor: turma.valor || 0,
-                            vencimento: vencimento.toISOString().split('T')[0],
-                            status: 'pendente'
-                        });
-                    }
-                } catch (err) {
-                    console.warn('Erro ao criar pagamento:', err);
-                }
+            if (turmaId && valor > 0) {
+                await sb.from('pagamentos').insert({
+                    id: uid(),
+                    aluno_id: dados.id,
+                    turma_id: turmaId,
+                    plano_id: null,
+                    valor: valor,
+                    vencimento: vencimento,
+                    status: 'pendente'
+                });
             }
         }
 
@@ -2314,6 +2510,7 @@ async function salvarAluno(e) {
         document.getElementById('formAluno').reset();
         carregarDashboard();
         carregarTabelas();
+        carregarVencimentos();
     } catch (error) {
         console.error('Erro ao salvar aluno:', error);
         hideLoading();
@@ -2424,7 +2621,7 @@ async function confirmarPagamento(id) {
 }
 
 // ============================================================
-//  VENCIMENTOS - FUNÇÃO PRINCIPAL
+//  VENCIMENTOS
 // ============================================================
 async function carregarVencimentos() {
     try {
@@ -2453,7 +2650,7 @@ async function carregarVencimentos() {
         const hoje = new Date();
         hoje.setHours(0, 0, 0, 0);
 
-        // Ordenar por vencimento (mais próximo primeiro)
+        // Ordenar por vencimento
         pagData.sort((a, b) => {
             const da = new Date(a.vencimento);
             const db = new Date(b.vencimento);
@@ -2467,8 +2664,7 @@ async function carregarVencimentos() {
             return;
         }
 
-        let vencidos = 0;
-        let venceHoje = 0;
+        const alertas = [];
 
         tabela.innerHTML = pagData.map(p => {
             const venc = new Date(p.vencimento);
@@ -2476,33 +2672,23 @@ async function carregarVencimentos() {
             const dias = calcularDiasAte(p.vencimento);
             const status = obterStatusVencimento(p.vencimento);
             
-            // Contar para badges
-            if (p.status !== 'pago') {
-                if (venc < hoje) vencidos++;
-                else if (venc.getTime() === hoje.getTime()) venceHoje++;
+            // Coletar alertas (apenas pendentes com até 7 dias)
+            if (p.status !== 'pago' && dias >= 0 && dias <= DIAS_ALERTA && dias > 0) {
+                alertas.push({
+                    aluno: alunoMap[p.aluno_id] || 'Aluno',
+                    turma: turmaMap[p.turma_id] || '',
+                    vencimento: p.vencimento,
+                    dias: dias
+                });
             }
 
             const statusPagamento = p.status === 'pago' ? 
                 '<span class="badge badge-success">Pago</span>' : 
-                '<span class="badge badge-warning">Pendente</span>';
+                `<span class="badge ${status.badge}">${status.texto}</span>`;
 
             const btnAcao = p.status === 'pendente' ? 
                 `<button class="btn btn-success btn-xs" onclick="confirmarPagamento('${p.id}')">Confirmar</button>` : 
                 '<span style="color:var(--text-muted);font-size:10px">Finalizado</span>';
-
-            // Badge de vencimento
-            let badgeVenc = '';
-            if (p.status === 'pago') {
-                badgeVenc = '<span class="badge badge-success">✅ Pago</span>';
-            } else if (dias < 0) {
-                badgeVenc = `<span class="badge badge-danger">⚠️ Vencido há ${Math.abs(dias)} dia(s)</span>`;
-            } else if (dias === 0) {
-                badgeVenc = '<span class="badge badge-warning">🔴 Vence hoje</span>';
-            } else if (dias <= 3) {
-                badgeVenc = `<span class="badge badge-warning">🟡 Vence em ${dias} dia(s)</span>`;
-            } else {
-                badgeVenc = `<span class="badge badge-success">✅ Vence em ${dias} dia(s)</span>`;
-            }
 
             return `
                 <tr>
@@ -2512,14 +2698,39 @@ async function carregarVencimentos() {
                     <td>R$ ${Number(p.valor).toFixed(2)}</td>
                     <td>${formatDate(p.vencimento)}</td>
                     <td>${dias === 0 ? 'Hoje!' : dias < 0 ? `${Math.abs(dias)} dias atrás` : `${dias} dias`}</td>
-                    <td>${badgeVenc}</td>
+                    <td>${statusPagamento}</td>
                     <td style="text-align:right">${btnAcao}</td>
                 </tr>
             `;
         }).join('');
 
+        // Mostrar alertas na página de vencimentos
+        const containerVenc = document.getElementById('alertasContainerVencimentos');
+        if (containerVenc) {
+            if (alertas.length === 0) {
+                containerVenc.innerHTML = '';
+                containerVenc.style.display = 'none';
+            } else {
+                containerVenc.style.display = 'block';
+                containerVenc.innerHTML = alertas.slice(0, 10).map(a => `
+                    <div class="alerta-vencimento">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"/>
+                            <polyline points="12 6 12 12 16 14"/>
+                        </svg>
+                        <div class="alerta-texto">
+                            <strong>${a.aluno}</strong> - 
+                            Vencimento em <strong>${a.dias} dias</strong> 
+                            (${formatDate(a.vencimento)})
+                            ${a.turma ? ` - Turma: ${a.turma}` : ''}
+                        </div>
+                    </div>
+                `).join('');
+            }
+        }
+
         // Atualizar badges
-        const totalVenc = vencidos + venceHoje;
+        const totalVenc = pagData.filter(p => p.status !== 'pago' && calcularDiasAte(p.vencimento) <= DIAS_ALERTA && calcularDiasAte(p.vencimento) >= 0).length;
         const badge = document.getElementById('vencimentosBadge');
         if (badge) {
             badge.textContent = totalVenc;
@@ -2534,15 +2745,14 @@ async function carregarVencimentos() {
 }
 
 // ============================================================
-//  GERAR COBRANÇAS RECORRENTES
+//  GERAR COBRANÇAS
 // ============================================================
 async function gerarCobrancas() {
-    if (!confirm('Deseja gerar cobranças para todos os alunos com pagamentos pendentes?')) return;
+    if (!confirm('Gerar cobranças para todos os alunos com pagamentos pendentes?')) return;
     
     try {
         showLoading();
         
-        // Buscar todos os alunos com pagamentos pendentes
         const { data: pagamentos, error: err1 } = await sb
             .from('pagamentos')
             .select('*')
@@ -2556,48 +2766,29 @@ async function gerarCobrancas() {
             return;
         }
 
-        // Para cada pagamento pendente, atualizar a data de vencimento
-        // ou criar um novo registro (dependendo da frequência do plano)
         let count = 0;
         for (const p of pagamentos) {
             try {
-                // Buscar o plano do aluno
-                const { data: plano } = await sb
-                    .from('planos')
-                    .select('frequencia, valor')
-                    .eq('id', p.plano_id)
-                    .single();
-
-                if (plano) {
-                    const novaData = new Date(p.vencimento);
-                    const freq = plano.frequencia || 'mensal';
-                    
-                    switch(freq) {
-                        case 'mensal': novaData.setMonth(novaData.getMonth() + 1); break;
-                        case 'trimestral': novaData.setMonth(novaData.getMonth() + 3); break;
-                        case 'semestral': novaData.setMonth(novaData.getMonth() + 6); break;
-                        case 'anual': novaData.setFullYear(novaData.getFullYear() + 1); break;
-                    }
-
-                    // Criar nova cobrança
-                    await sb.from('pagamentos').insert({
-                        id: uid(),
-                        aluno_id: p.aluno_id,
-                        turma_id: p.turma_id,
-                        plano_id: p.plano_id,
-                        valor: plano.valor || p.valor,
-                        vencimento: novaData.toISOString().split('T')[0],
-                        status: 'pendente'
-                    });
-                    count++;
-                }
+                const novaData = new Date(p.vencimento);
+                novaData.setMonth(novaData.getMonth() + 1);
+                
+                await sb.from('pagamentos').insert({
+                    id: uid(),
+                    aluno_id: p.aluno_id,
+                    turma_id: p.turma_id,
+                    plano_id: p.plano_id,
+                    valor: p.valor,
+                    vencimento: novaData.toISOString().split('T')[0],
+                    status: 'pendente'
+                });
+                count++;
             } catch (err) {
                 console.warn('Erro ao gerar cobrança para aluno:', err);
             }
         }
 
         hideLoading();
-        toast(`✅ ${count} novas cobranças geradas!`);
+        toast(`${count} novas cobranças geradas!`);
         carregarVencimentos();
         carregarDashboard();
     } catch (error) {
@@ -2629,7 +2820,7 @@ async function carregarBiblioteca() {
         let html = '';
 
         if (livros.length > 0) {
-            html += `<div style="grid-column:1/-1;margin-top:4px"><h3 style="font-size:15px;font-weight:600;display:flex;align-items:center;gap:8px">📚 Livros</h3></div>`;
+            html += `<div style="grid-column:1/-1;margin-top:4px"><h3 style="font-size:15px;font-weight:600;display:flex;align-items:center;gap:8px">Livros</h3></div>`;
             html += livros.map(b => `
                 <div class="bib-item bib-livro">
                     <div class="bib-tipo-badge livro">Livro</div>
@@ -2644,7 +2835,7 @@ async function carregarBiblioteca() {
         }
 
         if (artigos.length > 0) {
-            html += `<div style="grid-column:1/-1;margin-top:8px"><h3 style="font-size:15px;font-weight:600;display:flex;align-items:center;gap:8px">📄 Artigos</h3></div>`;
+            html += `<div style="grid-column:1/-1;margin-top:8px"><h3 style="font-size:15px;font-weight:600;display:flex;align-items:center;gap:8px">Artigos</h3></div>`;
             html += artigos.map(b => `
                 <div class="bib-item bib-artigo">
                     <div class="bib-tipo-badge artigo">Artigo</div>
@@ -2901,13 +3092,18 @@ document.addEventListener('DOMContentLoaded', function() {
     carregarPerfil();
     carregarVencimentos();
     
+    // Verificar alertas a cada 5 minutos
+    setInterval(() => {
+        carregarDashboard();
+        carregarVencimentos();
+    }, 300000);
+    
     console.log('✅ Admin carregado com sucesso!');
-    console.log('📋 Novas funcionalidades de vencimentos:');
-    console.log('  - Painel com cards de vencimentos');
-    console.log('  - Tabela detalhada de vencimentos');
-    console.log('  - Geração automática de cobranças recorrentes');
-    console.log('  - Badges de status de vencimento');
-    console.log('  - Cálculo de dias até o vencimento');
+    console.log('📋 Funcionalidades de vencimentos:');
+    console.log('  - Admin escolhe a data de vencimento ao cadastrar aluno');
+    console.log('  - Alerta visual quando faltam 7 dias ou menos');
+    console.log('  - Badge de notificação no menu');
+    console.log('  - Painel com cards de resumo');
 });
 </script>
 </body>
