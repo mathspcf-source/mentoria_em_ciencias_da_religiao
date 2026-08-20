@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>MentorCR - Login</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: #f4f0f9;
+            color: #1a0a2e;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            background-image: radial-gradient(ellipse at 20% 50%, rgba(108, 43, 217, 0.06) 0%, transparent 60%),
+                              radial-gradient(ellipse at 80% 50%, rgba(108, 43, 217, 0.06) 0%, transparent 60%);
+        }
+
+        .loading {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(26, 0, 51, 0.6);
+            backdrop-filter: blur(8px);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+        }
+        .loading.show {
+            display: flex;
+        }
+        .spinner {
+            width: 48px;
+            height: 48px;
+            border: 3px solid rgba(255, 255, 255, 0.1);
+            border-top-color: #ffffff;
+            border-radius: 50%;
+            animation: spin 0.6s linear infinite;
+        }
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .login-container {
+            display: flex;
+            gap: 48px;
+            max-width: 960px;
+            width: 100%;
+            align-items: center;
+        }
+
+        .login-brand {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+        .login-brand .logo {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 16px;
+        }
+        .login-brand .logo svg {
+            width: 56px;
+            height: 56px;
+        }
+        .login-brand .logo .logo-text {
+            display: flex;
+            flex-direction: column;
+        }
+        .login-brand .logo .logo-text span {
+            font-size: 28px;
+            font-weight: 700;
+            color: #1a0033;
+            letter-spacing: -1px;
+            line-height: 1.1;
+        }
+        .login-brand .logo .logo-text small {
+            font-size: 13px;
+            font-weight: 400;
+            color: #8a7a9a;
+        }
+        .login-brand h2 {
+            font-size: 20px;
+            font-weight: 600;
+            color: #1a0a2e;
+            margin-bottom: 8px;
+        }
+        .login-brand p {
+            font-size: 14px;
+            color: #5a4a6a;
+            line-height: 1.6;
+            max-width: 360px;
+        }
+        .login-brand .features {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        .login-brand .features .feat {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 13px;
+            color: #5a4a6a;
+        }
+        .login-brand .features .feat svg {
+            width: 20px;
+            height: 20px;
+            color: #6c2bd9;
+            flex-shrink: 0;
+        }
+
+        .login-card {
+            background: #ffffff;
+            border-radius: 16px;
+            padding: 40px 36px;
+            width: 100%;
+            max-width: 400px;
+            box-shadow: 0 8px 32px rgba(42, 0, 72, 0.08);
+            border: 1px solid rgba(42, 0, 72, 0.08);
+        }
+
+        .login-card .card-header {
+            text-align: center;
+            margin-bottom: 28px;
+        }
+        .login-card .card-header h1 {
+            font-size: 24px;
+            font-weight: 700;
+            color: #1a0a2e;
+            letter-spacing: -0.5px;
+        }
+        .login-card .card-header p {
+            font-size: 13px;
+            color: #5a4a6a;
+            margin-top: 4px;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+        .form-group label {
+            display: block;
+            font-size: 11px;
+            font-weight: 600;
+            color: #5a4a6a;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+        .form-group select,
+        .form-group input {
+            width: 100%;
+            padding: 11px 14px;
+            background: #f4f0f9;
+            border: 1px solid rgba(42, 0, 72, 0.08);
+            border-radius: 10px;
+            font-size: 13px;
+            color: #1a0a2e;
+            font-family: inherit;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .form-group select:focus,
+        .form-group input:focus {
+            outline: none;
+            border-color: #6c2bd9;
+            box-shadow: 0 0 0 4px rgba(108, 43, 217, 0.08);
+            background: #ffffff;
+        }
+
+        .btn-login {
+            width: 100%;
+            padding: 12px;
+            background: #6c2bd9;
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: inherit;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 12px rgba(108, 43, 217, 0.25);
+        }
+        .btn-login:hover {
+            background: #4a1a8f;
+            transform: translateY(-1px);
+            box-shadow: 0 6px 20px rgba(108, 43, 217, 0.30);
+        }
+        .btn-login:active {
+            transform: translateY(0);
+        }
+
+        .login-error {
+            color: #ef4444;
+            font-size: 12px;
+            margin-top: 12px;
+            display: none;
+            text-align: center;
+        }
+
+        .footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 14px;
+            text-align: center;
+            font-size: 11px;
+            color: #8a7a9a;
+            background: rgba(255, 255, 255, 0.80);
+            backdrop-filter: blur(8px);
+            border-top: 1px solid rgba(42, 0, 72, 0.08);
+        }
+        .footer span {
+            color: #6c2bd9;
+            font-weight: 600;
+        }
+        .footer a {
+            color: #10b981;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        .footer a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 768px) {
+            .login-container {
+                flex-direction: column;
+                gap: 28px;
+            }
+            .login-brand {
+                align-items: center;
+                text-align: center;
+            }
+            .login-brand p {
+                max-width: 100%;
+            }
+            .login-brand .features {
+                align-items: center;
+            }
+            .login-card {
+                max-width: 100%;
+                padding: 28px 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .login-card .card-header h1 {
+                font-size: 20px;
+            }
+            .login-brand .logo .logo-text span {
+                font-size: 22px;
+            }
+            .login-brand .logo svg {
+                width: 44px;
+                height: 44px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="loading" id="loading">
+    <div class="spinner"></div>
+</div>
+
+<div class="login-container">
+    <div class="login-brand">
+        <div class="logo">
+            <svg viewBox="0 0 48 48">
+                <defs>
+                    <linearGradient id="lg" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="#6c2bd9"/>
+                        <stop offset="100%" stop-color="#8b5cf6"/>
+                    </linearGradient>
+                </defs>
+                <rect x="3" y="3" width="42" height="42" rx="10" fill="url(#lg)"/>
+                <text x="24" y="30" text-anchor="middle" fill="#ffffff" font-size="18" font-weight="700">CR</text>
+            </svg>
+            <div class="logo-text">
+                <span>MentorCR</span>
+                <small>Ciências da Religião</small>
+            </div>
+        </div>
+        <h2>Bem-vindo de volta</h2>
+        <p>Acesse sua conta para gerenciar suas atividades acadêmicas.</p>
+        <div class="features">
+            <div class="feat">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"/>
+                    <path d="M12 6v6l4 2"/>
+                </svg>
+                Acompanhamento em tempo real
+            </div>
+            <div class="feat">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M22 11.08V12a10 10 0 11-5.93-9.14"/>
+                    <polyline points="22 4 12 14.01 9 11.01"/>
+                </svg>
+                Envio e correção de trabalhos
+            </div>
+            <div class="feat">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="2" y="3" width="20" height="14" rx="2"/>
+                    <line x1="8" y1="21" x2="16" y2="21"/>
+                    <line x1="12" y1="17" x2="12" y2="21"/>
+                </svg>
+                Biblioteca digital integrada
+            </div>
+        </div>
+    </div>
+
+    <div class="login-card">
+        <div class="card-header">
+            <h1>Entrar</h1>
+            <p>Insira suas credenciais para acessar</p>
+        </div>
+
+        <div class="form-group">
+            <label>Tipo de Acesso</label>
+            <select id="loginTipo">
+                <option value="admin">Administrador</option>
+                <option value="professor">Professor</option>
+                <option value="aluno">Aluno</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Email</label>
+            <input type="email" id="loginEmail" placeholder="email@exemplo.com">
+        </div>
+
+        <div class="form-group">
+            <label>Senha</label>
+            <input type="password" id="loginSenha" placeholder="••••••••">
+        </div>
+
+        <button class="btn-login" id="btnLogin">Entrar</button>
+        <p class="login-error" id="loginError"></p>
+    </div>
+</div>
+
+<div class="footer">
+    Criado por <span>Matheus Pacifico Evangelista</span> ·
+    <a href="https://wa.me/5579996458399" target="_blank">(79) 99645-8399</a>
+</div>
+
+<script>
+    const SUPABASE_URL = 'https://ggnjrzqzjdjhqnjaefom.supabase.co';
+    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdnbmpyenF6amRqaHFuamFlZm9tIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODU1NTM2NzcsImV4cCI6MjEwMTEyOTY3N30.rQ4vcgc_nx2m4-hz6J434kbjWd4Gcn_vsPZLyg7osHQ';
+    const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    const ADMIN_EMAIL = 'admin@mentorcr.com';
+
+    const $ = id => document.getElementById(id);
+    const showLoading = () => $('loading').classList.add('show');
+    const hideLoading = () => $('loading').classList.remove('show');
+
+    function criarSessao(tipo, id, nome) {
+        const s = { tipo, id, nome, timestamp: Date.now() };
+        localStorage.setItem('mentorcr_session', JSON.stringify(s));
+        localStorage.setItem('mentorcr_user_id', id);
+        localStorage.setItem('mentorcr_user_nome', nome);
+        localStorage.setItem('mentorcr_user_tipo', tipo);
+    }
+
+    $('btnLogin').addEventListener('click', async () => {
+        const t = $('loginTipo').value;
+        const e = $('loginEmail').value.trim();
+        const s = $('loginSenha').value.trim();
+        const err = $('loginError');
+        err.style.display = 'none';
+
+        if (!e || !s) {
+            err.textContent = 'Preencha todos os campos.';
+            err.style.display = 'block';
+            return;
+        }
+
+        showLoading();
+
+        try {
+            if (t === 'admin') {
+                const { data: c } = await sb.from('configuracoes').select('valor').eq('chave', 'admin_senha').single();
+                if (e === ADMIN_EMAIL && s === (c ? c.valor : 'admin123')) {
+                    criarSessao('admin', 'admin', 'Administrador');
+                    window.location.href = 'admin.html';
+                } else {
+                    err.textContent = 'Email ou senha incorretos.';
+                    err.style.display = 'block';
+                }
+            } else if (t === 'professor') {
+                const { data: p } = await sb.from('professores').select('*').eq('email', e).eq('senha', s).eq('ativo', true);
+                if (p && p.length > 0) {
+                    criarSessao('professor', p[0].id, p[0].nome);
+                    window.location.href = 'professor.html';
+                } else {
+                    err.textContent = 'Email ou senha incorretos.';
+                    err.style.display = 'block';
+                }
+            } else {
+                const { data: a } = await sb.from('alunos').select('*').eq('email', e).eq('senha', s).eq('ativo', true);
+                if (a && a.length > 0) {
+                    criarSessao('aluno', a[0].id, a[0].nome);
+                    window.location.href = 'aluno.html';
+                } else {
+                    err.textContent = 'Email ou senha incorretos.';
+                    err.style.display = 'block';
+                }
+            }
+        } catch (ex) {
+            err.textContent = 'Erro de conexão. Tente novamente.';
+            err.style.display = 'block';
+        }
+
+        hideLoading();
+    });
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') $('btnLogin').click();
+    });
+</script>
+</body>
+</html>
