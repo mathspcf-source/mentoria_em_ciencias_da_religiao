@@ -253,6 +253,10 @@
             font-size: 9px;
             color: #fff;
         }
+        .sidebar-nav button .badge-nav.danger {
+            background: var(--danger);
+            color: #fff;
+        }
         .sidebar-footer {
             padding: 16px 20px;
             border-top: 1px solid var(--border-light);
@@ -376,6 +380,17 @@
             background: var(--danger);
             border-radius: 50%;
             border: 2px solid #fff;
+            display: none;
+        }
+        .top-header-right .notify-btn .dot.show {
+            display: block;
+            animation: pulse-dot 1.5s infinite;
+        }
+
+        @keyframes pulse-dot {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.3); }
+            100% { transform: scale(1); }
         }
 
         .content {
@@ -459,6 +474,9 @@
             flex-shrink: 0;
         }
         .stat-card .stat-icon svg { width: 22px; height: 22px; }
+        .stat-card .stat-icon.danger { background: var(--danger-light); color: var(--danger); }
+        .stat-card .stat-icon.warning { background: var(--warning-light); color: var(--warning); }
+        .stat-card .stat-icon.success { background: var(--success-light); color: var(--success); }
         .stat-card .stat-info { flex: 1; }
         .stat-card .stat-label {
             font-size: 11px;
@@ -477,6 +495,55 @@
             font-size: 11px;
             color: var(--text-light);
             margin-top: 4px;
+        }
+
+        /* Alerta de vencimento */
+        .alerta-vencimento {
+            background: var(--danger-light);
+            border: 1px solid var(--danger);
+            border-radius: var(--radius-sm);
+            padding: 12px 16px;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            animation: pulse-border 1.5s infinite;
+        }
+        @keyframes pulse-border {
+            0% { border-color: var(--danger); }
+            50% { border-color: var(--warning); }
+            100% { border-color: var(--danger); }
+        }
+        .alerta-vencimento svg {
+            width: 24px;
+            height: 24px;
+            color: var(--danger);
+            flex-shrink: 0;
+        }
+        .alerta-vencimento .alerta-texto {
+            flex: 1;
+            font-size: 12px;
+            color: var(--danger);
+            font-weight: 500;
+        }
+        .alerta-vencimento .alerta-texto strong {
+            color: var(--text);
+        }
+        .alerta-vencimento.success {
+            background: var(--success-light);
+            border-color: var(--success);
+        }
+        .alerta-vencimento.success svg {
+            color: var(--success);
+        }
+        .alerta-vencimento.success .alerta-texto {
+            color: var(--success);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 18px;
         }
 
         .table-container {
@@ -579,6 +646,27 @@
         }
         .badge-success { background: var(--success-light); color: var(--success); }
         .badge-warning { background: var(--warning-light); color: var(--warning); }
+        .badge-danger { background: var(--danger-light); color: var(--danger); }
+        .badge-primary { background: #f0edf5; color: var(--primary); }
+
+        .badge-vencimento {
+            padding: 2px 10px;
+            border-radius: var(--radius-full);
+            font-size: 8px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+        .badge-vencimento.vencido { background: var(--danger-light); color: var(--danger); }
+        .badge-vencimento.hoje { background: var(--warning-light); color: var(--warning); }
+        .badge-vencimento.em-dia { background: var(--success-light); color: var(--success); }
+        .badge-vencimento.alerta { background: var(--warning-light); color: var(--warning); animation: pulse-badge 1.5s infinite; }
+
+        @keyframes pulse-badge {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
 
         .empty-state {
             text-align: center;
@@ -804,6 +892,7 @@
             .top-header { display: none; }
 
             .content { padding: 16px; gap: 16px; }
+            .stats-grid { grid-template-columns: 1fr; }
             .stat-card { padding: 16px 18px; }
 
             .modal-content { padding: 20px; margin: 8px; }
@@ -875,6 +964,7 @@
         <button data-section="financeiro" onclick="navegarPara('financeiro')">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
             Financeiro
+            <span class="badge-nav danger" id="financeiroBadge">0</span>
         </button>
         <button data-section="biblioteca" onclick="navegarPara('biblioteca')">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>
@@ -905,9 +995,12 @@
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
                 <input type="text" placeholder="Buscar...">
             </div>
-            <div class="notify-btn">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
-                <span class="dot"></span>
+            <div class="notify-btn" onclick="toggleNotificacoes()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+                    <path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+                    <path d="M13.73 21a2 2 0 01-3.46 0"/>
+                </svg>
+                <span class="dot" id="notifyDot"></span>
             </div>
         </div>
     </header>
@@ -917,6 +1010,7 @@
         <!-- TURMA -->
         <section class="content-section active" id="section-turma">
             <div class="section-title"><h2>Minha Turma</h2></div>
+            <div id="alertasContainer"></div>
             <div id="infoTurma"></div>
         </section>
 
@@ -935,7 +1029,8 @@
         <!-- FINANCEIRO -->
         <section class="content-section" id="section-financeiro">
             <div class="section-title"><h2>Financeiro</h2></div>
-            <div class="table-container"><div class="table-wrapper"><table><thead><tr><th>Referência</th><th>Valor</th><th>Vencimento</th><th>Status</th></tr></thead><tbody id="tabelaFinanceiro"></tbody></table></div></div>
+            <div id="alertasContainerFinanceiro"></div>
+            <div class="table-container"><div class="table-wrapper"><table><thead><tr><th>Referência</th><th>Valor</th><th>Vencimento</th><th>Situação</th><th>Dias</th></tr></thead><tbody id="tabelaFinanceiro"></tbody></table></div></div>
         </section>
 
         <!-- BIBLIOTECA -->
@@ -985,6 +1080,7 @@ const SUPABASE_URL = 'https://ggnjrzqzjdjhqnjaefom.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdnbmpyenF6amRqaHFuamFlZm9tIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODU1NTM2NzcsImV4cCI6MjEwMTEyOTY3N30.rQ4vcgc_nx2m4-hz6J434kbjWd4Gcn_vsPZLyg7osHQ';
 const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 const SESSION_DURATION = 2 * 60 * 60 * 1000;
+const DIAS_ALERTA = 7;
 
 // ============================================================
 //  SESSÃO
@@ -1026,6 +1122,30 @@ function toast(msg) {
 }
 
 function uid() { return Date.now().toString(36) + Math.random().toString(36).substr(2, 9); }
+
+function formatDate(dateStr) {
+    if (!dateStr) return '-';
+    const d = new Date(dateStr);
+    return d.toLocaleDateString('pt-BR');
+}
+
+function calcularDiasAte(dataStr) {
+    const hoje = new Date();
+    hoje.setHours(0, 0, 0, 0);
+    const venc = new Date(dataStr);
+    venc.setHours(0, 0, 0, 0);
+    const diff = Math.ceil((venc - hoje) / (1000 * 60 * 60 * 24));
+    return diff;
+}
+
+function obterStatusVencimento(dataStr) {
+    const dias = calcularDiasAte(dataStr);
+    if (dias < 0) return { texto: 'Vencido', classe: 'vencido', badge: 'badge-danger' };
+    if (dias === 0) return { texto: 'Vence Hoje', classe: 'hoje', badge: 'badge-warning' };
+    if (dias <= DIAS_ALERTA) return { texto: `Alerta: ${dias} dias`, classe: 'alerta', badge: 'badge-vencimento alerta' };
+    return { texto: `${dias} dias`, classe: 'em-dia', badge: 'badge-success' };
+}
+
 function openModal(id) { $('modal' + id).classList.add('show'); }
 function closeModal(id) { $('modal' + id).classList.remove('show'); }
 window.onclick = function(e) { if (e.target.classList.contains('modal')) e.target.classList.remove('show'); };
@@ -1038,6 +1158,52 @@ function toggleSidebar() {
 function closeSidebar() {
     document.querySelector('.sidebar').classList.remove('open');
     document.querySelector('.sidebar-overlay').classList.remove('show');
+}
+
+// ============================================================
+//  NOTIFICAÇÕES
+// ============================================================
+let notificacoesAbertas = false;
+
+function toggleNotificacoes() {
+    notificacoesAbertas = !notificacoesAbertas;
+    const container = document.getElementById('alertasContainer');
+    if (container) {
+        container.style.display = notificacoesAbertas ? 'block' : 'none';
+    }
+}
+
+function mostrarAlertas(alertas, containerId = 'alertasContainer') {
+    const container = document.getElementById(containerId);
+    if (!container) return;
+
+    if (!alertas || alertas.length === 0) {
+        container.innerHTML = '';
+        container.style.display = 'none';
+        if (containerId === 'alertasContainer') {
+            document.getElementById('notifyDot').classList.remove('show');
+        }
+        return;
+    }
+
+    container.style.display = 'block';
+    if (containerId === 'alertasContainer') {
+        document.getElementById('notifyDot').classList.add('show');
+    }
+
+    container.innerHTML = alertas.map(a => `
+        <div class="alerta-vencimento ${a.tipo || ''}">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"/>
+                <polyline points="12 6 12 12 16 14"/>
+            </svg>
+            <div class="alerta-texto">
+                <strong>${a.titulo || 'Aviso'}</strong> - 
+                ${a.mensagem}
+                ${a.data ? ` (${formatDate(a.data)})` : ''}
+            </div>
+        </div>
+    `).join('');
 }
 
 // ============================================================
@@ -1095,6 +1261,10 @@ async function carregarTurma() {
             return;
         }
         const { data: p } = await sb.from('professores').select('nome').eq('id', t.professor_id).single();
+        
+        // Verificar vencimentos
+        await verificarVencimentosAluno();
+        
         document.getElementById('infoTurma').innerHTML = `
             <div class="stat-card">
                 <div class="stat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/></svg></div>
@@ -1113,6 +1283,74 @@ async function carregarTurma() {
 }
 
 // ============================================================
+//  VENCIMENTOS DO ALUNO
+// ============================================================
+async function verificarVencimentosAluno() {
+    try {
+        const { data: pagamentos } = await sb
+            .from('pagamentos')
+            .select('*')
+            .eq('aluno_id', currentUserId)
+            .eq('status', 'pendente')
+            .order('vencimento', { ascending: true });
+
+        if (!pagamentos || pagamentos.length === 0) {
+            mostrarAlertas([], 'alertasContainer');
+            return;
+        }
+
+        const hoje = new Date();
+        hoje.setHours(0, 0, 0, 0);
+        const alertas = [];
+        let alertaCount = 0;
+
+        pagamentos.forEach(p => {
+            const venc = new Date(p.vencimento);
+            venc.setHours(0, 0, 0, 0);
+            const dias = calcularDiasAte(p.vencimento);
+
+            if (dias < 0) {
+                alertas.push({
+                    titulo: 'Pagamento Vencido',
+                    mensagem: `Seu pagamento de R$ ${Number(p.valor).toFixed(2)} está vencido há ${Math.abs(dias)} dia(s).`,
+                    data: p.vencimento,
+                    tipo: ''
+                });
+                alertaCount++;
+            } else if (dias === 0) {
+                alertas.push({
+                    titulo: 'Vence Hoje!',
+                    mensagem: `Seu pagamento de R$ ${Number(p.valor).toFixed(2)} vence hoje.`,
+                    data: p.vencimento,
+                    tipo: ''
+                });
+                alertaCount++;
+            } else if (dias <= DIAS_ALERTA) {
+                alertas.push({
+                    titulo: `Alerta: ${dias} dias`,
+                    mensagem: `Seu pagamento de R$ ${Number(p.valor).toFixed(2)} vence em ${dias} dia(s).`,
+                    data: p.vencimento,
+                    tipo: ''
+                });
+                alertaCount++;
+            }
+        });
+
+        // Badge no menu financeiro
+        const badge = document.getElementById('financeiroBadge');
+        if (badge) {
+            badge.textContent = alertaCount;
+            badge.style.display = alertaCount > 0 ? 'inline' : 'none';
+        }
+
+        // Mostrar alertas
+        mostrarAlertas(alertas.slice(0, 5), 'alertasContainer');
+    } catch (error) {
+        console.error('Erro ao verificar vencimentos:', error);
+    }
+}
+
+// ============================================================
 //  ENCONTROS
 // ============================================================
 async function carregarEncontros() {
@@ -1127,7 +1365,7 @@ async function carregarEncontros() {
         const { data: e } = await sb.from('encontros').select('*').eq('turma_id', a.turma_id).order('data', { ascending: true });
         document.getElementById('tabelaEncontros').innerHTML = (!e || e.length === 0) ?
             '<tr><td colspan="4"><div class="empty-state">Nenhum encontro agendado</div></td></tr>' :
-            e.map(x => `<tr><td>${x.data}</td><td>${x.hora}</td><td><a href="${x.link_meet}" target="_blank">Meet</a></td><td><a href="${x.link_material}" target="_blank">Material</a></td></tr>`).join('');
+            e.map(x => `<tr><td>${formatDate(x.data)}</td><td>${x.hora}</td><td><a href="${x.link_meet}" target="_blank">Meet</a></td><td><a href="${x.link_material}" target="_blank">Material</a></td></tr>`).join('');
         hideLoading();
     } catch (error) {
         console.error('Erro ao carregar encontros:', error);
@@ -1243,29 +1481,88 @@ async function enviarTrabalho(e) {
 }
 
 // ============================================================
-//  FINANCEIRO
+//  FINANCEIRO - COM ALERTAS
 // ============================================================
 async function carregarFinanceiro() {
     try {
         showLoading();
         const { data: p } = await sb.from('pagamentos').select('*').eq('aluno_id', currentUserId);
+        
         if (!p || p.length === 0) {
-            document.getElementById('tabelaFinanceiro').innerHTML = '<tr><td colspan="4"><div class="empty-state">Nenhum registro financeiro</div></td></tr>';
+            document.getElementById('tabelaFinanceiro').innerHTML = '<tr><td colspan="5"><div class="empty-state">Nenhum registro financeiro</div></td></tr>';
+            mostrarAlertas([], 'alertasContainerFinanceiro');
             hideLoading();
             return;
         }
+        
         const { data: t } = await sb.from('turmas').select('id,nome');
         const mt = {};
         if (t) t.forEach(x => mt[x.id] = x.nome);
 
-        document.getElementById('tabelaFinanceiro').innerHTML = p.map(x => `
-            <tr>
-                <td>${mt[x.turma_id] || '-'}</td>
-                <td>R$ ${Number(x.valor).toFixed(2)}</td>
-                <td>${x.vencimento}</td>
-                <td>${x.status === 'pago' ? '<span class="badge badge-success">Pago</span>' : '<span class="badge badge-warning">Pendente</span>'}</td>
-            </tr>
-        `).join('');
+        // Verificar alertas de vencimento para o financeiro
+        const alertas = [];
+        p.forEach(pag => {
+            if (pag.status === 'pendente') {
+                const dias = calcularDiasAte(pag.vencimento);
+                if (dias < 0) {
+                    alertas.push({
+                        titulo: 'Vencido',
+                        mensagem: `Pagamento de R$ ${Number(pag.valor).toFixed(2)} está vencido há ${Math.abs(dias)} dias.`,
+                        data: pag.vencimento,
+                        tipo: ''
+                    });
+                } else if (dias === 0) {
+                    alertas.push({
+                        titulo: 'Vence Hoje',
+                        mensagem: `Pagamento de R$ ${Number(pag.valor).toFixed(2)} vence hoje.`,
+                        data: pag.vencimento,
+                        tipo: ''
+                    });
+                } else if (dias <= DIAS_ALERTA) {
+                    alertas.push({
+                        titulo: `Alerta: ${dias} dias`,
+                        mensagem: `Pagamento de R$ ${Number(pag.valor).toFixed(2)} vence em ${dias} dias.`,
+                        data: pag.vencimento,
+                        tipo: ''
+                    });
+                }
+            }
+        });
+
+        mostrarAlertas(alertas.slice(0, 5), 'alertasContainerFinanceiro');
+
+        // Atualizar badge do menu
+        const badge = document.getElementById('financeiroBadge');
+        if (badge) {
+            const pendentes = p.filter(x => x.status === 'pendente').length;
+            badge.textContent = pendentes;
+            badge.style.display = pendentes > 0 ? 'inline' : 'none';
+        }
+
+        document.getElementById('tabelaFinanceiro').innerHTML = p.map(x => {
+            let statusText = x.status === 'pago' ? 
+                '<span class="badge badge-success">Pago</span>' : 
+                '<span class="badge badge-warning">Pendente</span>';
+            
+            // Adicionar badge de dias se pendente
+            let diasInfo = '';
+            if (x.status === 'pendente') {
+                const dias = calcularDiasAte(x.vencimento);
+                if (dias < 0) diasInfo = `${Math.abs(dias)} dias atrás`;
+                else if (dias === 0) diasInfo = 'Hoje!';
+                else diasInfo = `${dias} dias`;
+            }
+
+            return `
+                <tr>
+                    <td>${mt[x.turma_id] || '-'}</td>
+                    <td>R$ ${Number(x.valor).toFixed(2)}</td>
+                    <td>${formatDate(x.vencimento)}</td>
+                    <td>${statusText}</td>
+                    <td>${diasInfo || '-'}</td>
+                </tr>
+            `;
+        }).join('');
         hideLoading();
     } catch (error) {
         console.error('Erro ao carregar financeiro:', error);
@@ -1382,15 +1679,22 @@ async function salvarPerfil() {
 //  INIT
 // ============================================================
 document.addEventListener('DOMContentLoaded', function() {
-    // Verificar autenticação
     const session = localStorage.getItem('mentorcr_session');
     if (!session) { window.location.href = 'index.html'; return; }
     
     carregarTurma();
     carregarContadorSidebar();
+    carregarFinanceiro();
+    
+    // Verificar alertas a cada 5 minutos
+    setInterval(() => {
+        verificarVencimentosAluno();
+        carregarFinanceiro();
+    }, 300000);
 });
 
 console.log('✅ Aluno carregado com sucesso!');
+console.log('📋 Alertas de vencimento ativados (7 dias)');
 </script>
 </body>
 </html>
